@@ -8,7 +8,9 @@ function App() {
       	margin: "auto",
       	fontSize: "1.5rem"
       }}>
-      	Измените src/components/app/app.jsx и сохраните для обновления.
+      	And this is a new line.
+        How fast does it update?
+        Измените src/components/app/app.jsx и сохраните для обновления.
       </pre>
     </div>
   );
