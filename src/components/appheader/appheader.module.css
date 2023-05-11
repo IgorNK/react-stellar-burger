@@ -1,0 +1,15 @@
+.header {
+  margin: 0;
+  padding: 16px 0;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+  justify-items: center;
+}
+
+.navigation {
+  display: flex;
+  flex-direction: row;
+  column-gap: 8px;
+}

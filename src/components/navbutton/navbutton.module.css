@@ -1,0 +1,11 @@
+.navbutton {
+  margin: 0;
+  padding: 16px 20px;
+  background: none;
+  border: none;
+  display: flex;
+  flex-direction: row;
+  column-gap: 8px;
+  cursor: pointer;
+  color: var(--text-primary-color);
+}

@@ -1,0 +1,10 @@
+.ingredients {
+  max-height: 756px;
+  width: 600px;
+  overflow-y: scroll;
+}
+
+.tabs {
+  display: flex;
+  flex-direction: row;
+}
