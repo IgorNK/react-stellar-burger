@@ -19,7 +19,7 @@ const BurgerIngredients = (props) => {
 
   return (
     <div>
-      <div className={styles.tabs}>
+      <div className={styles.tabs + " pt-5 pb-10"}>
         <Tab value="buns" active={current === "buns"} onClick={setCurrent}>
           Булки
         </Tab>
@@ -36,19 +36,19 @@ const BurgerIngredients = (props) => {
       </div>
       <div className={styles.ingredients + " custom-scroll"}>
         <h2 className="text text_type_main-medium">Булки</h2>
-        <div className={styles.bunsContainer}>
+        <div className={styles.container + " pt-6 pl-4"}>
           {props.data.map((item) => {
             return renderIngredient(item, "bun");
           })}
         </div>
         <h2 className="text text_type_main-medium">Соусы</h2>
-        <div className={styles.saucesContainer}>
+        <div className={styles.container + " pt-6 pl-4"}>
           {props.data.map((item) => {
             return renderIngredient(item, "sauce");
           })}
         </div>
         <h2 className="text text_type_main-medium">Начинки</h2>
-        <div className={styles.fillingsContainer}>
+        <div className={styles.container + " pt-6 pl-4"}>
           {props.data.map((item) => {
             return renderIngredient(item, "main");
           })}
