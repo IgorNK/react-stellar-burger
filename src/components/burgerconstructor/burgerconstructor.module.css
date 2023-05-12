@@ -1,0 +1,12 @@
+.burgerconstructor {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+  max-height: 656px;
+}
+
+.ingredientsContainer {
+  overflow-y: scroll;
+}
