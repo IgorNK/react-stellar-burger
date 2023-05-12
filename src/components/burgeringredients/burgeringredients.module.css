@@ -1,5 +1,5 @@
 .ingredients {
-  max-height: calc(100vh - 284px);
+  max-height: calc(100vh - 364px);
   width: 600px;
   overflow-y: scroll;
 }
