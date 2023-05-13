@@ -2,6 +2,7 @@
   margin: 0;
   padding: 16px 0;
   width: 100%;
+  max-width: 1280px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   align-items: center;
@@ -12,4 +13,9 @@
   display: flex;
   flex-direction: row;
   column-gap: 8px;
+  justify-self: flex-start;
+}
+
+.profileButton {
+  justify-self: flex-end;
 }

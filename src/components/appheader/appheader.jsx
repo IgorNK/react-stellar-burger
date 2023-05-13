@@ -24,13 +24,15 @@ const AppHeader = (props) => {
         </NavButton>
       </nav>
       <Logo />
-      <NavButton
-        value="profile"
-        active={current === "profile"}
-        onClick={() => setCurrent("profile")}
-      >
-        Личный кабинет
-      </NavButton>
+      <nav className={styles.profileButton}>
+        <NavButton
+          value="profile"
+          active={current === "profile"}
+          onClick={() => setCurrent("profile")}
+        >
+          Личный кабинет
+        </NavButton>
+      </nav>
     </header>
   );
 };

@@ -8,7 +8,7 @@ function App() {
   return (
     <div className={styles.app}>
       <AppHeader />
-      <main className={styles.main}>
+      <main className={styles.main + " pl-5 pr-5"}>
         <section className={styles.twoColumns}>
           <div>
             <h1 className="text text_type_main-large mt-10 mb-5">

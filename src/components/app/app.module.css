@@ -1,18 +1,18 @@
 .app {
+  margin: 0 auto;
+  height: 100vh;
+  max-width: 1280px;
 }
 
 .main {
   display: flex;
   justify-content: center;
-  width: 100%;
-  height: calc(100% - 88px);
+  max-width: 1240px;
 }
 
 .twoColumns {
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: start;
-  max-width: 1240px;
-  max-height: 800px;
   column-gap: 40px;
 }

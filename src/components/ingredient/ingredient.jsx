@@ -1,15 +1,26 @@
-import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import { useState } from "react";
+import {
+  CurrencyIcon,
+  Counter,
+} from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./ingredient.module.css";
 
 const Ingredient = (props) => {
+  const [count, setCount] = useState(0);
+
+  const handleClick = () => {
+    setCount(count + 1);
+  };
+
   return (
-    <div className={styles.ingredient}>
+    <div className={styles.ingredient} onClick={handleClick}>
       <img src={props.image} alt="ingredient" />
       <div className={styles.priceContainer}>
-        <p className="text text_type_digits-default">{props.price}</p>
+        <p className="text text_type_digits-default pr-2">{props.price}</p>
         <CurrencyIcon />
       </div>
       <p className="text text_type_main-default">{props.name}</p>
+      {count > 0 && <Counter count={count} size="default" extraClass="m-1" />}
     </div>
   );
 };
