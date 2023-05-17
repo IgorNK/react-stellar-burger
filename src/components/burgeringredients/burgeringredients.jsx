@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import Ingredient from "../ingredient/ingredient";
 import { ingredientPropType } from "../../utils/prop-types";
@@ -8,16 +8,31 @@ import styles from "./burgeringredients.module.css";
 const BurgerIngredients = (props) => {
   const [current, setCurrent] = useState("buns");
 
-  const renderIngredient = (item, type) => {
-    return item.type === type ? (
+  const renderIngredient = (item) => {
+    return (
       <Ingredient
         key={item._id}
         image={item.image}
         price={item.price}
         name={item.name}
       />
-    ) : null;
+    );
   };
+
+  const buns = useMemo(
+    () => props.data.filter((item) => item.type === "bun"),
+    [props.data]
+  );
+
+  const sauces = useMemo(
+    () => props.data.filter((item) => item.type === "sauce"),
+    [props.data]
+  );
+
+  const fillings = useMemo(
+    () => props.data.filter((item) => item.type === "main"),
+    [props.data]
+  );
 
   return (
     <div>
@@ -39,20 +54,20 @@ const BurgerIngredients = (props) => {
       <div className={styles.ingredients + " custom-scroll"}>
         <h2 className="text text_type_main-medium">Булки</h2>
         <div className={styles.container + " pt-6 pl-4"}>
-          {props.data.map((item) => {
-            return renderIngredient(item, "bun");
+          {buns.map((item) => {
+            return renderIngredient(item);
           })}
         </div>
         <h2 className="text text_type_main-medium">Соусы</h2>
         <div className={styles.container + " pt-6 pl-4"}>
-          {props.data.map((item) => {
-            return renderIngredient(item, "sauce");
+          {sauces.map((item) => {
+            return renderIngredient(item);
           })}
         </div>
         <h2 className="text text_type_main-medium">Начинки</h2>
         <div className={styles.container + " pt-6 pl-4"}>
-          {props.data.map((item) => {
-            return renderIngredient(item, "main");
+          {fillings.map((item) => {
+            return renderIngredient(item);
           })}
         </div>
       </div>
