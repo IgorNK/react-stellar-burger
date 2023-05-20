@@ -9,25 +9,23 @@ import styles from "./burgerconstructor.module.css";
 
 const BurgerConstructor = (props) => {
   const getTotal = (ingredients) => {
-    console.log(ingredients);
     return ingredients.reduce((sum, item) => sum + item.price, 0);
   };
 
-  const [order, setOrder] = useState({});
+  const [order, setOrder] = useState();
 
   useEffect(() => {
-    console.log("data in props:");
-    console.log(props.data);
-    setOrder({
-      total: getTotal(props.data),
-      ingredients: [...props.data],
-    });
+    console.log("use effect BurgerConstructo is fired");
+    props.data &&
+      setOrder({
+        total: getTotal(props.data),
+        ingredients: [...props.data],
+      });
   }, [props.data]);
 
   const bun = useMemo(() => {
-    console.log("order is:");
-    console.log(order);
-    order.find((item) => item.type === "bun");
+    console.log("getting a bun!");
+    if (order) return order.ingredients.find((item) => item.type === "bun");
   }, [order]);
 
   const renderBun = (item, type) => {
@@ -62,19 +60,20 @@ const BurgerConstructor = (props) => {
   return (
     <div className={styles.burgerconstructor + " mt-25 pl-4"}>
       <ul className={styles.list}>
-        {renderBun(bun, "top")}
+        {bun && renderBun(bun, "top")}
         <li className={styles.ingredientsContainer + " custom-scroll pr-4"}>
           <ul className={styles.list}>
-            {order.ingredients.map((item) => {
-              return renderIngredient(item);
-            })}
+            {order &&
+              order.ingredients.map((item) => {
+                return renderIngredient(item);
+              })}
           </ul>
         </li>
-        {renderBun(bun, "bottom")}
+        {bun && renderBun(bun, "bottom")}
       </ul>
       <div className={styles.checkoutContainer + " pr-8"}>
         <div className={styles.totalContainer}>
-          <p className="text text_type_digits-medium">{order.total}</p>
+          <p className="text text_type_digits-medium">{order && order.total}</p>
           <CurrencyIcon className={styles.priceIcon} />
         </div>
         <Button htmlType="button" type="primary" size="large">
