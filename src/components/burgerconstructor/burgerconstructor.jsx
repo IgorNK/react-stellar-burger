@@ -1,27 +1,34 @@
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   ConstructorElement,
   DragIcon,
   CurrencyIcon,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { data } from "../../utils/data";
 import styles from "./burgerconstructor.module.css";
 
 const BurgerConstructor = (props) => {
   const getTotal = (ingredients) => {
+    console.log(ingredients);
     return ingredients.reduce((sum, item) => sum + item.price, 0);
   };
 
-  const [order, setOrder] = useState({
-    total: getTotal(data),
-    ingredients: [...data],
-  });
+  const [order, setOrder] = useState({});
 
-  const getBun = (data) => {
-    const bun = data.find((item) => item.type === "bun");
-    return bun;
-  };
+  useEffect(() => {
+    console.log("data in props:");
+    console.log(props.data);
+    setOrder({
+      total: getTotal(props.data),
+      ingredients: [...props.data],
+    });
+  }, [props.data]);
+
+  const bun = useMemo(() => {
+    console.log("order is:");
+    console.log(order);
+    order.find((item) => item.type === "bun");
+  }, [order]);
 
   const renderBun = (item, type) => {
     return (
@@ -55,7 +62,7 @@ const BurgerConstructor = (props) => {
   return (
     <div className={styles.burgerconstructor + " mt-25 pl-4"}>
       <ul className={styles.list}>
-        {renderBun(getBun(order.ingredients), "top")}
+        {renderBun(bun, "top")}
         <li className={styles.ingredientsContainer + " custom-scroll pr-4"}>
           <ul className={styles.list}>
             {order.ingredients.map((item) => {
@@ -63,7 +70,7 @@ const BurgerConstructor = (props) => {
             })}
           </ul>
         </li>
-        {renderBun(getBun(order.ingredients), "bottom")}
+        {renderBun(bun, "bottom")}
       </ul>
       <div className={styles.checkoutContainer + " pr-8"}>
         <div className={styles.totalContainer}>

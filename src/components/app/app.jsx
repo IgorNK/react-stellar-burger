@@ -1,10 +1,32 @@
+import { useState, useEffect } from "react";
 import styles from "./app.module.css";
-import { data } from "../../utils/data";
+import { dataUrl } from "../../utils/data";
+import Api from "../../utils/api.js";
 import AppHeader from "../appheader/appheader";
 import BurgerIngredients from "../burgeringredients/burgeringredients";
 import BurgerConstructor from "../burgerconstructor/burgerconstructor";
 
 function App() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const api = new Api({ baseUrl: dataUrl });
+    const getData = async () => {
+      await api
+        .getIngredients()
+        .then((data) => {
+          setData([...data.data]);
+        })
+        .catch((err) => {
+          console.log(
+            `ERROR FETCHING DATA FROM SERVER: ${err} \n ${err.stack}`
+          );
+        });
+    };
+
+    getData();
+  }, []);
+
   return (
     <div className={styles.app}>
       <AppHeader />
@@ -17,7 +39,7 @@ function App() {
             <BurgerIngredients data={data} />
           </div>
           <div>
-            <BurgerConstructor />
+            <BurgerConstructor data={data} />
           </div>
         </section>
       </main>
