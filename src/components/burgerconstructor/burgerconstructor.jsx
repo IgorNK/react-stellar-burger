@@ -7,7 +7,7 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./burgerconstructor.module.css";
 
-const BurgerConstructor = (props) => {
+const BurgerConstructor = ({ data, modalHandlers }) => {
   const getTotal = (ingredients) => {
     return ingredients.reduce((sum, item) => sum + item.price, 0);
   };
