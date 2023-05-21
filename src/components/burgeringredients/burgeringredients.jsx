@@ -5,7 +5,7 @@ import Ingredient from "../ingredient/ingredient";
 import { ingredientPropType } from "../../utils/prop-types";
 import styles from "./burgeringredients.module.css";
 
-const BurgerIngredients = (props) => {
+const BurgerIngredients = ({ data, modalHandler }) => {
   const [current, setCurrent] = useState("buns");
 
   useEffect(() => {
@@ -19,23 +19,24 @@ const BurgerIngredients = (props) => {
         image={item.image}
         price={item.price}
         name={item.name}
+        clickHandler={() => modalHandler(item)}
       />
     );
   };
 
   const buns = useMemo(
-    () => props.data.filter((item) => item.type === "bun"),
-    [props.data]
+    () => data.filter((item) => item.type === "bun"),
+    [data]
   );
 
   const sauces = useMemo(
-    () => props.data.filter((item) => item.type === "sauce"),
-    [props.data]
+    () => data.filter((item) => item.type === "sauce"),
+    [data]
   );
 
   const fillings = useMemo(
-    () => props.data.filter((item) => item.type === "main"),
-    [props.data]
+    () => data.filter((item) => item.type === "main"),
+    [data]
   );
 
   return (

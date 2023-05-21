@@ -36,22 +36,16 @@ function App() {
   }, []);
 
   const handleOpenIngredientDetails = (ingredient) => {
-    const ingredientDetails = () => {
-      return <IngredientDetails></IngredientDetails>;
-    };
     setModalState({
       visible: true,
-      content: ingredientDetails,
+      content: <IngredientDetails></IngredientDetails>,
     });
   };
 
   const handleOpenOrderDetails = (order) => {
-    const orderDetails = () => {
-      return <OrderDetails></OrderDetails>;
-    };
     setModalState({
       visible: true,
-      content: orderDetails,
+      content: <OrderDetails></OrderDetails>,
     });
   };
 
@@ -78,19 +72,13 @@ function App() {
             </h1>
             <BurgerIngredients
               data={data}
-              modalHandlers={{
-                open: handleOpenIngredientDetails,
-                close: handleCloseModal,
-              }}
+              modalHandler={handleOpenIngredientDetails}
             />
           </div>
           <div>
             <BurgerConstructor
               data={data}
-              modalHandlers={{
-                open: handleOpenOrderDetails,
-                close: handleCloseModal,
-              }}
+              modalHandler={handleOpenOrderDetails}
             />
           </div>
         </section>

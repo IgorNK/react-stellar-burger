@@ -7,7 +7,7 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./burgerconstructor.module.css";
 
-const BurgerConstructor = ({ data, modalHandlers }) => {
+const BurgerConstructor = ({ data, modalHandler }) => {
   const getTotal = (ingredients) => {
     return ingredients.reduce((sum, item) => sum + item.price, 0);
   };
@@ -16,12 +16,12 @@ const BurgerConstructor = ({ data, modalHandlers }) => {
 
   useEffect(() => {
     console.log("use effect BurgerConstructo is fired");
-    props.data &&
+    data &&
       setOrder({
-        total: getTotal(props.data),
-        ingredients: [...props.data],
+        total: getTotal(data),
+        ingredients: [...data],
       });
-  }, [props.data]);
+  }, [data]);
 
   const bun = useMemo(() => {
     console.log("getting a bun!");

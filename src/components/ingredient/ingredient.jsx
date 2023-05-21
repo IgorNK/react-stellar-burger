@@ -6,15 +6,15 @@ import {
 import { ingredientPropType } from "../../utils/prop-types.js";
 import styles from "./ingredient.module.css";
 
-const Ingredient = (props) => {
+const Ingredient = ({ clickHandler, ...props }) => {
   const [count, setCount] = useState(0);
 
-  const handleClick = () => {
-    setCount(count + 1);
-  };
+  // const handleClick = () => {
+  //   setCount(count + 1);
+  // };
 
   return (
-    <div className={styles.ingredient} onClick={handleClick}>
+    <div className={styles.ingredient} onClick={clickHandler}>
       <img src={props.image} alt="ingredient" />
       <div className={styles.priceContainer}>
         <p className="text text_type_digits-default pr-2">{props.price}</p>

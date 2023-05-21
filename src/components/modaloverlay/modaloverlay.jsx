@@ -3,13 +3,11 @@ import styles from "./modaloverlay.module.css";
 
 const modalRoot = document.getElementById("react-modals");
 
-const ModalOverlay = () => {
-  const { children, header, onClose } = this.props;
+const ModalOverlay = ({ children, onClose }) => {
+  // const { children, header, onClose } = this.props;
 
   return createPortal(
-    <>
-      <div className="styles.overlay"></div>
-    </>,
+    <div className={styles.overlay}>{children}</div>,
     modalRoot
   );
 };

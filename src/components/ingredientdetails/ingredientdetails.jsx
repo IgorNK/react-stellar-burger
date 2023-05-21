@@ -1,3 +1,5 @@
-const IngredientDetails = () => {};
+const IngredientDetails = () => {
+  return <div></div>;
+};
 
 export default IngredientDetails;
