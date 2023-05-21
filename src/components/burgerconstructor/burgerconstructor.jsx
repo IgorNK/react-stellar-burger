@@ -18,6 +18,7 @@ const BurgerConstructor = ({ data, modalHandler }) => {
     console.log("use effect BurgerConstructo is fired");
     data &&
       setOrder({
+        orderId: "034536",
         total: getTotal(data),
         ingredients: [...data],
       });
@@ -76,7 +77,14 @@ const BurgerConstructor = ({ data, modalHandler }) => {
           <p className="text text_type_digits-medium">{order && order.total}</p>
           <CurrencyIcon className={styles.priceIcon} />
         </div>
-        <Button htmlType="button" type="primary" size="large">
+        <Button
+          htmlType="button"
+          type="primary"
+          size="large"
+          onClick={() => {
+            modalHandler(order);
+          }}
+        >
           Оформить заказ
         </Button>
       </div>

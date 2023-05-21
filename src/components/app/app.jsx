@@ -38,14 +38,14 @@ function App() {
   const handleOpenIngredientDetails = (ingredient) => {
     setModalState({
       visible: true,
-      content: <IngredientDetails></IngredientDetails>,
+      content: <IngredientDetails data={ingredient}></IngredientDetails>,
     });
   };
 
   const handleOpenOrderDetails = (order) => {
     setModalState({
       visible: true,
-      content: <OrderDetails></OrderDetails>,
+      content: <OrderDetails data={order}></OrderDetails>,
     });
   };
 
@@ -57,9 +57,12 @@ function App() {
   };
 
   const modal = useMemo(() => {
-    if (modalState.visible)
-      return <ModalOverlay>{modalState.content}</ModalOverlay>;
-  }, [modalState]);
+    return (
+      <ModalOverlay onClose={handleCloseModal}>
+        {modalState.content}
+      </ModalOverlay>
+    );
+  }, [modalState.content]);
 
   return (
     <div className={styles.app}>
@@ -83,7 +86,7 @@ function App() {
           </div>
         </section>
       </main>
-      {modal}
+      {modalState.visible && modal}
     </div>
   );
 }
