@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import Ingredient from "../ingredient/ingredient";
 import { ingredientPropType } from "../../utils/prop-types";
@@ -7,10 +7,6 @@ import styles from "./burgeringredients.module.css";
 
 const BurgerIngredients = ({ data, modalHandler }) => {
   const [current, setCurrent] = useState("buns");
-
-  useEffect(() => {
-    console.log("use effect BurgerIngredients is fired");
-  }, []);
 
   const renderIngredient = (item) => {
     return (

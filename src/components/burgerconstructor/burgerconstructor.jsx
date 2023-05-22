@@ -15,7 +15,6 @@ const BurgerConstructor = ({ data, modalHandler }) => {
   const [order, setOrder] = useState();
 
   useEffect(() => {
-    console.log("use effect BurgerConstructo is fired");
     data &&
       setOrder({
         orderId: "034536",
@@ -25,7 +24,6 @@ const BurgerConstructor = ({ data, modalHandler }) => {
   }, [data]);
 
   const bun = useMemo(() => {
-    console.log("getting a bun!");
     if (order) return order.ingredients.find((item) => item.type === "bun");
   }, [order]);
 

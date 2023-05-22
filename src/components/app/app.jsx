@@ -17,7 +17,6 @@ function App() {
   });
 
   useEffect(() => {
-    console.log("use effect App is fired");
     const api = new Api({ baseUrl: dataUrl });
     const getData = async () => {
       await api

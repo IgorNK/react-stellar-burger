@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   CurrencyIcon,
   Counter,
@@ -9,9 +9,10 @@ import styles from "./ingredient.module.css";
 const Ingredient = ({ clickHandler, ...props }) => {
   const [count, setCount] = useState(0);
 
-  // const handleClick = () => {
-  //   setCount(count + 1);
-  // };
+  // Setting the count for each ingredient purely for debugging purposes:
+  useEffect(() => {
+    setCount(1);
+  }, []);
 
   return (
     <div className={styles.ingredient} onClick={clickHandler}>
