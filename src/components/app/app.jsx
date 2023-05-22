@@ -1,11 +1,11 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import styles from "./app.module.css";
 import { dataUrl } from "../../utils/data";
 import Api from "../../utils/api.js";
 import AppHeader from "../appheader/appheader";
 import BurgerIngredients from "../burgeringredients/burgeringredients";
 import BurgerConstructor from "../burgerconstructor/burgerconstructor";
-import ModalOverlay from "../modaloverlay/modaloverlay";
+import Modal from "../modal/modal";
 import IngredientDetails from "../ingredientdetails/ingredientdetails";
 import OrderDetails from "../orderdetails/orderdetails";
 
@@ -49,20 +49,16 @@ function App() {
     });
   };
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     setModalState({
       ...modalState,
       visible: false,
     });
-  };
+  }, [modalState]);
 
   const modal = useMemo(() => {
-    return (
-      <ModalOverlay onClose={handleCloseModal}>
-        {modalState.content}
-      </ModalOverlay>
-    );
-  }, [modalState.content]);
+    return <Modal onClose={handleCloseModal}>{modalState.content}</Modal>;
+  }, [modalState.content, handleCloseModal]);
 
   return (
     <div className={styles.app}>
