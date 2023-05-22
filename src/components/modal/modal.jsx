@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import styles from "./modal.module.css";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import ModalOverlay from "../modaloverlay/modaloverlay";
@@ -14,9 +14,25 @@ const Modal = ({ children, onClose }) => {
     setCloseIconState("primary");
   };
 
+  const handleEscapeButton = useCallback(
+    (e) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    },
+    [onClose]
+  );
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleEscapeButton);
+    return () => {
+      document.removeEventListener("keydown", handleEscapeButton);
+    };
+  }, [handleEscapeButton]);
+
   return (
-    <ModalOverlay>
-      <div className={styles.container}>
+    <ModalOverlay handleClick={onClose}>
+      <div onClick={(e) => e.stopPropagation()} className={styles.container}>
         <button
           type="button"
           className={styles.closeButton}
