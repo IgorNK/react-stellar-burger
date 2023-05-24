@@ -8,6 +8,7 @@ import BurgerConstructor from "../burgerconstructor/burgerconstructor";
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredientdetails/ingredientdetails";
 import OrderDetails from "../orderdetails/orderdetails";
+import ErrorPopup from "../errorpopup/errorpopup";
 
 function App() {
   const [data, setData] = useState([]);
@@ -15,6 +16,7 @@ function App() {
     visible: false,
     content: null,
   });
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const api = new Api({ baseUrl: dataUrl });
@@ -25,14 +27,18 @@ function App() {
           setData([...data.data]);
         })
         .catch((err) => {
-          console.log(
-            `ERROR FETCHING DATA FROM SERVER: ${err} \n ${err.stack}`
-          );
+          const errorMessage = `ERROR FETCHING DATA FROM SERVER: ${err} \n ${err.stack}`;
+          setError(errorMessage);
+          console.log(errorMessage);
         });
     };
 
     getData();
   }, []);
+
+  useEffect(() => {
+    error && handleOpenError(error);
+  }, [error]);
 
   const handleOpenIngredientDetails = (ingredient) => {
     setModalState({
@@ -45,6 +51,13 @@ function App() {
     setModalState({
       visible: true,
       content: <OrderDetails data={order}></OrderDetails>,
+    });
+  };
+
+  const handleOpenError = (errorMsg) => {
+    setModalState({
+      visible: true,
+      content: <ErrorPopup>{errorMsg}</ErrorPopup>,
     });
   };
 

@@ -1,4 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
+import { PropTypes } from "prop-types";
+import { ingredientPropType } from "../../utils/prop-types";
 import {
   ConstructorElement,
   DragIcon,
@@ -88,6 +90,11 @@ const BurgerConstructor = ({ data, modalHandler }) => {
       </div>
     </div>
   );
+};
+
+BurgerConstructor.propTypes = {
+  data: PropTypes.arrayOf(ingredientPropType),
+  modalHandler: PropTypes.func,
 };
 
 export default BurgerConstructor;

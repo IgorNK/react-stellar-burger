@@ -78,6 +78,7 @@ const BurgerIngredients = ({ data, modalHandler }) => {
 
 BurgerIngredients.propTypes = {
   data: PropTypes.arrayOf(ingredientPropType).isRequired,
+  modalHandler: PropTypes.func,
 };
 
 export default BurgerIngredients;

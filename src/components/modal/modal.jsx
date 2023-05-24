@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { PropTypes } from "prop-types";
 import styles from "./modal.module.css";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import ModalOverlay from "../modaloverlay/modaloverlay";
@@ -31,7 +32,8 @@ const Modal = ({ children, onClose }) => {
   }, [handleEscapeButton]);
 
   return (
-    <ModalOverlay handleClick={onClose}>
+    <div className={styles.modal}>
+      <ModalOverlay handleClick={onClose} />
       <div onClick={(e) => e.stopPropagation()} className={styles.container}>
         <button
           type="button"
@@ -44,8 +46,16 @@ const Modal = ({ children, onClose }) => {
         </button>
         {children}
       </div>
-    </ModalOverlay>
+    </div>
   );
+};
+
+Modal.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
+  onClose: PropTypes.func,
 };
 
 export default Modal;

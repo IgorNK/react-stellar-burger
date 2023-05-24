@@ -14,7 +14,7 @@ function _checkResponse(res) {
   if (res.ok) {
     return res.json();
   }
-  return Promise.reject(res.status);
+  return res.json().then((err) => Promise.reject(err));
 }
 
 export default Api;
