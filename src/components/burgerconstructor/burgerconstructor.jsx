@@ -35,7 +35,7 @@ const BurgerConstructor = ({ data, modalHandler }) => {
         <ConstructorElement
           type={type}
           isLocked={true}
-          text={item.name}
+          text={item.name + (type === "top" ? " (верх)" : " (низ)")}
           price={item.price}
           thumbnail={item.image_mobile}
         />
