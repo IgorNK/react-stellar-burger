@@ -1,5 +1,6 @@
 import styles from "./orderdetails.module.css";
 import orderAcceptedIcon from "../../images/order_accepted.svg";
+import { PropTypes } from "prop-types";
 
 const OrderDetails = ({ number }) => {
   return (
@@ -19,6 +20,10 @@ const OrderDetails = ({ number }) => {
       </p>
     </div>
   );
+};
+
+OrderDetails.propTypes = {
+  number: PropTypes.number,
 };
 
 export default OrderDetails;
