@@ -4,7 +4,18 @@ class Api {
   }
 
   getIngredients() {
-    return fetch(this._config.baseUrl).then((res) => {
+    return fetch(`${this._config.baseUrl}/ingredients`).then((res) => {
+      return _checkResponse(res);
+    });
+  }
+
+  submitOrder(ingredientIDs) {
+    return fetch(`${this._config.baseUrl}/orders`, {
+      method: "POST",
+      body: JSON.stringify({
+        ingredients: ingredientIDs,
+      }),
+    }).then((res) => {
       return _checkResponse(res);
     });
   }

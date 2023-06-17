@@ -1,12 +1,14 @@
 import PropTypes from "prop-types";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useContext } from "react";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import Ingredient from "../ingredient/ingredient";
 import { ingredientPropType } from "../../utils/prop-types";
 import styles from "./burgeringredients.module.css";
+import { CartContext } from "../../services/cartContext";
 
 const BurgerIngredients = ({ data, modalHandler }) => {
   const [current, setCurrent] = useState("buns");
+  const { cartDispatcher } = useContext(CartContext);
 
   const renderIngredient = (item) => {
     return (
@@ -15,9 +17,15 @@ const BurgerIngredients = ({ data, modalHandler }) => {
         image={item.image}
         price={item.price}
         name={item.name}
-        clickHandler={() => modalHandler(item)}
+        clickHandler={() => addToCart(item)}
+        //clickHandler={() => modalHandler(item)}
       />
     );
+  };
+
+  const addToCart = (item) => {
+    // setCart([...cart, item]);
+    cartDispatcher({ type: "add", payload: item });
   };
 
   const buns = useMemo(

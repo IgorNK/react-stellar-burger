@@ -5,7 +5,7 @@ const OrderDetails = (props) => {
   return (
     <div className={styles.container + " mt-30 mb-30"}>
       <p className={styles.orderid + " text text_type_digits-large"}>
-        {props.data.orderId}
+        {props.number}
       </p>
       <p className="text text_type_main-medium mt-8">идентификатор заказа</p>
       <img

@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useContext } from "react";
 import { PropTypes } from "prop-types";
 import { ingredientPropType } from "../../utils/prop-types";
 import {
@@ -8,26 +8,25 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./burgerconstructor.module.css";
+import { CartContext } from "../../services/cartContext";
 
-const BurgerConstructor = ({ data, modalHandler }) => {
-  const getTotal = (ingredients) => {
-    return ingredients.reduce((sum, item) => sum + item.price, 0);
-  };
+const BurgerConstructor = ({ modalHandler }) => {
+  const { cartState } = useContext(CartContext);
 
-  const [order, setOrder] = useState();
-
-  useEffect(() => {
-    data &&
-      setOrder({
-        orderId: "034536",
-        total: getTotal(data),
-        ingredients: [...data],
-      });
-  }, [data]);
+  // const [order, setOrder] = useState();
+  //
+  // useEffect(() => {
+  //   cartState &&
+  //     setOrder({
+  //       total: cartState.total,
+  //       ingredientIDs: getIngredientIDs(cartState.ingredients),
+  //     });
+  // }, [cartState]);
 
   const bun = useMemo(() => {
-    if (order) return order.ingredients.find((item) => item.type === "bun");
-  }, [order]);
+    if (cartState)
+      return cartState.ingredients.find((item) => item.type === "bun");
+  }, [cartState]);
 
   const renderBun = (item, type) => {
     return (
@@ -43,9 +42,10 @@ const BurgerConstructor = ({ data, modalHandler }) => {
     );
   };
 
-  const renderIngredient = (item) => {
+  const renderIngredient = (item, index) => {
+    // console.log(`item: ${item.name}, index: ${index}`);
     return item.type !== "bun" ? (
-      <li key={item._id} className={styles.draggable + " pl-8"}>
+      <li key={index} className={styles.draggable + " pl-8"}>
         <div className={styles.dragHandle}>
           <DragIcon />
         </div>
@@ -64,9 +64,9 @@ const BurgerConstructor = ({ data, modalHandler }) => {
         {bun && renderBun(bun, "top")}
         <li className={styles.ingredientsContainer + " custom-scroll pr-4"}>
           <ul className={styles.list}>
-            {order &&
-              order.ingredients.map((item) => {
-                return renderIngredient(item);
+            {cartState &&
+              cartState.ingredients.map((item, index) => {
+                return renderIngredient(item, index);
               })}
           </ul>
         </li>
@@ -74,7 +74,9 @@ const BurgerConstructor = ({ data, modalHandler }) => {
       </ul>
       <div className={styles.checkoutContainer + " pr-8"}>
         <div className={styles.totalContainer}>
-          <p className="text text_type_digits-medium">{order && order.total}</p>
+          <p className="text text_type_digits-medium">
+            {cartState && cartState.total}
+          </p>
           <CurrencyIcon className={styles.priceIcon} />
         </div>
         <Button
@@ -82,7 +84,7 @@ const BurgerConstructor = ({ data, modalHandler }) => {
           type="primary"
           size="large"
           onClick={() => {
-            modalHandler(order);
+            modalHandler(cartState);
           }}
         >
           Оформить заказ
