@@ -17,7 +17,10 @@ const BurgerIngredients = ({ data, modalHandler }) => {
         image={item.image}
         price={item.price}
         name={item.name}
-        clickHandler={() => addToCart(item)}
+        clickHandler={() => {
+          modalHandler(item);
+          addToCart(item);
+        }}
         //clickHandler={() => modalHandler(item)}
       />
     );

@@ -54,6 +54,10 @@ function App() {
 
   const [cartState, cartDispatcher] = useReducer(cartReducer, initialCart);
 
+  const cartContextValue = useMemo(() => {
+    return { cartState, cartDispatcher };
+  }, [cartState, cartDispatcher]);
+
   useEffect(() => {
     const getData = async () => {
       console.log("get data");
@@ -135,7 +139,7 @@ function App() {
       <AppHeader />
       <main className={styles.main + " pl-5 pr-5"}>
         <section className={styles.twoColumns}>
-          <CartContext.Provider value={{ cartState, cartDispatcher }}>
+          <CartContext.Provider value={cartContextValue}>
             <div>
               <h1 className="text text_type_main-large mt-10 mb-5">
                 Соберите бургер
