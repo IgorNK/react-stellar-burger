@@ -73,6 +73,10 @@ function App() {
   }, []);
 
   useEffect(() => {
+    order && handleOpenOrderDetails(order);
+  }, [order]);
+
+  useEffect(() => {
     error && handleOpenError(error);
   }, [error]);
 
@@ -87,23 +91,24 @@ function App() {
     console.log("submit order");
     await api
       .submitOrder(ingredientIDs)
-      .then((response) => {
-        setOrder(response);
+      .then((res) => {
+        setOrder(res.order);
       })
       .catch((err) => {
         const errorMessage = `ERROR POSTING ORDER: ${err} \n ${err.message}`;
         setError(errorMessage);
-        console.log(errorMessage);
       });
   };
 
-  const handleOpenOrderDetails = (cartState) => {
+  const handleOrderSubmit = async (cartState) => {
     const ingredientIDs = getIngredientIDs(cartState.ingredients);
-    requestOrderSubmit(ingredientIDs).then(() => {
-      setModalState({
-        visible: true,
-        content: <OrderDetails number={order.number}></OrderDetails>,
-      });
+    await requestOrderSubmit(ingredientIDs);
+  };
+
+  const handleOpenOrderDetails = (order) => {
+    setModalState({
+      visible: true,
+      content: <OrderDetails number={order.number}></OrderDetails>,
     });
   };
 
@@ -141,7 +146,7 @@ function App() {
               />
             </div>
             <div>
-              <BurgerConstructor modalHandler={handleOpenOrderDetails} />
+              <BurgerConstructor modalHandler={handleOrderSubmit} />
             </div>
           </CartContext.Provider>
         </section>

@@ -3,8 +3,8 @@ import { useState, useMemo, useContext } from "react";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import Ingredient from "../ingredient/ingredient";
 import { ingredientPropType } from "../../utils/prop-types";
-import styles from "./burgeringredients.module.css";
 import { CartContext } from "../../services/cartContext";
+import styles from "./burgeringredients.module.css";
 
 const BurgerIngredients = ({ data, modalHandler }) => {
   const [current, setCurrent] = useState("buns");
@@ -24,7 +24,6 @@ const BurgerIngredients = ({ data, modalHandler }) => {
   };
 
   const addToCart = (item) => {
-    // setCart([...cart, item]);
     cartDispatcher({ type: "add", payload: item });
   };
 

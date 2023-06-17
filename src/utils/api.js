@@ -12,6 +12,9 @@ class Api {
   submitOrder(ingredientIDs) {
     return fetch(`${this._config.baseUrl}/orders`, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
         ingredients: ingredientIDs,
       }),

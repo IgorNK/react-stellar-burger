@@ -7,21 +7,11 @@ import {
   CurrencyIcon,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import styles from "./burgerconstructor.module.css";
 import { CartContext } from "../../services/cartContext";
+import styles from "./burgerconstructor.module.css";
 
 const BurgerConstructor = ({ modalHandler }) => {
   const { cartState } = useContext(CartContext);
-
-  // const [order, setOrder] = useState();
-  //
-  // useEffect(() => {
-  //   cartState &&
-  //     setOrder({
-  //       total: cartState.total,
-  //       ingredientIDs: getIngredientIDs(cartState.ingredients),
-  //     });
-  // }, [cartState]);
 
   const bun = useMemo(() => {
     if (cartState)
