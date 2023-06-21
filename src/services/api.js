@@ -3,13 +3,13 @@ class Api {
     this._config = options;
   }
 
-  getIngredients() {
+  getIngredientsRequest() {
     return fetch(`${this._config.baseUrl}/ingredients`).then((res) => {
       return _checkResponse(res);
     });
   }
 
-  submitOrder(ingredientIDs) {
+  submitOrderRequest(ingredientIDs) {
     return fetch(`${this._config.baseUrl}/orders`, {
       method: "POST",
       headers: {

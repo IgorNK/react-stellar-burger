@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useCallback, useReducer } from "react";
 import styles from "./app.module.css";
 import { dataUrl } from "../../utils/data";
-import Api from "../../utils/api.js";
+import Api from "../../services/api.js";
 import AppHeader from "../appheader/appheader";
 import BurgerIngredients from "../burgeringredients/burgeringredients";
 import BurgerConstructor from "../burgerconstructor/burgerconstructor";
@@ -62,7 +62,7 @@ function App() {
     const getData = async () => {
       console.log("get data");
       await api
-        .getIngredients()
+        .getIngredientsRequest()
         .then((data) => {
           setData([...data.data]);
         })
@@ -94,7 +94,7 @@ function App() {
   const requestOrderSubmit = async (ingredientIDs) => {
     console.log("submit order");
     await api
-      .submitOrder(ingredientIDs)
+      .submitOrderRequest(ingredientIDs)
       .then((res) => {
         setOrder(res.order);
       })
