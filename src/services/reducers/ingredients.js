@@ -40,10 +40,16 @@ export const ingredientsReducer = (state = initialState, action) => {
       };
     }
     case SHOW_INGREDIENT: {
-      break;
+      return {
+        ...state,
+        shownIngredient: action.item,
+      };
     }
     case SWITCH_TAB: {
-      break;
+      return {
+        ...state,
+        currentTab: action.tab,
+      };
     }
     default: {
       return state;

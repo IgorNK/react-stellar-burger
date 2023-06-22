@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo, useCallback, useReducer } from "react";
+import { useSelector } from "react-redux";
 import styles from "./app.module.css";
-import { dataUrl } from "../../utils/data";
-import Api from "../../services/api.js";
 import AppHeader from "../appheader/appheader";
 import BurgerIngredients from "../burgeringredients/burgeringredients";
 import BurgerConstructor from "../burgerconstructor/burgerconstructor";
@@ -9,80 +8,33 @@ import Modal from "../modal/modal";
 import IngredientDetails from "../ingredientdetails/ingredientdetails";
 import OrderDetails from "../orderdetails/orderdetails";
 import ErrorPopup from "../errorpopup/errorpopup";
-import { CartContext } from "../../services/cartContext";
-
-const initialCart = { total: 0, ingredients: [] };
-
-function cartReducer(state, action) {
-  switch (action.type) {
-    case "add": {
-      const newIngredients = [...state.ingredients, action.payload];
-      const newTotal = getTotal(newIngredients);
-      return { total: newTotal, ingredients: newIngredients };
-    }
-    case "remove": {
-      const newIngredients = [...initialCart.ingredients];
-      const ingredientIndex = newIngredients.indexOf(action.payload);
-      if (ingredientIndex > -1) {
-        newIngredients.splice(ingredientIndex, 1);
-      }
-      const newTotal = getTotal(newIngredients);
-      return { total: newTotal, ingredients: newIngredients };
-    }
-    default:
-      throw new Error(`Wrong type of action: ${action.type}`);
-  }
-}
-
-function getTotal(ingredients) {
-  return ingredients.reduce((sum, item) => sum + item.price, 0);
-}
-
-function getIngredientIDs(ingredients) {
-  return ingredients.map((item) => item._id);
-}
 
 function App() {
-  const api = new Api({ baseUrl: dataUrl });
-  const [data, setData] = useState([]);
+  const { shownIngredient, order, error } = useSelector((store) => ({
+    shownIngredient: store.ingredients.shownIngredient,
+    order: store.order,
+    error: store.error,
+  }));
+
   const [modalState, setModalState] = useState({
     visible: false,
     content: null,
   });
-  const [error, setError] = useState(null);
-  const [order, setOrder] = useState(null);
-
-  const [cartState, cartDispatcher] = useReducer(cartReducer, initialCart);
-
-  const cartContextValue = useMemo(() => {
-    return { cartState, cartDispatcher };
-  }, [cartState, cartDispatcher]);
 
   useEffect(() => {
-    const getData = async () => {
-      console.log("get data");
-      await api
-        .getIngredientsRequest()
-        .then((data) => {
-          setData([...data.data]);
-        })
-        .catch((err) => {
-          const errorMessage = `ERROR FETCHING DATA FROM SERVER: ${err} \n ${err.stack}`;
-          setError(errorMessage);
-          console.log(errorMessage);
-        });
-    };
-
-    getData();
-  }, []);
-
-  useEffect(() => {
-    order && handleOpenOrderDetails(order);
+    !order.orderFailed &&
+      !order.orderRequest &&
+      order.number &&
+      handleOpenOrderDetails(order.number);
   }, [order]);
 
   useEffect(() => {
     error && handleOpenError(error);
   }, [error]);
+
+  useEffect(() => {
+    shownIngredient && handleOpenIngredientDetails(shownIngredient);
+  }, [shownIngredient]);
 
   const handleOpenIngredientDetails = (ingredient) => {
     setModalState({
@@ -91,28 +43,10 @@ function App() {
     });
   };
 
-  const requestOrderSubmit = async (ingredientIDs) => {
-    console.log("submit order");
-    await api
-      .submitOrderRequest(ingredientIDs)
-      .then((res) => {
-        setOrder(res.order);
-      })
-      .catch((err) => {
-        const errorMessage = `ERROR POSTING ORDER: ${err} \n ${err.message}`;
-        setError(errorMessage);
-      });
-  };
-
-  const handleOrderSubmit = async (cartState) => {
-    const ingredientIDs = getIngredientIDs(cartState.ingredients);
-    await requestOrderSubmit(ingredientIDs);
-  };
-
-  const handleOpenOrderDetails = (order) => {
+  const handleOpenOrderDetails = (number) => {
     setModalState({
       visible: true,
-      content: <OrderDetails number={order.number}></OrderDetails>,
+      content: <OrderDetails number={number}></OrderDetails>,
     });
   };
 
@@ -139,20 +73,15 @@ function App() {
       <AppHeader />
       <main className={styles.main + " pl-5 pr-5"}>
         <section className={styles.twoColumns}>
-          <CartContext.Provider value={cartContextValue}>
-            <div>
-              <h1 className="text text_type_main-large mt-10 mb-5">
-                Соберите бургер
-              </h1>
-              <BurgerIngredients
-                data={data}
-                modalHandler={handleOpenIngredientDetails}
-              />
-            </div>
-            <div>
-              <BurgerConstructor modalHandler={handleOrderSubmit} />
-            </div>
-          </CartContext.Provider>
+          <div>
+            <h1 className="text text_type_main-large mt-10 mb-5">
+              Соберите бургер
+            </h1>
+            <BurgerIngredients />
+          </div>
+          <div>
+            <BurgerConstructor />
+          </div>
         </section>
       </main>
       {modalState.visible && modal}

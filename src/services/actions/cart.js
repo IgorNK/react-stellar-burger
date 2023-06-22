@@ -1,6 +1,2 @@
-export const ADD_INGREDIENT = "ADD_INGREDIENT";
-export const REMOVE_INGREDIENT = "REMOVE_INGREDIENT";
-
-export function addToCart(ingredient) {}
-
-export function removeFromCart(ingredient) {}
+export const ADD_TO_CART = "ADD_TO_CART";
+export const REMOVE_FROM_CART = "REMOVE_FROM_CART";

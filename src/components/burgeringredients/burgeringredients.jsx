@@ -1,94 +1,169 @@
 import PropTypes from "prop-types";
-import { useState, useMemo, useContext } from "react";
+import { useMemo, useCallback, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import Ingredient from "../ingredient/ingredient";
-import { ingredientPropType } from "../../utils/prop-types";
-import { CartContext } from "../../services/cartContext";
 import styles from "./burgeringredients.module.css";
+import { getIngredients } from "../../services/actions/ingredients";
+import { ADD_TO_CART, REMOVE_FROM_CART } from "../../services/actions/cart";
+import {
+  SWITCH_TAB,
+  SHOW_INGREDIENT,
+} from "../../services/actions/ingredients";
 
-const BurgerIngredients = ({ data, modalHandler }) => {
-  const [current, setCurrent] = useState("buns");
-  const { cartDispatcher } = useContext(CartContext);
+const BurgerIngredients = () => {
+  const dispatch = useDispatch();
 
-  const renderIngredient = (item) => {
-    return (
-      <Ingredient
-        key={item._id}
-        image={item.image}
-        price={item.price}
-        name={item.name}
-        clickHandler={() => {
-          modalHandler(item);
-          addToCart(item);
-        }}
-        //clickHandler={() => modalHandler(item)}
-      />
-    );
-  };
+  useEffect(() => {
+    dispatch(getIngredients());
+  }, [dispatch]);
 
-  const addToCart = (item) => {
-    cartDispatcher({ type: "add", payload: item });
-  };
+  const { ingredients, currentTab, ingredientsRequest } = useSelector(
+    (store) => store.ingredients
+  );
+
+  const addToCart = useCallback(
+    (item) => {
+      dispatch({
+        type: ADD_TO_CART,
+        ingredient: item,
+      });
+    },
+    [dispatch]
+  );
+
+  const showIngredient = useCallback(
+    (item) => {
+      dispatch({
+        type: SHOW_INGREDIENT,
+        item: item,
+      });
+    },
+    [dispatch]
+  );
+
+  const renderIngredient = useCallback(
+    (item) => {
+      return (
+        <Ingredient
+          key={item._id}
+          image={item.image}
+          price={item.price}
+          name={item.name}
+          clickHandler={() => {
+            showIngredient(item);
+            addToCart(item);
+          }}
+        />
+      );
+    },
+    [addToCart, showIngredient]
+  );
 
   const buns = useMemo(
-    () => data.filter((item) => item.type === "bun"),
-    [data]
+    () => ingredients.filter((item) => item.type === "bun"),
+    [ingredients]
   );
 
   const sauces = useMemo(
-    () => data.filter((item) => item.type === "sauce"),
-    [data]
+    () => ingredients.filter((item) => item.type === "sauce"),
+    [ingredients]
   );
 
   const fillings = useMemo(
-    () => data.filter((item) => item.type === "main"),
-    [data]
+    () => ingredients.filter((item) => item.type === "main"),
+    [ingredients]
   );
 
-  return (
-    <div>
-      <div className={styles.tabs + " pt-5 pb-10"}>
-        <Tab value="buns" active={current === "buns"} onClick={setCurrent}>
+  const bunsRef = useRef(null);
+  const saucesRef = useRef(null);
+  const fillingsRef = useRef(null);
+  const scrollContainerRef = useRef(null);
+
+  const handleScroll = useCallback(() => {
+    const scrollTop = scrollContainerRef.current.scrollTop;
+    const offsets = [
+      { name: "buns", offset: Math.abs(bunsRef.current.offsetTop - scrollTop) },
+      {
+        name: "sauces",
+        offset: Math.abs(saucesRef.current.offsetTop - scrollTop),
+      },
+      {
+        name: "fillings",
+        offset: Math.abs(fillingsRef.current.offsetTop - scrollTop),
+      },
+    ];
+
+    const tab = offsets.reduce((acc, val) => {
+      return acc.offset < val.offset ? acc : val;
+    });
+
+    if (currentTab !== tab.name) {
+      // console.log(`currentTab: ${currentTab}, tabname: ${tab.name}`);
+      dispatch({ type: SWITCH_TAB, tab: tab.name });
+    }
+  }, [currentTab, dispatch]);
+
+  const ingredientsContainer = useMemo(() => {
+    return !ingredientsRequest ? (
+      <div
+        className={styles.ingredients + " custom-scroll"}
+        ref={scrollContainerRef}
+        onScroll={handleScroll}
+      >
+        <h2 className="text text_type_main-medium" ref={bunsRef}>
           Булки
-        </Tab>
-        <Tab value="sauces" active={current === "sauces"} onClick={setCurrent}>
-          Соусы
-        </Tab>
-        <Tab
-          value="fillings"
-          active={current === "fillings"}
-          onClick={setCurrent}
-        >
-          Начинки
-        </Tab>
-      </div>
-      <div className={styles.ingredients + " custom-scroll"}>
-        <h2 className="text text_type_main-medium">Булки</h2>
+        </h2>
         <div className={styles.container + " pt-6 pl-4"}>
           {buns.map((item) => {
             return renderIngredient(item);
           })}
         </div>
-        <h2 className="text text_type_main-medium">Соусы</h2>
+        <h2 className="text text_type_main-medium" ref={saucesRef}>
+          Соусы
+        </h2>
         <div className={styles.container + " pt-6 pl-4"}>
           {sauces.map((item) => {
             return renderIngredient(item);
           })}
         </div>
-        <h2 className="text text_type_main-medium">Начинки</h2>
+        <h2 className="text text_type_main-medium" ref={fillingsRef}>
+          Начинки
+        </h2>
         <div className={styles.container + " pt-6 pl-4"}>
           {fillings.map((item) => {
             return renderIngredient(item);
           })}
         </div>
       </div>
+    ) : (
+      <p className="text text_type_main-medium">Загрузка...</p>
+    );
+  }, [
+    buns,
+    sauces,
+    fillings,
+    renderIngredient,
+    ingredientsRequest,
+    handleScroll,
+  ]);
+
+  return (
+    <div>
+      <div className={styles.tabs + " pt-5 pb-10"}>
+        <Tab value="buns" active={currentTab === "buns"}>
+          Булки
+        </Tab>
+        <Tab value="sauces" active={currentTab === "sauces"}>
+          Соусы
+        </Tab>
+        <Tab value="fillings" active={currentTab === "fillings"}>
+          Начинки
+        </Tab>
+      </div>
+      {ingredientsContainer}
     </div>
   );
-};
-
-BurgerIngredients.propTypes = {
-  data: PropTypes.arrayOf(ingredientPropType).isRequired,
-  modalHandler: PropTypes.func,
 };
 
 export default BurgerIngredients;
