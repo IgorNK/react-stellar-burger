@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { useMemo, useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";

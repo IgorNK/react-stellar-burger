@@ -1,5 +1,5 @@
-import { useState, useEffect, useMemo, useCallback, useReducer } from "react";
-import { useSelector } from "react-redux";
+import { useState, useEffect, useMemo, useCallback } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import styles from "./app.module.css";
 import AppHeader from "../appheader/appheader";
 import BurgerIngredients from "../burgeringredients/burgeringredients";
@@ -8,8 +8,11 @@ import Modal from "../modal/modal";
 import IngredientDetails from "../ingredientdetails/ingredientdetails";
 import OrderDetails from "../orderdetails/orderdetails";
 import ErrorPopup from "../errorpopup/errorpopup";
+import { SHOW_INGREDIENT } from "../../services/actions/ingredients";
 
 function App() {
+  const dispatch = useDispatch();
+
   const { shownIngredient, order, error } = useSelector((store) => ({
     shownIngredient: store.ingredients.shownIngredient,
     order: store.order,
@@ -61,6 +64,10 @@ function App() {
     setModalState({
       ...modalState,
       visible: false,
+    });
+    dispatch({
+      type: SHOW_INGREDIENT,
+      item: null,
     });
   }, [modalState]);
 
