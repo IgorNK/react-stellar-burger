@@ -21,16 +21,6 @@ const BurgerIngredients = () => {
     (store) => store.ingredients
   );
 
-  const addToCart = useCallback(
-    (item) => {
-      dispatch({
-        type: ADD_TO_CART,
-        ingredient: item,
-      });
-    },
-    [dispatch]
-  );
-
   const showIngredient = useCallback(
     (item) => {
       dispatch({
@@ -46,17 +36,14 @@ const BurgerIngredients = () => {
       return (
         <Ingredient
           key={item._id}
-          image={item.image}
-          price={item.price}
-          name={item.name}
+          item={item}
           clickHandler={() => {
             showIngredient(item);
-            addToCart(item);
           }}
         />
       );
     },
-    [addToCart, showIngredient]
+    [showIngredient]
   );
 
   const buns = useMemo(
