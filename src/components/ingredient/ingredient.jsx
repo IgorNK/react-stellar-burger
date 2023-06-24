@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useDrag } from "react-dnd";
 import {
   CurrencyIcon,
@@ -9,11 +9,10 @@ import { ingredientPropType } from "../../utils/prop-types.js";
 import styles from "./ingredient.module.css";
 
 const Ingredient = (props) => {
-  const { item, clickHandler } = props;
+  const { item, cartID, type, pos, board, clickHandler } = props;
   const { cartItems } = useSelector((store) => store.cart);
   const [count, setCount] = useState(0);
 
-  // Setting the count for each ingredient purely for debugging purposes:
   useEffect(() => {
     const count = cartItems.reduce(
       (acc, cartItem) => (cartItem.item._id === item._id ? acc + 1 : acc),
@@ -27,7 +26,7 @@ const Ingredient = (props) => {
     item: { item: item },
   });
 
-  return (
+  const listIngredient = (
     <div ref={ref} className={styles.ingredient} onClick={clickHandler}>
       <img src={item.image} alt="ingredient" />
       <div className={styles.priceContainer}>
@@ -38,6 +37,8 @@ const Ingredient = (props) => {
       {count > 0 && <Counter count={count} size="default" extraClass="m-1" />}
     </div>
   );
+
+  return listIngredient;
 };
 
 // Ingredient.propTypes = ingredientPropType;

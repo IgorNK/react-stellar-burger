@@ -37,6 +37,7 @@ const BurgerIngredients = () => {
         <Ingredient
           key={item._id}
           item={item}
+          board="default"
           clickHandler={() => {
             showIngredient(item);
           }}
