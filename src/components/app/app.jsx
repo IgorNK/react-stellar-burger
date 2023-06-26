@@ -9,6 +9,7 @@ import IngredientDetails from "../ingredient-details/ingredient-details";
 import OrderDetails from "../order-details/order-details";
 import ErrorPopup from "../error-popup/error-popup";
 import { SHOW_INGREDIENT } from "../../services/actions/ingredients";
+import { DISPLAY_ERROR_MESSAGE } from "../../services/actions";
 
 function App() {
   const dispatch = useDispatch();
@@ -65,10 +66,16 @@ function App() {
       ...modalState,
       visible: false,
     });
-    dispatch({
-      type: SHOW_INGREDIENT,
-      item: null,
-    });
+    shownIngredient &&
+      dispatch({
+        type: SHOW_INGREDIENT,
+        item: null,
+      });
+    error &&
+      dispatch({
+        type: DISPLAY_ERROR_MESSAGE,
+        message: null,
+      });
   }, [modalState, dispatch]);
 
   return (
