@@ -1,4 +1,4 @@
-import styles from "./navbutton.module.css";
+import styles from "./nav-button.module.css";
 import {
   BurgerIcon,
   ListIcon,

@@ -1,18 +1,23 @@
 import uuid from "react-uuid";
-import {
-  ADD_TO_CART,
-  REMOVE_FROM_CART,
-  SET_CART_POSITION,
-  SET_DRAGGING,
-} from "../actions/cart";
+import { ADD_TO_CART, REMOVE_FROM_CART, MOVE_CART_ITEM } from "../actions/cart";
 
 const initialState = {
   total: 0,
   cartItems: [],
-  isDragging: false,
 };
 
 export const cartReducer = (state = initialState, action) => {
+  const getAdjustedPrice = (isBun = false, price) => {
+    return isBun ? price * 2 : price;
+  };
+
+  const moveCartItem = (dragIndex, hoverIndex) => {
+    const newItems = [...state.cartItems];
+    newItems.splice(dragIndex, 1);
+    newItems.splice(hoverIndex, 0, state.cartItems[dragIndex]);
+    return newItems;
+  };
+
   switch (action.type) {
     case ADD_TO_CART: {
       const newItems = [
@@ -22,7 +27,9 @@ export const cartReducer = (state = initialState, action) => {
           item: action.item,
         },
       ];
-      const newTotal = state.total + action.item.price;
+      const newTotal =
+        state.total +
+        getAdjustedPrice(action.item.type === "bun", action.item.price);
       return {
         ...state,
         total: newTotal,
@@ -33,35 +40,23 @@ export const cartReducer = (state = initialState, action) => {
       const cartItem = state.cartItems.find(
         (cartItem) => cartItem.key === action.key
       );
-      // console.log(`key: ${action.key}, cartItem: ${cartItem}`);
       const newItems = [...state.cartItems].filter(
         (item) => item.key !== action.key
       );
-      const newTotal = state.total - cartItem.item.price;
+
+      const newTotal =
+        state.total -
+        getAdjustedPrice(cartItem.item.type === "bun", cartItem.item.price);
       return {
         ...state,
         total: newTotal,
         cartItems: newItems,
       };
     }
-    case SET_CART_POSITION: {
-      const newItems = [...state.cartItems];
-      console.log(`dragged: ${action.draggedID}, index: ${action.index}`);
-      const draggedItem = newItems.find(
-        (cartItem) => cartItem.key === action.draggedID
-      ).item;
-      newItems.splice(action.index, 0, { key: uuid(), item: draggedItem });
+    case MOVE_CART_ITEM: {
       return {
         ...state,
-        cartItems: newItems.filter(
-          (cartItem) => cartItem.key !== action.draggedID
-        ),
-      };
-    }
-    case SET_DRAGGING: {
-      return {
-        ...state,
-        isDragging: action.value,
+        cartItems: moveCartItem(action.dragIndex, action.hoverIndex),
       };
     }
     default: {

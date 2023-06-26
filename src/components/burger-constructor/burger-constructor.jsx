@@ -1,21 +1,20 @@
-import { useMemo, useCallback, useState, useEffect } from "react";
+import { useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useDrag, useDrop } from "react-dnd";
+import { useDrop } from "react-dnd";
 import {
   CurrencyIcon,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import ConstructorIngredient from "../constructoringredient/constructoringredient";
-import ConstructorDropArea from "../constructordroparea/constructordroparea";
+import ConstructorIngredient from "../constructor-ingredient/constructor-ingredient";
 import { submitOrder } from "../../services/actions/order";
 
 import { ADD_TO_CART, REMOVE_FROM_CART } from "../../services/actions/cart";
 
-import styles from "./burgerconstructor.module.css";
+import styles from "./burger-constructor.module.css";
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
-  const { total, cartItems, isDragging } = useSelector((store) => store.cart);
+  const { total, cartItems } = useSelector((store) => store.cart);
 
   const bun = useMemo(() => {
     if (cartItems)
@@ -34,13 +33,11 @@ const BurgerConstructor = () => {
   };
 
   const renderIngredient = ({ item, index, key }) => {
-    // console.log(`item: ${item.name}, index: ${index}`);
-    return item.type !== "bun" ? (
+    return (
       <li key={key}>
-        <ConstructorIngredient item={item} cartID={key} />
-        {isDragging && <ConstructorDropArea index={index + 1} />}
+        <ConstructorIngredient item={item} index={index} cartID={key} />
       </li>
-    ) : null;
+    );
   };
 
   const handleSubmitOrder = useCallback(() => {
@@ -59,7 +56,6 @@ const BurgerConstructor = () => {
 
   const addToCart = (cartItem) => {
     if (bun && cartItem.item.type === "bun") {
-      console.log("bun exists!");
       dispatch({
         type: REMOVE_FROM_CART,
         key: bun.key,
@@ -87,14 +83,15 @@ const BurgerConstructor = () => {
         {bun && renderBun({ item: bun.item, pos: "top", key: bun.key })}
         <div className={styles.ingredientsContainer + " custom-scroll pr-4"}>
           <ul className={styles.list}>
-            {isDragging && <ConstructorDropArea index={0} />}
             {cartItems &&
               cartItems.map((cartItem, index) => {
-                return renderIngredient({
-                  item: cartItem.item,
-                  key: cartItem.key,
-                  index: index,
-                });
+                if (cartItem.item.type !== "bun") {
+                  return renderIngredient({
+                    item: cartItem.item,
+                    key: cartItem.key,
+                    index: index,
+                  });
+                } else return null;
               })}
           </ul>
         </div>

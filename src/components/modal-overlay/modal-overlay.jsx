@@ -1,5 +1,5 @@
 import { createPortal } from "react-dom";
-import styles from "./modaloverlay.module.css";
+import styles from "./modal-overlay.module.css";
 
 const ModalOverlay = ({ handleClick }) => {
   const modalRoot = document.getElementById("react-modals");

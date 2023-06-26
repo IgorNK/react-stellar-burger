@@ -2,9 +2,8 @@ import { useMemo, useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import Ingredient from "../ingredient/ingredient";
-import styles from "./burgeringredients.module.css";
+import styles from "./burger-ingredients.module.css";
 import { getIngredients } from "../../services/actions/ingredients";
-import { ADD_TO_CART, REMOVE_FROM_CART } from "../../services/actions/cart";
 import {
   SWITCH_TAB,
   SHOW_INGREDIENT,
@@ -69,15 +68,25 @@ const BurgerIngredients = () => {
 
   const handleScroll = useCallback(() => {
     const scrollTop = scrollContainerRef.current.scrollTop;
+    const margin = -300;
     const offsets = [
-      { name: "buns", offset: Math.abs(bunsRef.current.offsetTop - scrollTop) },
+      {
+        name: "buns",
+        offset: Math.abs(
+          Math.abs(bunsRef.current.offsetTop - scrollTop) + margin
+        ),
+      },
       {
         name: "sauces",
-        offset: Math.abs(saucesRef.current.offsetTop - scrollTop),
+        offset: Math.abs(
+          Math.abs(saucesRef.current.offsetTop - scrollTop) + margin
+        ),
       },
       {
         name: "fillings",
-        offset: Math.abs(fillingsRef.current.offsetTop - scrollTop),
+        offset: Math.abs(
+          Math.abs(fillingsRef.current.offsetTop - scrollTop) + margin
+        ),
       },
     ];
 
@@ -86,69 +95,73 @@ const BurgerIngredients = () => {
     });
 
     if (currentTab !== tab.name) {
-      // console.log(`currentTab: ${currentTab}, tabname: ${tab.name}`);
       dispatch({ type: SWITCH_TAB, tab: tab.name });
     }
   }, [currentTab, dispatch]);
 
-  const ingredientsContainer = useMemo(() => {
-    return !ingredientsRequest ? (
-      <div
-        className={styles.ingredients + " custom-scroll"}
-        ref={scrollContainerRef}
-        onScroll={handleScroll}
-      >
-        <h2 className="text text_type_main-medium" ref={bunsRef}>
-          Булки
-        </h2>
-        <div className={styles.container + " pt-6 pl-4"}>
-          {buns.map((item) => {
-            return renderIngredient(item);
-          })}
-        </div>
-        <h2 className="text text_type_main-medium" ref={saucesRef}>
-          Соусы
-        </h2>
-        <div className={styles.container + " pt-6 pl-4"}>
-          {sauces.map((item) => {
-            return renderIngredient(item);
-          })}
-        </div>
-        <h2 className="text text_type_main-medium" ref={fillingsRef}>
-          Начинки
-        </h2>
-        <div className={styles.container + " pt-6 pl-4"}>
-          {fillings.map((item) => {
-            return renderIngredient(item);
-          })}
-        </div>
-      </div>
-    ) : (
-      <p className="text text_type_main-medium">Загрузка...</p>
-    );
-  }, [
-    buns,
-    sauces,
-    fillings,
-    renderIngredient,
-    ingredientsRequest,
-    handleScroll,
-  ]);
+  const scrollTo = (ref) => {
+    ref.current.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <div>
       <div className={styles.tabs + " pt-5 pb-10"}>
-        <Tab value="buns" active={currentTab === "buns"}>
+        <Tab
+          value="buns"
+          onClick={() => scrollTo(bunsRef)}
+          active={currentTab === "buns"}
+        >
           Булки
         </Tab>
-        <Tab value="sauces" active={currentTab === "sauces"}>
+        <Tab
+          value="sauces"
+          onClick={() => scrollTo(saucesRef)}
+          active={currentTab === "sauces"}
+        >
           Соусы
         </Tab>
-        <Tab value="fillings" active={currentTab === "fillings"}>
+        <Tab
+          value="fillings"
+          onClick={() => scrollTo(fillingsRef)}
+          active={currentTab === "fillings"}
+        >
           Начинки
         </Tab>
       </div>
-      {ingredientsContainer}
+      {!ingredientsRequest ? (
+        <div
+          className={styles.ingredients + " custom-scroll"}
+          ref={scrollContainerRef}
+          onScroll={handleScroll}
+        >
+          <h2 className="text text_type_main-medium" ref={bunsRef}>
+            Булки
+          </h2>
+          <div className={styles.container + " pt-6 pl-4"}>
+            {buns.map((item) => {
+              return renderIngredient(item);
+            })}
+          </div>
+          <h2 className="text text_type_main-medium" ref={saucesRef}>
+            Соусы
+          </h2>
+          <div className={styles.container + " pt-6 pl-4"}>
+            {sauces.map((item) => {
+              return renderIngredient(item);
+            })}
+          </div>
+          <h2 className="text text_type_main-medium" ref={fillingsRef}>
+            Начинки
+          </h2>
+          <div className={styles.container + " pt-6 pl-4"}>
+            {fillings.map((item) => {
+              return renderIngredient(item);
+            })}
+          </div>
+        </div>
+      ) : (
+        <p className="text text_type_main-medium">Загрузка...</p>
+      )}
     </div>
   );
 };

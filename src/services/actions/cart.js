@@ -1,4 +1,3 @@
 export const ADD_TO_CART = "ADD_TO_CART";
 export const REMOVE_FROM_CART = "REMOVE_FROM_CART";
-export const SET_CART_POSITION = "SET_CART_POSITION";
-export const SET_DRAGGING = "SET_DRAGGING";
+export const MOVE_CART_ITEM = "MOVE_CART_ITEM";

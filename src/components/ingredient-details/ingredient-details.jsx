@@ -1,4 +1,4 @@
-import styles from "../ingredientdetails/ingredientdetails.module.css";
+import styles from "./ingredient-details.module.css";
 import { ingredientPropType } from "../../utils/prop-types";
 
 const IngredientDetails = (props) => {

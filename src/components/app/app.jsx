@@ -1,23 +1,23 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styles from "./app.module.css";
-import AppHeader from "../appheader/appheader";
-import BurgerIngredients from "../burgeringredients/burgeringredients";
-import BurgerConstructor from "../burgerconstructor/burgerconstructor";
+import AppHeader from "../app-header/app-header";
+import BurgerIngredients from "../burger-ingredients/burger-ingredients";
+import BurgerConstructor from "../burger-constructor/burger-constructor";
 import Modal from "../modal/modal";
-import IngredientDetails from "../ingredientdetails/ingredientdetails";
-import OrderDetails from "../orderdetails/orderdetails";
-import ErrorPopup from "../errorpopup/errorpopup";
+import IngredientDetails from "../ingredient-details/ingredient-details";
+import OrderDetails from "../order-details/order-details";
+import ErrorPopup from "../error-popup/error-popup";
 import { SHOW_INGREDIENT } from "../../services/actions/ingredients";
 
 function App() {
   const dispatch = useDispatch();
 
-  const { shownIngredient, order, error } = useSelector((store) => ({
-    shownIngredient: store.ingredients.shownIngredient,
-    order: store.order,
-    error: store.error,
-  }));
+  const shownIngredient = useSelector(
+    (store) => store.ingredients.shownIngredient
+  );
+  const order = useSelector((store) => store.order);
+  const error = useSelector((store) => store.error);
 
   const [modalState, setModalState] = useState({
     visible: false,
@@ -69,11 +69,7 @@ function App() {
       type: SHOW_INGREDIENT,
       item: null,
     });
-  }, [modalState]);
-
-  const modal = useMemo(() => {
-    return <Modal onClose={handleCloseModal}>{modalState.content}</Modal>;
-  }, [modalState.content, handleCloseModal]);
+  }, [modalState, dispatch]);
 
   return (
     <div className={styles.app}>
@@ -91,7 +87,9 @@ function App() {
           </div>
         </section>
       </main>
-      {modalState.visible && modal}
+      {modalState.visible && (
+        <Modal onClose={handleCloseModal}>{modalState.content}</Modal>
+      )}
     </div>
   );
 }

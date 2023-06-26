@@ -5,7 +5,7 @@ class Api {
 
   getIngredientsRequest() {
     return fetch(`${this._config.baseUrl}/ingredients`).then((res) => {
-      return _checkResponse(res);
+      return checkResponse(res);
     });
   }
 
@@ -19,12 +19,12 @@ class Api {
         ingredients: ingredientIDs,
       }),
     }).then((res) => {
-      return _checkResponse(res);
+      return checkResponse(res);
     });
   }
 }
 
-function _checkResponse(res) {
+function checkResponse(res) {
   if (res.ok) {
     return res.json();
   }

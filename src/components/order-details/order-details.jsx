@@ -1,4 +1,4 @@
-import styles from "./orderdetails.module.css";
+import styles from "./order-details.module.css";
 import orderAcceptedIcon from "../../images/order_accepted.svg";
 import { PropTypes } from "prop-types";
 

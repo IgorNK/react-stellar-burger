@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { PropTypes } from "prop-types";
+import { useSelector } from "react-redux";
 import { useDrag } from "react-dnd";
 import {
   CurrencyIcon,
@@ -9,7 +10,7 @@ import { ingredientPropType } from "../../utils/prop-types.js";
 import styles from "./ingredient.module.css";
 
 const Ingredient = (props) => {
-  const { item, cartID, type, pos, board, clickHandler } = props;
+  const { item, clickHandler } = props;
   const { cartItems } = useSelector((store) => store.cart);
   const [count, setCount] = useState(0);
 
@@ -41,6 +42,9 @@ const Ingredient = (props) => {
   return listIngredient;
 };
 
-// Ingredient.propTypes = ingredientPropType;
+Ingredient.propTypes = {
+  item: ingredientPropType,
+  clickHandler: PropTypes.func.isRequired,
+};
 
 export default Ingredient;

@@ -32,11 +32,8 @@ export const orderReducer = (state = initialState, action) => {
     }
     case SEND_ORDER_FAILED: {
       return {
-        ...state,
+        ...initialState,
         orderFailed: true,
-        orderRequest: false,
-        number: null,
-        ingredientIDs: [],
         message: action.message,
       };
     }
