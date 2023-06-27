@@ -3,14 +3,11 @@ import { ADD_TO_CART, REMOVE_FROM_CART, MOVE_CART_ITEM } from "../actions/cart";
 
 const initialState = {
   total: 0,
+  bun: null,
   cartItems: [],
 };
 
 export const cartReducer = (state = initialState, action) => {
-  const getAdjustedPrice = (isBun = false, price) => {
-    return isBun ? price * 2 : price;
-  };
-
   const moveCartItem = (dragIndex, hoverIndex) => {
     const newItems = [...state.cartItems];
     newItems.splice(dragIndex, 1);
@@ -20,38 +17,58 @@ export const cartReducer = (state = initialState, action) => {
 
   switch (action.type) {
     case ADD_TO_CART: {
-      const newItems = [
-        ...state.cartItems,
-        {
+      if (action.item.type !== "bun") {
+        const newItems = [
+          ...state.cartItems,
+          {
+            key: uuid(),
+            item: action.item,
+          },
+        ];
+        const newTotal = state.total + action.item.price;
+        return {
+          ...state,
+          total: newTotal,
+          cartItems: newItems,
+        };
+      } else {
+        const newBun = {
           key: uuid(),
           item: action.item,
-        },
-      ];
-      const newTotal =
-        state.total +
-        getAdjustedPrice(action.item.type === "bun", action.item.price);
-      return {
-        ...state,
-        total: newTotal,
-        cartItems: newItems,
-      };
+        };
+        const newTotal = state.total + action.item.price * 2;
+        return {
+          ...state,
+          total: newTotal,
+          bun: newBun,
+        };
+      }
     }
     case REMOVE_FROM_CART: {
-      const cartItem = state.cartItems.find(
-        (cartItem) => cartItem.key === action.key
-      );
-      const newItems = [...state.cartItems].filter(
-        (item) => item.key !== action.key
-      );
+      const allItems = [...state.cartItems, state.bun];
+      const cartItem = allItems.find((item) => item.key === action.key);
+      if (cartItem.item.type !== "bun") {
+        const cartItem = state.cartItems.find(
+          (cartItem) => cartItem.key === action.key
+        );
+        const newItems = [...state.cartItems].filter(
+          (item) => item.key !== action.key
+        );
 
-      const newTotal =
-        state.total -
-        getAdjustedPrice(cartItem.item.type === "bun", cartItem.item.price);
-      return {
-        ...state,
-        total: newTotal,
-        cartItems: newItems,
-      };
+        const newTotal = state.total - cartItem.item.price;
+        return {
+          ...state,
+          total: newTotal,
+          cartItems: newItems,
+        };
+      } else {
+        const newTotal = state.total - state.bun.item.price * 2;
+        return {
+          ...state,
+          total: newTotal,
+          bun: null,
+        };
+      }
     }
     case MOVE_CART_ITEM: {
       return {

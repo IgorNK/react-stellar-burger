@@ -14,12 +14,11 @@ import styles from "./burger-constructor.module.css";
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
-  const { total, cartItems } = useSelector((store) => store.cart);
-
-  const bun = useMemo(() => {
-    if (cartItems)
-      return cartItems.find((cartItem) => cartItem.item.type === "bun");
-  }, [cartItems]);
+  const { total, cartItems, bun } = useSelector((store) => ({
+    total: store.cart.total,
+    cartItems: store.cart.cartItems,
+    bun: store.cart.bun,
+  }));
 
   const renderBun = ({ item, pos, key }) => {
     return (
@@ -75,7 +74,7 @@ const BurgerConstructor = () => {
   return (
     <div
       ref={dropTarget}
-      className={`${styles.burgerconstructor} mt-25 pl-4 ${
+      className={`${styles.burgerConstructor} mt-25 pl-4 ${
         isHover ? styles.onHover : ""
       }`}
     >

@@ -1,4 +1,4 @@
-.burgerconstructor {
+.burgerConstructor {
   display: grid;
   grid-template-columns: 1fr;
   row-gap: 16px;

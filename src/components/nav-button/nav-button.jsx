@@ -4,6 +4,7 @@ import {
   ListIcon,
   ProfileIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
+import PropTypes from "prop-types";
 
 const NavButton = (props) => {
   const getIconClass = (active) => {
@@ -32,7 +33,7 @@ const NavButton = (props) => {
   return (
     <button
       type="button"
-      className={styles.navbutton + " pl-5 pr-5 pb-4 pt-4"}
+      className={styles.navButton + " pl-5 pr-5 pb-4 pt-4"}
       onClick={props.onClick}
     >
       {renderIcon(props.value)}
@@ -41,4 +42,13 @@ const NavButton = (props) => {
   );
 };
 
+NavButton.propTypes = {
+  active: PropTypes.bool,
+  onClick: PropTypes.func,
+  value: PropTypes.string,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
+};
 export default NavButton;

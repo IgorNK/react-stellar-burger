@@ -5,7 +5,7 @@ import { PropTypes } from "prop-types";
 const OrderDetails = ({ number }) => {
   return (
     <div className={styles.container + " mt-30 mb-30"}>
-      <p className={styles.orderid + " text text_type_digits-large"}>
+      <p className={styles.orderId + " text text_type_digits-large"}>
         {number}
       </p>
       <p className="text text_type_main-medium mt-8">идентификатор заказа</p>

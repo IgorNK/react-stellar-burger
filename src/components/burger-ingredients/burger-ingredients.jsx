@@ -20,31 +20,25 @@ const BurgerIngredients = () => {
     (store) => store.ingredients
   );
 
-  const showIngredient = useCallback(
-    (item) => {
-      dispatch({
-        type: SHOW_INGREDIENT,
-        item: item,
-      });
-    },
-    [dispatch]
-  );
+  const showIngredient = (item) => {
+    dispatch({
+      type: SHOW_INGREDIENT,
+      item: item,
+    });
+  };
 
-  const renderIngredient = useCallback(
-    (item) => {
-      return (
-        <Ingredient
-          key={item._id}
-          item={item}
-          board="default"
-          clickHandler={() => {
-            showIngredient(item);
-          }}
-        />
-      );
-    },
-    [showIngredient]
-  );
+  const renderIngredient = (item) => {
+    return (
+      <Ingredient
+        key={item._id}
+        item={item}
+        board="default"
+        clickHandler={() => {
+          showIngredient(item);
+        }}
+      />
+    );
+  };
 
   const buns = useMemo(
     () => ingredients.filter((item) => item.type === "bun"),
@@ -66,7 +60,7 @@ const BurgerIngredients = () => {
   const fillingsRef = useRef(null);
   const scrollContainerRef = useRef(null);
 
-  const handleScroll = useCallback(() => {
+  const handleScroll = () => {
     const scrollTop = scrollContainerRef.current.scrollTop;
     const margin = -300;
     const offsets = [
@@ -97,7 +91,7 @@ const BurgerIngredients = () => {
     if (currentTab !== tab.name) {
       dispatch({ type: SWITCH_TAB, tab: tab.name });
     }
-  }, [currentTab, dispatch]);
+  };
 
   const scrollTo = (ref) => {
     ref.current.scrollIntoView({ behavior: "smooth" });

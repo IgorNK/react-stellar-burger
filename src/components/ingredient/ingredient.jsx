@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useMemo } from "react";
 import { PropTypes } from "prop-types";
 import { useSelector } from "react-redux";
 import { useDrag } from "react-dnd";
@@ -11,16 +11,15 @@ import styles from "./ingredient.module.css";
 
 const Ingredient = (props) => {
   const { item, clickHandler } = props;
-  const { cartItems } = useSelector((store) => store.cart);
-  const [count, setCount] = useState(0);
+  const { cartItems, bun } = useSelector((store) => store.cart);
 
-  useEffect(() => {
-    const count = cartItems.reduce(
-      (acc, cartItem) => (cartItem.item._id === item._id ? acc + 1 : acc),
+  const count = useMemo(() => {
+    const newCount = [...cartItems, bun].reduce(
+      (acc, cartItem) => (cartItem?.item?._id === item._id ? acc + 1 : acc),
       0
     );
-    setCount(count);
-  }, [cartItems, item]);
+    return newCount;
+  }, [cartItems, item, bun]);
 
   const [, ref] = useDrag({
     type: "ingredient",
