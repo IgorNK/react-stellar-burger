@@ -1,4 +1,4 @@
-.registerForm {
+.form {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -11,4 +11,11 @@
 
 .link {
   cursor: pointer;
+  text-decoration: none;
+  color: #4c4cff;
+  transition: opacity 0.1 linear;
+}
+
+.link:hover {
+  opacity: 80%;
 }
