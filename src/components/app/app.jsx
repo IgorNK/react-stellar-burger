@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import styles from "./app.module.css";
 import AppHeader from "../app-header/app-header";
+import { MainPage, LoginPage, RegisterPage, ProfilePage, IngredientsPage, ForgotPasswordPage, ResetPasswordPage } from "../../pages";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
 import Modal from "../modal/modal";
@@ -77,7 +79,7 @@ function App() {
         message: null,
       });
   }, [modalState, dispatch]);
-
+/*
   return (
     <div className={styles.app}>
       <AppHeader />
@@ -99,6 +101,23 @@ function App() {
       )}
     </div>
   );
+  */
+  return (
+    <div className={styles.app}>
+      <AppHeader />
+      <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/ingredients" element={<IngredientsPage />} />
+      </Routes>
+      </BrowserRouter>
+    </div>
+  )
 }
 
 export default App;
