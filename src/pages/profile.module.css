@@ -1,0 +1,9 @@
+.profile {
+  display: flex;
+  flex-direction: row;
+}
+
+.navigation {
+  display: flex;
+  flex-direction: column;
+}

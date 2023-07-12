@@ -1,16 +1,19 @@
 import { useState, useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Input,
   PasswordInput,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { resetPassword } from "../services/actions/auth";
 import styles from "./form.module.css";
 
 export const ResetPasswordPage = () => {
   const dispatch = useDispatch();
+  const { forgotPasswordSuccess } = useSelector((store) => ({
+    forgotPasswordSuccess: store.auth.forgotPasswordSuccess
+  }));
   const [form, setFormValue] = useState({ password: "", token: "" });
 
   const onFormChange = (e) => {
@@ -25,6 +28,10 @@ export const ResetPasswordPage = () => {
     },
     [dispatch, form]
   );
+
+  if (!forgotPasswordSuccess) {
+    return <Navigate to="/forgot-password" replace/>;
+  }
 
   return (
     <form className={styles.form}>

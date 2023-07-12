@@ -68,12 +68,12 @@ class Api {
     });
   }
 
-  getUserRequest() {
+  getUserRequest(accessToken) {
     return fetch(`${this._config.baseUrl}/auth/user`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: getCookie("token"),
+        Authorization: accessToken,
       },
     }).then((res) => {
       return checkResponse(res);
@@ -92,12 +92,12 @@ class Api {
     });
   }
 
-  updateUserRequest(form) {
+  updateUserRequest(form, accessToken) {
     return fetch(`${this._config.baseUrl}/auth/user`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        Authorization: getCookie("token"),
+        Authorization: accessToken,
       },
       body: JSON.stringify(form),
     }).then((res) => {

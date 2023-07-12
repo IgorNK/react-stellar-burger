@@ -1,6 +1,8 @@
 import Api from "../api";
 import { dataUrl } from "../../utils/data.js";
 
+import { setCookie, deleteCookie } from "../../utils/cookies";
+
 export const LOGIN_REQUEST = "LOGIN_REQUEST";
 export const LOGIN_FAILED = "LOGIN_FAILED";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
@@ -48,6 +50,7 @@ export const logIn = (form) => {
           accessToken: res.accessToken,
           refreshToken: res.refreshToken,
         });
+        setCookie("token", res.refreshToken);
       } else {
         dispatch({
           type: LOGIN_FAILED,
@@ -57,16 +60,17 @@ export const logIn = (form) => {
   };
 };
 
-export const logOut = (form) => {
+export const logOut = (refreshToken) => {
   return function (dispatch) {
     dispatch({
       type: LOGOUT_REQUEST,
     });
-    api.logoutRequest().then((res) => {
+    api.logoutRequest(refreshToken).then((res) => {
       if (res && res.success) {
         dispatch({
           type: LOGOUT_SUCCESS,
         });
+        deleteCookie("token")
       } else {
         dispatch({
           type: LOGOUT_FAILED,
@@ -89,6 +93,7 @@ export const register = (form) => {
           accessToken: res.accessToken,
           refreshToken: res.refreshToken,
         });
+        setCookie("token", res.refreshToken)
       } else {
         dispatch({
           type: REGISTER_USER_FAILED,
@@ -98,12 +103,12 @@ export const register = (form) => {
   };
 };
 
-export const getUser = () => {
+export const getUser = (accessToken) => {
   return function (dispatch) {
     dispatch({
       type: GET_USER_REQUEST,
     });
-    api.getUserRequest().then((res) => {
+    api.getUserRequest(accessToken).then((res) => {
       if (res && res.success) {
         dispatch({
           type: GET_USER_SUCCESS,
@@ -118,12 +123,12 @@ export const getUser = () => {
   };
 };
 
-export const updateUser = (form) => {
+export const updateUser = (form, accessToken) => {
   return function (dispatch) {
     dispatch({
       type: UPDATE_USER_REQUEST,
     });
-    api.updateUserRequest(form).then((res) => {
+    api.updateUserRequest(form, accessToken).then((res) => {
       if (res && res.success) {
         dispatch({
           type: UPDATE_USER_SUCCESS,
