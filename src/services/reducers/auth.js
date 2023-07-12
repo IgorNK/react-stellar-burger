@@ -34,8 +34,8 @@ const initialState = {
   logoutFailed: false,
   getUserRequest: false,
   getUserFailed: false,
-  updateUserRequest: false,
-  updateUserFailed: false,
+  updateTokenRequest: false,
+  updateTokenFailed: false,
   refreshUserRequest: false,
   refreshUserFailed: false,
   forgotPasswordRequest: false,
@@ -59,9 +59,7 @@ export const authReducer = (state = initialState, action) => {
     }
     case LOGIN_SUCCESS: {
       return {
-        ...state,
-        loginRequest: false,
-        loginFailed: false,
+        ...initialState,
         user: action.user,
         accessToken: action.accessToken,
         refreshToken: action.refreshToken,
@@ -81,9 +79,7 @@ export const authReducer = (state = initialState, action) => {
     }
     case REGISTER_USER_SUCCESS: {
       return {
-        ...state,
-        registerRequest: false,
-        registerFailed: false,
+        ...initialState,
         user: action.user,
         accessToken: action.accessToken,
         refreshToken: action.refreshToken,
@@ -104,8 +100,6 @@ export const authReducer = (state = initialState, action) => {
     case LOGOUT_SUCCESS: {
       return {
         ...initialState,
-        logoutRequest: false,
-        logoutFailed: false,
       };
     }
     case LOGOUT_FAILED: {
@@ -164,10 +158,9 @@ export const authReducer = (state = initialState, action) => {
     }
     case REFRESH_TOKEN_SUCCESS: {
       return {
-        ...state,
-        refreshTokenRequest: false,
-        refreshTokenFailed: false,
-        user: action.user,
+        ...initialState,
+        accessToken: action.accessToken,
+        refreshToken: action.refreshToken,
       };
     }
     case REFRESH_TOKEN_FAILED: {
@@ -196,7 +189,7 @@ export const authReducer = (state = initialState, action) => {
     }
     case RESET_PASSWORD_REQUEST: {
       return {
-        ...initialState,
+        ...state,
         resetPasswordRequest: true,
       };
     }
@@ -208,7 +201,8 @@ export const authReducer = (state = initialState, action) => {
     }
     case RESET_PASSWORD_FAILED: {
       return {
-        ...initialState,
+        ...state,
+        resetPasswordRequest: false,
         resetPasswordFailed: true,
       };
     }

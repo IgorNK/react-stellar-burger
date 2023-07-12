@@ -3,13 +3,21 @@ import { useSelector, useDispatch } from "react-redux";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import styles from "./app.module.css";
 import AppHeader from "../app-header/app-header";
-import { MainPage, LoginPage, RegisterPage, ProfilePage, IngredientsPage, ForgotPasswordPage, ResetPasswordPage } from "../../pages";
+import {
+  MainPage,
+  LoginPage,
+  RegisterPage,
+  ProfilePage,
+  IngredientsPage,
+  ForgotPasswordPage,
+  ResetPasswordPage,
+} from "../../pages";
 
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import OrderDetails from "../order-details/order-details";
 import ErrorPopup from "../error-popup/error-popup";
-import ProtectedRouteElement from "../protected-route/protected-route";
+import { ProtectedRouteElement } from "../protected-route/protected-route";
 import { SHOW_INGREDIENT } from "../../services/actions/ingredients";
 import { DISPLAY_ERROR_MESSAGE } from "../../services/actions";
 
@@ -79,7 +87,7 @@ function App() {
         message: null,
       });
   }, [modalState, dispatch]);
-/*
+  /*
   return (
     <div className={styles.app}>
       <AppHeader />
@@ -104,27 +112,83 @@ function App() {
   */
   return (
     <div className={styles.app}>
-      <AppHeader />
       <main className={styles.main + " pl-5 pr-5"}>
-      <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<MainPage />} />
-        <Route path="/login" element={<ProtectedRouteElement authRequired={false} element={<LoginPage />} />} />
-        <Route path="/register" element={<ProtectedRouteElement authRequired={false} element={<RegisterPage />} />} />
-        <Route path="/forgot-password" element={<ProtectedRouteElement authRequired={false} element={<ForgotPasswordPage />} />} />
-        <Route path="/reset-password" element={<ProtectedRouteElement authRequired={false} element={<ResetPasswordPage />} />} />
-        <Route path="/profile" element={<ProtectedRouteElement authRequired={true} element={<ProfilePage />} />} />
-        <Route path="/profile/orders" element={<ProtectedRouteElement authRequired={true} element={<ProfilePage />} />} />
-        <Route path="/profile/orders/:id" element={<ProtectedRouteElement authRequired={true} element={<ProfilePage />} />} />
-        <Route path="/ingredients/:id" element={<IngredientsPage />} />
-      </Routes>
-      </BrowserRouter>
+        <BrowserRouter>
+          <AppHeader />
+          <Routes>
+            <Route path="/" element={<MainPage />} />
+            <Route
+              path="/login"
+              element={
+                <ProtectedRouteElement
+                  authRequired={false}
+                  element={<LoginPage />}
+                />
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                <ProtectedRouteElement
+                  authRequired={false}
+                  element={<RegisterPage />}
+                />
+              }
+            />
+            <Route
+              path="/forgot-password"
+              element={
+                <ProtectedRouteElement
+                  authRequired={false}
+                  element={<ForgotPasswordPage />}
+                />
+              }
+            />
+            <Route
+              path="/reset-password"
+              element={
+                <ProtectedRouteElement
+                  authRequired={false}
+                  element={<ResetPasswordPage />}
+                />
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRouteElement
+                  authRequired={true}
+                  element={<ProfilePage />}
+                />
+              }
+            />
+            <Route
+              path="/profile/orders"
+              element={
+                <ProtectedRouteElement
+                  authRequired={true}
+                  element={<ProfilePage />}
+                />
+              }
+            />
+            <Route
+              path="/profile/orders/:id"
+              element={
+                <ProtectedRouteElement
+                  authRequired={true}
+                  element={<ProfilePage />}
+                />
+              }
+            />
+            <Route path="/ingredients/:id" element={<IngredientsPage />} />
+          </Routes>
+        </BrowserRouter>
       </main>
       {modalState.visible && (
         <Modal onClose={handleCloseModal}>{modalState.content}</Modal>
       )}
     </div>
-  )
+  );
 }
 
 export default App;

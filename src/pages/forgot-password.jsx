@@ -1,16 +1,19 @@
-import { useState, useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { useState, useCallback, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Input,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { forgotPassword } from "../services/actions/auth";
 import styles from "./form.module.css";
 
 export const ForgotPasswordPage = () => {
   const dispatch = useDispatch();
   const [form, setFormValue] = useState({ email: "" });
+  const { forgotPasswordRequest, forgotPasswordSuccess } = useSelector(
+    (store) => store.auth
+  );
 
   const onFormChange = (e) => {
     e.preventDefault();
@@ -24,6 +27,14 @@ export const ForgotPasswordPage = () => {
     },
     [dispatch, form]
   );
+
+  if (forgotPasswordSuccess) {
+    return <Navigate to="/reset-password" />;
+  }
+
+  if (forgotPasswordRequest) {
+    return <h1>Подождите...</h1>;
+  }
 
   return (
     <form className={styles.form}>

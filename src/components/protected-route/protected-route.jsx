@@ -1,30 +1,34 @@
-import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux"
+import { useEffect, useCallback } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Navigate } from "react-router-dom";
 import { getUser } from "../../services/actions/auth";
 
 export const ProtectedRouteElement = ({ authRequired, element }) => {
   const dispatch = useDispatch();
-  const { getUserRequest, user, accessToken } = useSelector((store) => ({
-    getUserRequest: store.auth.getUserRequest,
-    user: store.auth.user,
-    accesssToken: store.auth.accessToken
-  }));
-  
-  const init = () => {
+  const { getUserRequest, refreshTokenRequest, user, accessToken } =
+    useSelector((store) => store.auth);
+
+  const init = useCallback(() => {
     dispatch(getUser(accessToken));
-  };
+  }, [accessToken, dispatch]);
 
   useEffect(() => {
     init();
-  }, []);
+  }, [init]);
 
   // While request is pending, show nothing
-  if (getUserRequest) {
-    return null;
+  if (getUserRequest || refreshTokenRequest) {
+    console.log("returning null for now");
+    return <h1>Загрузка...</h1>;
   }
 
-  // Otherwise, show element or redirect
-  const redirect = authRequired ? "/login" : "/profile";
-  return user ? element : <Navigate to={redirect} replace/>;
-}
+  console.log("got past null");
+
+  if (authRequired) {
+    console.log("auth required block");
+    return user ? element : <Navigate to="/login" replace />;
+  } else {
+    console.log("auth not required block");
+    return user ? <Navigate to="/profile" replace /> : element;
+  }
+};

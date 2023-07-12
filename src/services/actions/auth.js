@@ -1,7 +1,7 @@
 import Api from "../api";
 import { dataUrl } from "../../utils/data.js";
 
-import { setCookie, deleteCookie } from "../../utils/cookies";
+import { setCookie, deleteCookie, getCookie } from "../../utils/cookies";
 
 export const LOGIN_REQUEST = "LOGIN_REQUEST";
 export const LOGIN_FAILED = "LOGIN_FAILED";
@@ -11,7 +11,7 @@ export const REGISTER_USER_REQUEST = "REGISTER_USER_REQUEST";
 export const REGISTER_USER_FAILED = "REGISTER_USER_FAILED";
 export const REGISTER_USER_SUCCESS = "REGISTER_USER_SUCCESS";
 
-export const LOGOUT_REQUEST = "LOGOUT_REAUEST";
+export const LOGOUT_REQUEST = "LOGOUT_REQUEST";
 export const LOGOUT_FAILED = "LOGOUT_FAILED";
 export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
 
@@ -42,21 +42,29 @@ export const logIn = (form) => {
     dispatch({
       type: LOGIN_REQUEST,
     });
-    api.loginRequest(form).then((res) => {
-      if (res && res.success) {
-        dispatch({
-          type: LOGIN_SUCCESS,
-          user: res.user,
-          accessToken: res.accessToken,
-          refreshToken: res.refreshToken,
-        });
-        setCookie("token", res.refreshToken);
-      } else {
+    api
+      .loginRequest(form)
+      .then((res) => {
+        if (res && res.success) {
+          dispatch({
+            type: LOGIN_SUCCESS,
+            user: res.user,
+            accessToken: res.accessToken,
+            refreshToken: res.refreshToken,
+          });
+          setCookie("token", res.refreshToken);
+        } else {
+          dispatch({
+            type: LOGIN_FAILED,
+          });
+        }
+      })
+      .catch((err) => {
         dispatch({
           type: LOGIN_FAILED,
         });
-      }
-    });
+        console.log(err.message);
+      });
   };
 };
 
@@ -65,18 +73,26 @@ export const logOut = (refreshToken) => {
     dispatch({
       type: LOGOUT_REQUEST,
     });
-    api.logoutRequest(refreshToken).then((res) => {
-      if (res && res.success) {
-        dispatch({
-          type: LOGOUT_SUCCESS,
-        });
-        deleteCookie("token")
-      } else {
+    api
+      .logoutRequest(refreshToken)
+      .then((res) => {
+        if (res && res.success) {
+          dispatch({
+            type: LOGOUT_SUCCESS,
+          });
+          deleteCookie("token");
+        } else {
+          dispatch({
+            type: LOGOUT_FAILED,
+          });
+        }
+      })
+      .catch((err) => {
         dispatch({
           type: LOGOUT_FAILED,
         });
-      }
-    });
+        console.log(err.message);
+      });
   };
 };
 
@@ -85,21 +101,29 @@ export const register = (form) => {
     dispatch({
       type: RESET_PASSWORD_REQUEST,
     });
-    api.registerRequest(form).then((res) => {
-      if (res && res.success) {
-        dispatch({
-          type: REGISTER_USER_SUCCESS,
-          user: res.user,
-          accessToken: res.accessToken,
-          refreshToken: res.refreshToken,
-        });
-        setCookie("token", res.refreshToken)
-      } else {
+    api
+      .registerRequest(form)
+      .then((res) => {
+        if (res && res.success) {
+          dispatch({
+            type: REGISTER_USER_SUCCESS,
+            user: res.user,
+            accessToken: res.accessToken,
+            refreshToken: res.refreshToken,
+          });
+          setCookie("token", res.refreshToken);
+        } else {
+          dispatch({
+            type: REGISTER_USER_FAILED,
+          });
+        }
+      })
+      .catch((err) => {
         dispatch({
           type: REGISTER_USER_FAILED,
         });
-      }
-    });
+        console.log(err.message);
+      });
   };
 };
 
@@ -108,18 +132,60 @@ export const getUser = (accessToken) => {
     dispatch({
       type: GET_USER_REQUEST,
     });
-    api.getUserRequest(accessToken).then((res) => {
-      if (res && res.success) {
-        dispatch({
-          type: GET_USER_SUCCESS,
-          user: res.user,
-        });
-      } else {
+    api
+      .getUserRequest(accessToken)
+      .then((res) => {
+        if (res && res.success) {
+          dispatch({
+            type: GET_USER_SUCCESS,
+            user: res.user,
+          });
+          console.log("get user success");
+        } else {
+          dispatch({
+            type: GET_USER_FAILED,
+          });
+          console.log("Failing in Else statement: get user failed");
+        }
+      })
+      .catch((err) => {
         dispatch({
           type: GET_USER_FAILED,
         });
-      }
+        dispatch(refreshToken());
+        console.log("Failing in Catch: " + err.message);
+      });
+  };
+};
+
+export const refreshToken = () => {
+  return function (dispatch) {
+    dispatch({
+      type: REFRESH_TOKEN_REQUEST,
     });
+    api
+      .refreshTokenRequest({ token: getCookie("token") })
+      .then((res) => {
+        if (res && res.success) {
+          dispatch({
+            type: REFRESH_TOKEN_SUCCESS,
+            accessToken: res.accessToken,
+            refreshToken: res.refreshToken,
+          });
+          setCookie("token", res.refreshToken);
+          // dispatch(getUser(res.accessToken));
+        } else {
+          dispatch({
+            type: REFRESH_TOKEN_FAILED,
+          });
+        }
+      })
+      .catch((err) => {
+        dispatch({
+          type: REFRESH_TOKEN_FAILED,
+        });
+        console.log(err.message);
+      });
   };
 };
 
@@ -128,18 +194,26 @@ export const updateUser = (form, accessToken) => {
     dispatch({
       type: UPDATE_USER_REQUEST,
     });
-    api.updateUserRequest(form, accessToken).then((res) => {
-      if (res && res.success) {
-        dispatch({
-          type: UPDATE_USER_SUCCESS,
-          user: res.user,
-        });
-      } else {
+    api
+      .updateUserRequest(form, accessToken)
+      .then((res) => {
+        if (res && res.success) {
+          dispatch({
+            type: UPDATE_USER_SUCCESS,
+            user: res.user,
+          });
+        } else {
+          dispatch({
+            type: UPDATE_USER_FAILED,
+          });
+        }
+      })
+      .catch((err) => {
         dispatch({
           type: UPDATE_USER_FAILED,
         });
-      }
-    });
+        console.log(err.message);
+      });
   };
 };
 
@@ -148,17 +222,25 @@ export const forgotPassword = (form) => {
     dispatch({
       type: FORGOT_PASSWORD_REQUEST,
     });
-    api.forgotPasswordRequest(form).then((res) => {
-      if (res && res.success) {
-        dispatch({
-          type: FORGOT_PASSWORD_SUCCESS,
-        });
-      } else {
+    api
+      .forgotPasswordRequest(form)
+      .then((res) => {
+        if (res && res.success) {
+          dispatch({
+            type: FORGOT_PASSWORD_SUCCESS,
+          });
+        } else {
+          dispatch({
+            type: FORGOT_PASSWORD_FAILED,
+          });
+        }
+      })
+      .catch((err) => {
         dispatch({
           type: FORGOT_PASSWORD_FAILED,
         });
-      }
-    });
+        console.log(err.message);
+      });
   };
 };
 
@@ -167,16 +249,24 @@ export const resetPassword = (form) => {
     dispatch({
       type: RESET_PASSWORD_REQUEST,
     });
-    api.resetPasswordRequest(form).then((res) => {
-      if (res && res.success) {
-        dispatch({
-          type: RESET_PASSWORD_SUCCESS,
-        });
-      } else {
+    api
+      .resetPasswordRequest(form)
+      .then((res) => {
+        if (res && res.success) {
+          dispatch({
+            type: RESET_PASSWORD_SUCCESS,
+          });
+        } else {
+          dispatch({
+            type: RESET_PASSWORD_FAILED,
+          });
+        }
+      })
+      .catch((err) => {
         dispatch({
           type: RESET_PASSWORD_FAILED,
         });
-      }
-    });
+        console.log(err.message);
+      });
   };
 };

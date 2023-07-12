@@ -11,9 +11,12 @@ import styles from "./form.module.css";
 
 export const ResetPasswordPage = () => {
   const dispatch = useDispatch();
-  const { forgotPasswordSuccess } = useSelector((store) => ({
-    forgotPasswordSuccess: store.auth.forgotPasswordSuccess
-  }));
+  const {
+    forgotPasswordSuccess,
+    resetPasswordRequest,
+    resetPasswordSuccess,
+    resetPasswordFailed,
+  } = useSelector((store) => store.auth);
   const [form, setFormValue] = useState({ password: "", token: "" });
 
   const onFormChange = (e) => {
@@ -30,7 +33,15 @@ export const ResetPasswordPage = () => {
   );
 
   if (!forgotPasswordSuccess) {
-    return <Navigate to="/forgot-password" replace/>;
+    return <Navigate to="/forgot-password" replace />;
+  }
+
+  if (resetPasswordRequest) {
+    return <h1>Подождите...</h1>;
+  }
+
+  if (resetPasswordSuccess) {
+    return <Navigate to="/login" replace />;
   }
 
   return (
@@ -69,6 +80,8 @@ export const ResetPasswordPage = () => {
       >
         Сохранить
       </Button>
+
+      {resetPasswordFailed && <p>Неправильный код подтверждения</p>}
 
       <p className="text text_type_main-default text_color_inactive mb-4">
         Вспомнили пароль?{" "}
