@@ -1,11 +1,12 @@
-import styles from "./orderdetails.module.css";
+import styles from "./order-details.module.css";
 import orderAcceptedIcon from "../../images/order_accepted.svg";
+import { PropTypes } from "prop-types";
 
-const OrderDetails = (props) => {
+const OrderDetails = ({ number }) => {
   return (
     <div className={styles.container + " mt-30 mb-30"}>
-      <p className={styles.orderid + " text text_type_digits-large"}>
-        {props.data.orderId}
+      <p className={styles.orderId + " text text_type_digits-large"}>
+        {number}
       </p>
       <p className="text text_type_main-medium mt-8">идентификатор заказа</p>
       <img
@@ -19,6 +20,10 @@ const OrderDetails = (props) => {
       </p>
     </div>
   );
+};
+
+OrderDetails.propTypes = {
+  number: PropTypes.number,
 };
 
 export default OrderDetails;

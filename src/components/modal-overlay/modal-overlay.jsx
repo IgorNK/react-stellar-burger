@@ -1,5 +1,6 @@
 import { createPortal } from "react-dom";
-import styles from "./modaloverlay.module.css";
+import styles from "./modal-overlay.module.css";
+import PropTypes from "prop-types";
 
 const ModalOverlay = ({ handleClick }) => {
   const modalRoot = document.getElementById("react-modals");
@@ -7,6 +8,10 @@ const ModalOverlay = ({ handleClick }) => {
     <div className={styles.overlay} onClick={handleClick}></div>,
     modalRoot
   );
+};
+
+ModalOverlay.propTypes = {
+  handleClick: PropTypes.func.isRequired,
 };
 
 export default ModalOverlay;

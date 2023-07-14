@@ -1,6 +1,6 @@
 import { Logo } from "@ya.praktikum/react-developer-burger-ui-components";
-import NavButton from "../navbutton/navbutton";
-import styles from "./appheader.module.css";
+import NavButton from "../nav-button/nav-button";
+import styles from "./app-header.module.css";
 
 const AppHeader = (props) => {
   return (

@@ -1,4 +1,4 @@
-.burgerconstructor {
+.burgerConstructor {
   display: grid;
   grid-template-columns: 1fr;
   row-gap: 16px;
@@ -24,18 +24,6 @@
   row-gap: 16px;
 }
 
-.draggable {
-  position: relative;
-}
-
-.dragHandle {
-  position: absolute;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  left: 0;
-}
-
 .checkoutContainer {
   display: flex;
   flex-direction: row;
@@ -55,4 +43,8 @@
 .priceIcon {
   width: 36px;
   height: 36px;
+}
+
+.onHover {
+  border: 2px solid lightblue;
 }

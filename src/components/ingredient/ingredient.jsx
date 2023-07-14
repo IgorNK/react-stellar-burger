@@ -1,4 +1,7 @@
-import { useState, useEffect } from "react";
+import { useMemo } from "react";
+import { PropTypes } from "prop-types";
+import { useSelector } from "react-redux";
+import { useDrag } from "react-dnd";
 import {
   CurrencyIcon,
   Counter,
@@ -6,27 +9,41 @@ import {
 import { ingredientPropType } from "../../utils/prop-types.js";
 import styles from "./ingredient.module.css";
 
-const Ingredient = ({ clickHandler, ...props }) => {
-  const [count, setCount] = useState(0);
+const Ingredient = (props) => {
+  const { item, clickHandler } = props;
+  const { cartItems, bun } = useSelector((store) => store.cart);
 
-  // Setting the count for each ingredient purely for debugging purposes:
-  useEffect(() => {
-    setCount(1);
-  }, []);
+  const count = useMemo(() => {
+    const newCount = [...cartItems, bun].reduce(
+      (acc, cartItem) => (cartItem?.item?._id === item._id ? acc + 1 : acc),
+      0
+    );
+    return newCount;
+  }, [cartItems, item, bun]);
 
-  return (
-    <div className={styles.ingredient} onClick={clickHandler}>
-      <img src={props.image} alt="ingredient" />
+  const [, ref] = useDrag({
+    type: "ingredient",
+    item: { item: item },
+  });
+
+  const listIngredient = (
+    <div ref={ref} className={styles.ingredient} onClick={clickHandler}>
+      <img src={item.image} alt="ingredient" />
       <div className={styles.priceContainer}>
-        <p className="text text_type_digits-default pr-2">{props.price}</p>
+        <p className="text text_type_digits-default pr-2">{item.price}</p>
         <CurrencyIcon />
       </div>
-      <p className="text text_type_main-default">{props.name}</p>
+      <p className="text text_type_main-default">{item.name}</p>
       {count > 0 && <Counter count={count} size="default" extraClass="m-1" />}
     </div>
   );
+
+  return listIngredient;
 };
 
-Ingredient.propTypes = ingredientPropType;
+Ingredient.propTypes = {
+  item: ingredientPropType,
+  clickHandler: PropTypes.func.isRequired,
+};
 
 export default Ingredient;
