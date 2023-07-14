@@ -1,25 +1,41 @@
 import styles from "./ingredient-details.module.css";
-import { ingredientPropType } from "../../utils/prop-types";
+import { useEffect, useState } from "react"
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-const IngredientDetails = (props) => {
+const IngredientDetails = () => {
+  const { id } = useParams();
+  const ingredients = useSelector((store) => store.ingredients.ingredients);
+  const [ingredient, setIngredient] = useState(null);
+
+  useEffect(() => {
+    setIngredient(ingredients.find(item => item._id == id));
+    console.log(ingredients);
+    console.log(ingredient);
+  }, [ingredients]);
+
+  if (!ingredient) {
+    return <h1>Ингредиент не найден!</h1>
+  } 
+
   return (
-    <div className={styles.container}>
+     <div className={styles.container}>
       <h2 className={styles.heading + " text text_type_main-large"}>
         Детали ингредиента
       </h2>
       <img
         className={styles.image}
-        src={props.data.image_large}
-        alt={props.data.name}
+        src={ingredient.image_large}
+        alt={ingredient.name}
       />
-      <p className="text text_type_main-medium mt-4">{props.data.name}</p>
+      <p className="text text_type_main-medium mt-4">{ingredient.name}</p>
       <ul className={styles.table}>
         <li className={styles.cell}>
           <p className="text text_type_main-default text_color_inactive">
             Калории, ккал
           </p>
           <p className="text text_type_digits-default text_color_inactive">
-            {props.data.calories}
+            {ingredient.calories}
           </p>
         </li>
         <li className={styles.cell}>
@@ -27,7 +43,7 @@ const IngredientDetails = (props) => {
             Белки, г
           </p>
           <p className="text text_type_digits-default text_color_inactive">
-            {props.data.proteins}
+            {ingredient.proteins}
           </p>
         </li>
         <li className={styles.cell}>
@@ -35,7 +51,7 @@ const IngredientDetails = (props) => {
             Жиры, г
           </p>
           <p className="text text_type_digits-default text_color_inactive">
-            {props.data.fat}
+            {ingredient.fat}
           </p>
         </li>
         <li className={styles.cell}>
@@ -43,14 +59,12 @@ const IngredientDetails = (props) => {
             Углеводы, г
           </p>
           <p className="text text_type_digits-default text_color_inactive">
-            {props.data.carbohydrates}
+            {ingredient.carbohydrates}
           </p>
         </li>
       </ul>
     </div>
   );
 };
-
-IngredientDetails.propTypes = ingredientPropType;
 
 export default IngredientDetails;

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import styles from "./app.module.css";
 import AppHeader from "../app-header/app-header";
 import {
@@ -8,7 +8,6 @@ import {
   LoginPage,
   RegisterPage,
   ProfilePage,
-  IngredientsPage,
   ForgotPasswordPage,
   ResetPasswordPage,
 } from "../../pages";
@@ -110,10 +109,14 @@ function App() {
     </div>
   );
   */
+
+  const location = useLocation();
+
+  const background = location.state && location.state.background;
+  
   return (
     <div className={styles.app}>
       <main className={styles.main + " pl-5 pr-5"}>
-        <BrowserRouter>
           <AppHeader />
           <Routes>
             <Route path="/" element={<MainPage />} />
@@ -180,13 +183,10 @@ function App() {
                 />
               }
             />
-            <Route path="/ingredients/:id" element={<IngredientsPage />} />
+            <Route path="/ingredients/:id" element={<IngredientDetails />} />
+            background && <Route path="/ingredients/id" element={<Modal children={<IngredientDetails />} />} />
           </Routes>
-        </BrowserRouter>
       </main>
-      {modalState.visible && (
-        <Modal onClose={handleCloseModal}>{modalState.content}</Modal>
-      )}
     </div>
   );
 }

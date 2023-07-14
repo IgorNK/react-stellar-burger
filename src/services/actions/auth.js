@@ -173,7 +173,6 @@ export const refreshToken = () => {
             refreshToken: res.refreshToken,
           });
           setCookie("token", res.refreshToken);
-          // dispatch(getUser(res.accessToken));
         } else {
           dispatch({
             type: REFRESH_TOKEN_FAILED,

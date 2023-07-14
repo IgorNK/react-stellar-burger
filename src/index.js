@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { compose, createStore, applyMiddleware } from "redux";
+import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { rootReducer } from "./services/reducers";
 import thunk from "redux-thunk";
@@ -23,7 +24,9 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <DndProvider backend={HTML5Backend}>
-        <App />
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
       </DndProvider>
     </Provider>
   </React.StrictMode>,
