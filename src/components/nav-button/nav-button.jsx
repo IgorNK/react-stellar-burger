@@ -31,11 +31,7 @@ const NavButton = (props) => {
   };
 
   return (
-    <button
-      type="button"
-      className={styles.navButton + " pl-5 pr-5 pb-4 pt-4"}
-      onClick={props.onClick}
-    >
+    <button type="button" className={styles.navButton + " pl-5 pr-5 pb-4 pt-4"}>
       {renderIcon(props.value)}
       <p className={getTextClass(props.active)}>{props.children}</p>
     </button>
@@ -44,7 +40,6 @@ const NavButton = (props) => {
 
 NavButton.propTypes = {
   active: PropTypes.bool,
-  onClick: PropTypes.func,
   value: PropTypes.string,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),

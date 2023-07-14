@@ -45,7 +45,6 @@ const initialState = {
   resetPasswordFailed: false,
   resetPasswordSuccess: false,
   user: null,
-  accessToken: "",
   refreshToken: "",
 };
 

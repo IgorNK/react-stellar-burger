@@ -2,6 +2,7 @@ import { useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Navigate } from "react-router-dom";
 import { getUser } from "../../services/actions/auth";
+import { GoBack } from "../go-back/go-back";
 
 export const ProtectedRouteElement = ({ authRequired, element }) => {
   const dispatch = useDispatch();
@@ -9,8 +10,8 @@ export const ProtectedRouteElement = ({ authRequired, element }) => {
     useSelector((store) => store.auth);
 
   const init = useCallback(() => {
-    dispatch(getUser(accessToken));
-  }, [accessToken, dispatch]);
+    !user && dispatch(getUser(accessToken));
+  }, [accessToken, dispatch, user]);
 
   useEffect(() => {
     init();
@@ -18,17 +19,12 @@ export const ProtectedRouteElement = ({ authRequired, element }) => {
 
   // While request is pending, show nothing
   if (getUserRequest || refreshTokenRequest) {
-    console.log("returning null for now");
     return <h1>Загрузка...</h1>;
   }
 
-  console.log("got past null");
-
   if (authRequired) {
-    console.log("auth required block");
-    return user ? element : <Navigate to="/login" replace />;
+    return user ? element : <Navigate to="/login" />;
   } else {
-    console.log("auth not required block");
-    return user ? <Navigate to="/profile" replace /> : element;
+    return user ? <GoBack /> : element;
   }
 };

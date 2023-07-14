@@ -19,6 +19,7 @@ import ErrorPopup from "../error-popup/error-popup";
 import { ProtectedRouteElement } from "../protected-route/protected-route";
 import { SHOW_INGREDIENT } from "../../services/actions/ingredients";
 import { DISPLAY_ERROR_MESSAGE } from "../../services/actions";
+import { getIngredients } from "../../services/actions/ingredients";
 
 function App() {
   const dispatch = useDispatch();
@@ -33,6 +34,10 @@ function App() {
     visible: false,
     content: null,
   });
+
+  useEffect(() => {
+    dispatch(getIngredients());
+  }, [dispatch]);
 
   useEffect(() => {
     !order.orderFailed &&
@@ -70,22 +75,6 @@ function App() {
     });
   };
 
-  const handleCloseModal = useCallback(() => {
-    setModalState({
-      ...modalState,
-      visible: false,
-    });
-    shownIngredient &&
-      dispatch({
-        type: SHOW_INGREDIENT,
-        item: null,
-      });
-    error &&
-      dispatch({
-        type: DISPLAY_ERROR_MESSAGE,
-        message: null,
-      });
-  }, [modalState, dispatch]);
   /*
   return (
     <div className={styles.app}>
@@ -112,80 +101,90 @@ function App() {
 
   const location = useLocation();
 
-  const background = location.state && location.state.background;
-  
+  const background = location.state?.background;
+
   return (
     <div className={styles.app}>
       <main className={styles.main + " pl-5 pr-5"}>
-          <AppHeader />
+        <AppHeader />
+        <Routes location={background || location}>
+          <Route path="/" element={<MainPage />} />
+          <Route
+            path="/login"
+            element={
+              <ProtectedRouteElement
+                authRequired={false}
+                element={<LoginPage />}
+              />
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <ProtectedRouteElement
+                authRequired={false}
+                element={<RegisterPage />}
+              />
+            }
+          />
+          <Route
+            path="/forgot-password"
+            element={
+              <ProtectedRouteElement
+                authRequired={false}
+                element={<ForgotPasswordPage />}
+              />
+            }
+          />
+          <Route
+            path="/reset-password"
+            element={
+              <ProtectedRouteElement
+                authRequired={false}
+                element={<ResetPasswordPage />}
+              />
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRouteElement
+                from="/profile"
+                authRequired={true}
+                element={<ProfilePage />}
+              />
+            }
+          />
+          <Route
+            path="/profile/orders"
+            element={
+              <ProtectedRouteElement
+                from="/profile/orders"
+                authRequired={true}
+                element={<ProfilePage />}
+              />
+            }
+          />
+          <Route
+            path="/profile/orders/:id"
+            element={
+              <ProtectedRouteElement
+                from="/profile/orders/:id"
+                authRequired={true}
+                element={<ProfilePage />}
+              />
+            }
+          />
+          <Route path="/ingredients/:id" element={<IngredientDetails />} />
+        </Routes>
+        {background && (
           <Routes>
-            <Route path="/" element={<MainPage />} />
             <Route
-              path="/login"
-              element={
-                <ProtectedRouteElement
-                  authRequired={false}
-                  element={<LoginPage />}
-                />
-              }
+              path="/ingredients/:id"
+              element={<Modal children={<IngredientDetails />} />}
             />
-            <Route
-              path="/register"
-              element={
-                <ProtectedRouteElement
-                  authRequired={false}
-                  element={<RegisterPage />}
-                />
-              }
-            />
-            <Route
-              path="/forgot-password"
-              element={
-                <ProtectedRouteElement
-                  authRequired={false}
-                  element={<ForgotPasswordPage />}
-                />
-              }
-            />
-            <Route
-              path="/reset-password"
-              element={
-                <ProtectedRouteElement
-                  authRequired={false}
-                  element={<ResetPasswordPage />}
-                />
-              }
-            />
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRouteElement
-                  authRequired={true}
-                  element={<ProfilePage />}
-                />
-              }
-            />
-            <Route
-              path="/profile/orders"
-              element={
-                <ProtectedRouteElement
-                  authRequired={true}
-                  element={<ProfilePage />}
-                />
-              }
-            />
-            <Route
-              path="/profile/orders/:id"
-              element={
-                <ProtectedRouteElement
-                  authRequired={true}
-                  element={<ProfilePage />}
-                />
-              }
-            />
-            <Route path="/ingredients/:id" element={<IngredientDetails />} />
-            background && <Route path="/ingredients/id" element={<Modal children={<IngredientDetails />} />} />
           </Routes>
+        )}
       </main>
     </div>
   );

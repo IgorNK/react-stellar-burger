@@ -49,14 +49,11 @@ export const logIn = (form) => {
           dispatch({
             type: LOGIN_SUCCESS,
             user: res.user,
-            accessToken: res.accessToken,
             refreshToken: res.refreshToken,
           });
+          sessionStorage.setItem("accessToken", res.accessToken);
+          deleteCookie("token");
           setCookie("token", res.refreshToken);
-        } else {
-          dispatch({
-            type: LOGIN_FAILED,
-          });
         }
       })
       .catch((err) => {
@@ -68,23 +65,20 @@ export const logIn = (form) => {
   };
 };
 
-export const logOut = (refreshToken) => {
+export const logOut = () => {
   return function (dispatch) {
+    sessionStorage.removeItem("accessToken");
     dispatch({
       type: LOGOUT_REQUEST,
     });
     api
-      .logoutRequest(refreshToken)
+      .logoutRequest({ token: getCookie("token") })
       .then((res) => {
         if (res && res.success) {
           dispatch({
             type: LOGOUT_SUCCESS,
           });
           deleteCookie("token");
-        } else {
-          dispatch({
-            type: LOGOUT_FAILED,
-          });
         }
       })
       .catch((err) => {
@@ -108,14 +102,11 @@ export const register = (form) => {
           dispatch({
             type: REGISTER_USER_SUCCESS,
             user: res.user,
-            accessToken: res.accessToken,
             refreshToken: res.refreshToken,
           });
+          sessionStorage.setItem("accessToken", res.accessToken);
+          deleteCookie("token");
           setCookie("token", res.refreshToken);
-        } else {
-          dispatch({
-            type: REGISTER_USER_FAILED,
-          });
         }
       })
       .catch((err) => {
@@ -127,25 +118,19 @@ export const register = (form) => {
   };
 };
 
-export const getUser = (accessToken) => {
+export const getUser = () => {
   return function (dispatch) {
     dispatch({
       type: GET_USER_REQUEST,
     });
     api
-      .getUserRequest(accessToken)
+      .getUserRequest(sessionStorage.getItem("accessToken"))
       .then((res) => {
         if (res && res.success) {
           dispatch({
             type: GET_USER_SUCCESS,
             user: res.user,
           });
-          console.log("get user success");
-        } else {
-          dispatch({
-            type: GET_USER_FAILED,
-          });
-          console.log("Failing in Else statement: get user failed");
         }
       })
       .catch((err) => {
@@ -153,7 +138,6 @@ export const getUser = (accessToken) => {
           type: GET_USER_FAILED,
         });
         dispatch(refreshToken());
-        console.log("Failing in Catch: " + err.message);
       });
   };
 };
@@ -169,14 +153,11 @@ export const refreshToken = () => {
         if (res && res.success) {
           dispatch({
             type: REFRESH_TOKEN_SUCCESS,
-            accessToken: res.accessToken,
             refreshToken: res.refreshToken,
           });
+          sessionStorage.setItem("accessToken", res.accessToken);
+          deleteCookie("token");
           setCookie("token", res.refreshToken);
-        } else {
-          dispatch({
-            type: REFRESH_TOKEN_FAILED,
-          });
         }
       })
       .catch((err) => {
@@ -188,22 +169,18 @@ export const refreshToken = () => {
   };
 };
 
-export const updateUser = (form, accessToken) => {
+export const updateUser = (form) => {
   return function (dispatch) {
     dispatch({
       type: UPDATE_USER_REQUEST,
     });
     api
-      .updateUserRequest(form, accessToken)
+      .updateUserRequest(form, sessionStorage.getItem("accessToken"))
       .then((res) => {
         if (res && res.success) {
           dispatch({
             type: UPDATE_USER_SUCCESS,
             user: res.user,
-          });
-        } else {
-          dispatch({
-            type: UPDATE_USER_FAILED,
           });
         }
       })
@@ -228,10 +205,6 @@ export const forgotPassword = (form) => {
           dispatch({
             type: FORGOT_PASSWORD_SUCCESS,
           });
-        } else {
-          dispatch({
-            type: FORGOT_PASSWORD_FAILED,
-          });
         }
       })
       .catch((err) => {
@@ -254,10 +227,6 @@ export const resetPassword = (form) => {
         if (res && res.success) {
           dispatch({
             type: RESET_PASSWORD_SUCCESS,
-          });
-        } else {
-          dispatch({
-            type: RESET_PASSWORD_FAILED,
           });
         }
       })

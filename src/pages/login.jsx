@@ -20,7 +20,6 @@ export const LoginPage = () => {
 
   const onFormSubmit = useCallback(
     (e) => {
-      console.log("click!");
       e.preventDefault();
       dispatch(logIn(form));
     },

@@ -1,5 +1,5 @@
 import styles from "./ingredient-details.module.css";
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -9,17 +9,15 @@ const IngredientDetails = () => {
   const [ingredient, setIngredient] = useState(null);
 
   useEffect(() => {
-    setIngredient(ingredients.find(item => item._id == id));
-    console.log(ingredients);
-    console.log(ingredient);
-  }, [ingredients]);
+    setIngredient(ingredients.find((item) => item._id === id));
+  }, [ingredients, id]);
 
   if (!ingredient) {
-    return <h1>Ингредиент не найден!</h1>
-  } 
+    return <h1>Ингредиент не найден!</h1>;
+  }
 
   return (
-     <div className={styles.container}>
+    <div className={styles.container}>
       <h2 className={styles.heading + " text text_type_main-large"}>
         Детали ингредиента
       </h2>

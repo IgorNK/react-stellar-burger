@@ -31,8 +31,6 @@ class Api {
   }
 
   loginRequest(form) {
-    console.log("doing a login");
-    console.log(form);
     return fetch(`${this._config.baseUrl}/auth/login`, {
       method: "POST",
       headers: {
@@ -57,8 +55,6 @@ class Api {
   }
 
   logoutRequest(refreshToken) {
-    console.log("logout refresh token: ");
-    console.log(refreshToken);
     return fetch(`${this._config.baseUrl}/auth/logout`, {
       method: "POST",
       headers: {
@@ -71,8 +67,6 @@ class Api {
   }
 
   getUserRequest(accessToken) {
-    console.log("accesstoken: ");
-    console.log(accessToken);
     return fetch(`${this._config.baseUrl}/auth/user`, {
       method: "GET",
       headers: {
@@ -85,8 +79,6 @@ class Api {
   }
 
   refreshTokenRequest(refreshToken) {
-    console.log("refreshtoken: ");
-    console.log(refreshToken);
     return fetch(`${this._config.baseUrl}/auth/token`, {
       method: "POST",
       headers: {
@@ -112,8 +104,6 @@ class Api {
   }
 
   forgotPasswordRequest(form) {
-    console.log("forgot password form: ");
-    console.log(form);
     return fetch(`${this._config.baseUrl}/password-reset`, {
       method: "POST",
       headers: {

@@ -19,3 +19,7 @@
 .profileButton {
   justify-self: flex-end;
 }
+
+.link {
+  all: unset;
+}

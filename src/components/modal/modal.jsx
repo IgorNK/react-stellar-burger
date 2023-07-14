@@ -7,7 +7,7 @@ import ModalOverlay from "../modal-overlay/modal-overlay";
 
 const Modal = ({ children }) => {
   const navigate = useNavigate();
-  
+
   const [closeIconState, setCloseIconState] = useState("primary");
 
   const handleCloseButtonHover = () => {
@@ -18,6 +18,10 @@ const Modal = ({ children }) => {
     setCloseIconState("primary");
   };
 
+  const onClose = useCallback(() => {
+    navigate(-1);
+  }, [navigate]);
+
   const handleEscapeButton = useCallback(
     (e) => {
       if (e.key === "Escape") {
@@ -26,10 +30,6 @@ const Modal = ({ children }) => {
     },
     [onClose]
   );
-
-  const onClose = () => {
-    navigate(-1);
-  }
 
   useEffect(() => {
     document.addEventListener("keydown", handleEscapeButton);
