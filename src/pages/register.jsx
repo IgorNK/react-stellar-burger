@@ -27,7 +27,7 @@ export const RegisterPage = () => {
   );
 
   return (
-    <form className={styles.form}>
+    <form className={styles.form} onSubmit={onFormSubmit}>
       <h1 className="text text_type_main-medium mb-6">Регистрация</h1>
 
       <label htmlFor="name"></label>
@@ -65,13 +65,7 @@ export const RegisterPage = () => {
         id="password"
       />
 
-      <Button
-        htmlType="submit"
-        type="primary"
-        size="medium"
-        extraClass="mb-20"
-        onClick={onFormSubmit}
-      >
+      <Button htmlType="submit" type="primary" size="medium" extraClass="mb-20">
         Зарегистрироваться
       </Button>
 

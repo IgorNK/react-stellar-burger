@@ -17,9 +17,9 @@ import IngredientDetails from "../ingredient-details/ingredient-details";
 import OrderDetails from "../order-details/order-details";
 import ErrorPopup from "../error-popup/error-popup";
 import { ProtectedRouteElement } from "../protected-route/protected-route";
-import { SHOW_INGREDIENT } from "../../services/actions/ingredients";
 import { DISPLAY_ERROR_MESSAGE } from "../../services/actions";
 import { getIngredients } from "../../services/actions/ingredients";
+import { getUser } from "../../services/actions/auth";
 
 function App() {
   const dispatch = useDispatch();
@@ -27,8 +27,9 @@ function App() {
   const shownIngredient = useSelector(
     (store) => store.ingredients.shownIngredient
   );
-  const order = useSelector((store) => store.order);
   const error = useSelector((store) => store.error);
+  const user = useSelector((store) => store.auth.user);
+  const ingredients = useSelector((store) => store.ingredients.ingredients);
 
   const [modalState, setModalState] = useState({
     visible: false,
@@ -36,15 +37,9 @@ function App() {
   });
 
   useEffect(() => {
-    dispatch(getIngredients());
-  }, [dispatch]);
-
-  useEffect(() => {
-    !order.orderFailed &&
-      !order.orderRequest &&
-      order.number &&
-      handleOpenOrderDetails(order.number);
-  }, [order]);
+    !ingredients.length && dispatch(getIngredients());
+    !user && dispatch(getUser());
+  }, [dispatch, user]);
 
   useEffect(() => {
     error && handleOpenError(error);
@@ -61,43 +56,12 @@ function App() {
     });
   };
 
-  const handleOpenOrderDetails = (number) => {
-    setModalState({
-      visible: true,
-      content: <OrderDetails number={number}></OrderDetails>,
-    });
-  };
-
   const handleOpenError = (errorMsg) => {
     setModalState({
       visible: true,
       content: <ErrorPopup>{errorMsg}</ErrorPopup>,
     });
   };
-
-  /*
-  return (
-    <div className={styles.app}>
-      <AppHeader />
-      <main className={styles.main + " pl-5 pr-5"}>
-        <section className={styles.twoColumns}>
-          <div>
-            <h1 className="text text_type_main-large mt-10 mb-5">
-              Соберите бургер
-            </h1>
-            <BurgerIngredients />
-          </div>
-          <div>
-            <BurgerConstructor />
-          </div>
-        </section>
-      </main>
-      {modalState.visible && (
-        <Modal onClose={handleCloseModal}>{modalState.content}</Modal>
-      )}
-    </div>
-  );
-  */
 
   const location = useLocation();
 
@@ -149,7 +113,6 @@ function App() {
             path="/profile"
             element={
               <ProtectedRouteElement
-                from="/profile"
                 authRequired={true}
                 element={<ProfilePage />}
               />
@@ -159,7 +122,6 @@ function App() {
             path="/profile/orders"
             element={
               <ProtectedRouteElement
-                from="/profile/orders"
                 authRequired={true}
                 element={<ProfilePage />}
               />
@@ -169,7 +131,6 @@ function App() {
             path="/profile/orders/:id"
             element={
               <ProtectedRouteElement
-                from="/profile/orders/:id"
                 authRequired={true}
                 element={<ProfilePage />}
               />
@@ -182,6 +143,15 @@ function App() {
             <Route
               path="/ingredients/:id"
               element={<Modal children={<IngredientDetails />} />}
+            />
+            <Route
+              path="/profile/orders/:id"
+              element={
+                <ProtectedRouteElement
+                  authRequired={true}
+                  element={<Modal children={<OrderDetails />} />}
+                />
+              }
             />
           </Routes>
         )}

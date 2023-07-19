@@ -3,15 +3,19 @@ import { useSelector, useDispatch } from "react-redux";
 import { Navigate } from "react-router-dom";
 import { getUser } from "../../services/actions/auth";
 import { GoBack } from "../go-back/go-back";
+import { getCookie } from "../../utils/cookies";
 
 export const ProtectedRouteElement = ({ authRequired, element }) => {
   const dispatch = useDispatch();
-  const { getUserRequest, refreshTokenRequest, user, accessToken } =
-    useSelector((store) => store.auth);
+  const { getUserRequest, refreshTokenRequest, user } = useSelector(
+    (store) => store.auth
+  );
 
   const init = useCallback(() => {
-    !user && dispatch(getUser(accessToken));
-  }, [accessToken, dispatch, user]);
+    const refreshToken = localStorage.getItem("refreshToken");
+    const accessToken = getCookie("token");
+    if ((refreshToken || accessToken) && !user) dispatch(getUser());
+  }, [dispatch, user]);
 
   useEffect(() => {
     init();

@@ -49,11 +49,10 @@ export const logIn = (form) => {
           dispatch({
             type: LOGIN_SUCCESS,
             user: res.user,
-            refreshToken: res.refreshToken,
           });
-          sessionStorage.setItem("accessToken", res.accessToken);
           deleteCookie("token");
-          setCookie("token", res.refreshToken);
+          setCookie("token", res.accessToken);
+          localStorage.setItem("refreshToken", res.refreshToken);
         }
       })
       .catch((err) => {
@@ -67,17 +66,17 @@ export const logIn = (form) => {
 
 export const logOut = () => {
   return function (dispatch) {
-    sessionStorage.removeItem("accessToken");
     dispatch({
       type: LOGOUT_REQUEST,
     });
     api
-      .logoutRequest({ token: getCookie("token") })
+      .logoutRequest()
       .then((res) => {
         if (res && res.success) {
           dispatch({
             type: LOGOUT_SUCCESS,
           });
+          localStorage.removeItem("refreshToken");
           deleteCookie("token");
         }
       })
@@ -102,11 +101,10 @@ export const register = (form) => {
           dispatch({
             type: REGISTER_USER_SUCCESS,
             user: res.user,
-            refreshToken: res.refreshToken,
           });
-          sessionStorage.setItem("accessToken", res.accessToken);
           deleteCookie("token");
-          setCookie("token", res.refreshToken);
+          setCookie("token", res.accessToken);
+          localStorage.setItem("refreshToken", res.refreshToken);
         }
       })
       .catch((err) => {
@@ -124,7 +122,7 @@ export const getUser = () => {
       type: GET_USER_REQUEST,
     });
     api
-      .getUserRequest(sessionStorage.getItem("accessToken"))
+      .getUserRequest()
       .then((res) => {
         if (res && res.success) {
           dispatch({
@@ -137,27 +135,23 @@ export const getUser = () => {
         dispatch({
           type: GET_USER_FAILED,
         });
-        dispatch(refreshToken());
+        dispatch(refreshAccessToken());
       });
   };
 };
 
-export const refreshToken = () => {
+export const refreshAccessToken = () => {
   return function (dispatch) {
     dispatch({
       type: REFRESH_TOKEN_REQUEST,
     });
     api
-      .refreshTokenRequest({ token: getCookie("token") })
+      .refreshTokenRequest()
       .then((res) => {
         if (res && res.success) {
           dispatch({
             type: REFRESH_TOKEN_SUCCESS,
-            refreshToken: res.refreshToken,
           });
-          sessionStorage.setItem("accessToken", res.accessToken);
-          deleteCookie("token");
-          setCookie("token", res.refreshToken);
         }
       })
       .catch((err) => {
@@ -175,7 +169,7 @@ export const updateUser = (form) => {
       type: UPDATE_USER_REQUEST,
     });
     api
-      .updateUserRequest(form, sessionStorage.getItem("accessToken"))
+      .updateUserRequest(form)
       .then((res) => {
         if (res && res.success) {
           dispatch({

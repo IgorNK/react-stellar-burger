@@ -1,7 +1,10 @@
 import { useState, useCallback, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
-import { Input } from "@ya.praktikum/react-developer-burger-ui-components";
+import {
+  Input,
+  Button,
+} from "@ya.praktikum/react-developer-burger-ui-components";
 import { updateUser, logOut } from "../services/actions/auth";
 import styles from "./profile.module.css";
 
@@ -32,12 +35,16 @@ export const ProfilePage = () => {
   }, [location]);
 
   useEffect(() => {
+    resetForm(user);
+  }, [user]);
+
+  const resetForm = (userdata) => {
     setFormValue({
-      name: user.name,
-      email: user.email,
+      name: userdata.name,
+      email: userdata.email,
       password: "******",
     });
-  }, [user]);
+  };
 
   const onFormChange = (e) => {
     e.preventDefault();
@@ -48,8 +55,22 @@ export const ProfilePage = () => {
     (e) => {
       e.preventDefault();
       dispatch(updateUser(form));
+      setNameEditActive(false);
+      setEmailEditActive(false);
+      setPasswordEditActive(false);
     },
     [dispatch, form]
+  );
+
+  const onFormReset = useCallback(
+    (e) => {
+      e.preventDefault();
+      resetForm(user);
+      setNameEditActive(false);
+      setEmailEditActive(false);
+      setPasswordEditActive(false);
+    },
+    [user]
   );
 
   const onLogoutClick = useCallback(
@@ -93,7 +114,7 @@ export const ProfilePage = () => {
           </Link>
         </nav>
 
-        <form onSubmit={onFormSubmit}>
+        <form onSubmit={onFormSubmit} onReset={onFormReset}>
           <label htmlFor="name"></label>
           <Input
             type="text"
@@ -108,7 +129,6 @@ export const ProfilePage = () => {
             name="name"
             id="name"
           />
-
           <label htmlFor="email"></label>
           <Input
             type="email"
@@ -123,7 +143,6 @@ export const ProfilePage = () => {
             name="email"
             id="email"
           />
-
           <label htmlFor="password"></label>
           <Input
             placeholder="Пароль"
@@ -140,8 +159,21 @@ export const ProfilePage = () => {
             name="password"
             id="password"
           />
-
-          <input type="submit" style={{ display: "none" }} />
+          {(nameEditActive || emailEditActive || passwordEditActive) && (
+            <div>
+              <Button htmlType="submit" type="primary" size="medium">
+                Сохранить
+              </Button>
+              <Button
+                htmlType="reset"
+                type="primary"
+                size="medium"
+                extraClass="ml-6"
+              >
+                Отмена
+              </Button>
+            </div>
+          )}
         </form>
         <p className="text text_type_main-default text_color_inactive">
           В этом разделе вы можете изменить&nbsp;свои персональные данные

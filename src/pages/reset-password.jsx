@@ -45,7 +45,7 @@ export const ResetPasswordPage = () => {
   }
 
   return (
-    <form className={styles.form}>
+    <form className={styles.form} onSubmit={onFormSubmit}>
       <h1 className="text text_type_main-medium mb-6">Восстановление пароля</h1>
 
       <label htmlFor="password"></label>
@@ -71,13 +71,7 @@ export const ResetPasswordPage = () => {
         id="token"
       />
 
-      <Button
-        htmlType="submit"
-        type="primary"
-        size="medium"
-        extraClass="mb-20"
-        onClick={onFormSubmit}
-      >
+      <Button htmlType="submit" type="primary" size="medium" extraClass="mb-20">
         Сохранить
       </Button>
 

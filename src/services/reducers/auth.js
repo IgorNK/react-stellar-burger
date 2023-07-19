@@ -45,7 +45,6 @@ const initialState = {
   resetPasswordFailed: false,
   resetPasswordSuccess: false,
   user: null,
-  refreshToken: "",
 };
 
 export const authReducer = (state = initialState, action) => {
@@ -60,8 +59,6 @@ export const authReducer = (state = initialState, action) => {
       return {
         ...initialState,
         user: action.user,
-        accessToken: action.accessToken,
-        refreshToken: action.refreshToken,
       };
     }
     case LOGIN_FAILED: {
@@ -80,8 +77,6 @@ export const authReducer = (state = initialState, action) => {
       return {
         ...initialState,
         user: action.user,
-        accessToken: action.accessToken,
-        refreshToken: action.refreshToken,
       };
     }
     case REGISTER_USER_FAILED: {
@@ -158,8 +153,6 @@ export const authReducer = (state = initialState, action) => {
     case REFRESH_TOKEN_SUCCESS: {
       return {
         ...initialState,
-        accessToken: action.accessToken,
-        refreshToken: action.refreshToken,
       };
     }
     case REFRESH_TOKEN_FAILED: {

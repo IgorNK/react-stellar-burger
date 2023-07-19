@@ -1,6 +1,7 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useDrop } from "react-dnd";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   CurrencyIcon,
   Button,
@@ -8,17 +9,40 @@ import {
 import ConstructorIngredient from "../constructor-ingredient/constructor-ingredient";
 import { submitOrder } from "../../services/actions/order";
 
-import { ADD_TO_CART, REMOVE_FROM_CART } from "../../services/actions/cart";
+import {
+  ADD_TO_CART,
+  REMOVE_FROM_CART,
+  CLEAR_CART,
+} from "../../services/actions/cart";
 
 import styles from "./burger-constructor.module.css";
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
   const { total, cartItems, bun } = useSelector((store) => ({
     total: store.cart.total,
     cartItems: store.cart.cartItems,
     bun: store.cart.bun,
   }));
+  const { orderRequest, orderSuccess, number } = useSelector((store) => ({
+    orderRequest: store.order.orderRequest,
+    orderSuccess: store.order.orderSuccess,
+    number: store.order.number,
+  }));
+  const { user } = useSelector((store) => store.auth);
+
+  useEffect(() => {
+    if (orderSuccess) {
+      dispatch({
+        type: CLEAR_CART,
+      });
+      navigate(`/profile/orders/${number}`, {
+        state: { background: location },
+      });
+    }
+  }, [orderSuccess]);
 
   const renderBun = ({ item, pos, key }) => {
     return (
@@ -40,8 +64,17 @@ const BurgerConstructor = () => {
   };
 
   const handleSubmitOrder = useCallback(() => {
-    dispatch(submitOrder(cartItems.map((cartItem) => cartItem.item._id)));
-  }, [dispatch, cartItems]);
+    user
+      ? dispatch(
+          submitOrder(
+            cartItems
+              .concat(bun)
+              .concat(bun)
+              .map((cartItem) => cartItem.item._id)
+          )
+        )
+      : navigate("/login");
+  }, [dispatch, cartItems, user, navigate, bun]);
 
   const [{ isHover }, dropTarget] = useDrop({
     accept: "ingredient",
@@ -105,11 +138,12 @@ const BurgerConstructor = () => {
           htmlType="button"
           type="primary"
           size="large"
+          disabled={cartItems.length && !orderRequest ? false : true}
           onClick={() => {
             handleSubmitOrder();
           }}
         >
-          Оформить заказ
+          {orderRequest ? "Подождите..." : "Оформить заказ"}
         </Button>
       </div>
     </div>

@@ -6,6 +6,7 @@ import { DISPLAY_ERROR_MESSAGE } from "./index";
 export const SEND_ORDER_REQUEST = "SEND_ORDER_REQUEST";
 export const SEND_ORDER_SUCCESS = "SEND_ORDER_SUCCESS";
 export const SEND_ORDER_FAILED = "SEND_ORDER_FAILED";
+export const ORDER_REPORTED = "ORDER_REPORTED";
 
 export function submitOrder(ingredientIDs) {
   const api = new Api({ baseUrl: dataUrl });

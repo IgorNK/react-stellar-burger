@@ -27,7 +27,7 @@ export const LoginPage = () => {
   );
 
   return (
-    <form className={styles.form}>
+    <form className={styles.form} onSubmit={onFormSubmit}>
       <h1 className="text text_type_main-medium mb-6">Вход</h1>
 
       <label htmlFor="email"></label>
@@ -53,13 +53,7 @@ export const LoginPage = () => {
         id="password"
       />
 
-      <Button
-        htmlType="submit"
-        type="primary"
-        size="medium"
-        extraClass="mb-20"
-        onClick={onFormSubmit}
-      >
+      <Button htmlType="submit" type="primary" size="medium" extraClass="mb-20">
         Войти
       </Button>
 
