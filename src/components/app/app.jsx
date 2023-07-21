@@ -20,6 +20,7 @@ import { ProtectedRouteElement } from "../protected-route/protected-route";
 import { DISPLAY_ERROR_MESSAGE } from "../../services/actions";
 import { getIngredients } from "../../services/actions/ingredients";
 import { getUser } from "../../services/actions/auth";
+import { getCookie } from "../../utils/cookies";
 
 function App() {
   const dispatch = useDispatch();
@@ -38,7 +39,9 @@ function App() {
 
   useEffect(() => {
     !ingredients.length && dispatch(getIngredients());
-    !user && dispatch(getUser());
+    const refreshToken = localStorage.getItem("refreshToken");
+    const accessToken = getCookie("token");
+    if ((refreshToken || accessToken) && !user) dispatch(getUser());
   }, [dispatch, user]);
 
   useEffect(() => {

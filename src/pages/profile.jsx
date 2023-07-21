@@ -42,7 +42,6 @@ export const ProfilePage = () => {
     setFormValue({
       name: userdata.name,
       email: userdata.email,
-      password: "******",
     });
   };
 
@@ -146,7 +145,7 @@ export const ProfilePage = () => {
           <label htmlFor="password"></label>
           <Input
             placeholder="Пароль"
-            value={form.password}
+            value={passwordEditActive ? (form.password || "") : "******"}
             size="default"
             extraClass="mb-6"
             onChange={onFormChange}
