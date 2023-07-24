@@ -10,6 +10,7 @@ import {
   ProfilePage,
   ForgotPasswordPage,
   ResetPasswordPage,
+  FeedPage
 } from "../../pages";
 
 import Modal from "../modal/modal";
@@ -139,6 +140,8 @@ function App() {
               />
             }
           />
+          <Route path="/feed" element={<FeedPage />} />
+          <Route path="/feed/:id" element={<FeedPage />} />
           <Route path="/ingredients/:id" element={<IngredientDetails />} />
         </Routes>
         {background && (
@@ -148,7 +151,7 @@ function App() {
               element={<Modal children={<IngredientDetails />} />}
             />
             <Route
-              path="/profile/orders/:id"
+              path="/profile/order-accepted/:id"
               element={
                 <ProtectedRouteElement
                   authRequired={true}
