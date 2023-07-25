@@ -38,7 +38,7 @@ const BurgerConstructor = () => {
       dispatch({
         type: CLEAR_CART,
       });
-      navigate(`/profile/order-accepted/${number}`, {
+      navigate(`/profile/orders/${number}`, {
         state: { background: location },
       });
     }
