@@ -1,15 +1,26 @@
 import { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Routes, Route, useLocation } from "react-router-dom";
 import styles from "./app.module.css";
 import AppHeader from "../app-header/app-header";
-import BurgerIngredients from "../burger-ingredients/burger-ingredients";
-import BurgerConstructor from "../burger-constructor/burger-constructor";
+import {
+  MainPage,
+  LoginPage,
+  RegisterPage,
+  ProfilePage,
+  ForgotPasswordPage,
+  ResetPasswordPage,
+} from "../../pages";
+
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import OrderDetails from "../order-details/order-details";
 import ErrorPopup from "../error-popup/error-popup";
-import { SHOW_INGREDIENT } from "../../services/actions/ingredients";
+import { ProtectedRouteElement } from "../protected-route/protected-route";
 import { DISPLAY_ERROR_MESSAGE } from "../../services/actions";
+import { getIngredients } from "../../services/actions/ingredients";
+import { getUser } from "../../services/actions/auth";
+import { getCookie } from "../../utils/cookies";
 
 function App() {
   const dispatch = useDispatch();
@@ -17,8 +28,9 @@ function App() {
   const shownIngredient = useSelector(
     (store) => store.ingredients.shownIngredient
   );
-  const order = useSelector((store) => store.order);
   const error = useSelector((store) => store.error);
+  const user = useSelector((store) => store.auth.user);
+  const ingredients = useSelector((store) => store.ingredients.ingredients);
 
   const [modalState, setModalState] = useState({
     visible: false,
@@ -26,11 +38,11 @@ function App() {
   });
 
   useEffect(() => {
-    !order.orderFailed &&
-      !order.orderRequest &&
-      order.number &&
-      handleOpenOrderDetails(order.number);
-  }, [order]);
+    !ingredients.length && dispatch(getIngredients());
+    const refreshToken = localStorage.getItem("refreshToken");
+    const accessToken = getCookie("token");
+    if ((refreshToken || accessToken) && !user) dispatch(getUser());
+  }, [dispatch, user]);
 
   useEffect(() => {
     error && handleOpenError(error);
@@ -47,13 +59,6 @@ function App() {
     });
   };
 
-  const handleOpenOrderDetails = (number) => {
-    setModalState({
-      visible: true,
-      content: <OrderDetails number={number}></OrderDetails>,
-    });
-  };
-
   const handleOpenError = (errorMsg) => {
     setModalState({
       visible: true,
@@ -61,42 +66,99 @@ function App() {
     });
   };
 
-  const handleCloseModal = useCallback(() => {
-    setModalState({
-      ...modalState,
-      visible: false,
-    });
-    shownIngredient &&
-      dispatch({
-        type: SHOW_INGREDIENT,
-        item: null,
-      });
-    error &&
-      dispatch({
-        type: DISPLAY_ERROR_MESSAGE,
-        message: null,
-      });
-  }, [modalState, dispatch]);
+  const location = useLocation();
+
+  const background = location.state?.background;
 
   return (
     <div className={styles.app}>
-      <AppHeader />
       <main className={styles.main + " pl-5 pr-5"}>
-        <section className={styles.twoColumns}>
-          <div>
-            <h1 className="text text_type_main-large mt-10 mb-5">
-              Соберите бургер
-            </h1>
-            <BurgerIngredients />
-          </div>
-          <div>
-            <BurgerConstructor />
-          </div>
-        </section>
+        <AppHeader />
+        <Routes location={background || location}>
+          <Route path="/" element={<MainPage />} />
+          <Route
+            path="/login"
+            element={
+              <ProtectedRouteElement
+                authRequired={false}
+                element={<LoginPage />}
+              />
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <ProtectedRouteElement
+                authRequired={false}
+                element={<RegisterPage />}
+              />
+            }
+          />
+          <Route
+            path="/forgot-password"
+            element={
+              <ProtectedRouteElement
+                authRequired={false}
+                element={<ForgotPasswordPage />}
+              />
+            }
+          />
+          <Route
+            path="/reset-password"
+            element={
+              <ProtectedRouteElement
+                authRequired={false}
+                element={<ResetPasswordPage />}
+              />
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRouteElement
+                authRequired={true}
+                element={<ProfilePage />}
+              />
+            }
+          />
+          <Route
+            path="/profile/orders"
+            element={
+              <ProtectedRouteElement
+                authRequired={true}
+                element={<ProfilePage />}
+              />
+            }
+          />
+          <Route
+            path="/profile/orders/:id"
+            element={
+              <ProtectedRouteElement
+                authRequired={true}
+                element={<ProfilePage />}
+              />
+            }
+          />
+          <Route path="/ingredients/:id" element={<IngredientDetails />} />
+        </Routes>
+        {background && (
+          <Routes>
+            <Route
+              path="/ingredients/:id"
+              element={<Modal children={<IngredientDetails />} />}
+            />
+            <Route
+              path="/profile/orders/:id"
+              element={
+                <ProtectedRouteElement
+                  authRequired={true}
+                  element={<Modal children={<OrderDetails />} />}
+                />
+              }
+            />
+          </Routes>
+        )}
       </main>
-      {modalState.visible && (
-        <Modal onClose={handleCloseModal}>{modalState.content}</Modal>
-      )}
     </div>
   );
 }

@@ -6,13 +6,7 @@
 
 .main {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   max-width: 1240px;
-}
-
-.twoColumns {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: start;
-  column-gap: 40px;
 }

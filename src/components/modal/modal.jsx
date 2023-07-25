@@ -1,10 +1,13 @@
 import { useState, useEffect, useCallback } from "react";
 import { PropTypes } from "prop-types";
+import { useNavigate } from "react-router-dom";
 import styles from "./modal.module.css";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import ModalOverlay from "../modal-overlay/modal-overlay";
 
-const Modal = ({ children, onClose }) => {
+const Modal = ({ children }) => {
+  const navigate = useNavigate();
+
   const [closeIconState, setCloseIconState] = useState("primary");
 
   const handleCloseButtonHover = () => {
@@ -14,6 +17,10 @@ const Modal = ({ children, onClose }) => {
   const handleCloseButtonLeave = () => {
     setCloseIconState("primary");
   };
+
+  const onClose = useCallback(() => {
+    navigate(-1);
+  }, [navigate]);
 
   const handleEscapeButton = useCallback(
     (e) => {
@@ -55,7 +62,6 @@ Modal.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]),
-  onClose: PropTypes.func,
 };
 
 export default Modal;

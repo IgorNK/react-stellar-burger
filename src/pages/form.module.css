@@ -1,0 +1,21 @@
+.form {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.link {
+  cursor: pointer;
+  text-decoration: none;
+  color: #4c4cff;
+  transition: opacity 0.1 linear;
+}
+
+.link:hover {
+  opacity: 80%;
+}

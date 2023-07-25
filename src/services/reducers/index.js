@@ -2,6 +2,7 @@ import { combineReducers } from "redux";
 import { cartReducer } from "./cart";
 import { ingredientsReducer } from "./ingredients";
 import { orderReducer } from "./order";
+import { authReducer } from "./auth";
 import { DISPLAY_ERROR_MESSAGE } from "../actions/index";
 
 const errorReducer = (state = null, action) => {
@@ -16,6 +17,7 @@ const errorReducer = (state = null, action) => {
 };
 
 export const rootReducer = combineReducers({
+  auth: authReducer,
   cart: cartReducer,
   ingredients: ingredientsReducer,
   order: orderReducer,

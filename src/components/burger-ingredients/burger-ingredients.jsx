@@ -1,42 +1,32 @@
 import { useMemo, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link, useLocation } from "react-router-dom";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import Ingredient from "../ingredient/ingredient";
 import styles from "./burger-ingredients.module.css";
-import { getIngredients } from "../../services/actions/ingredients";
 import {
   SWITCH_TAB,
   SHOW_INGREDIENT,
 } from "../../services/actions/ingredients";
 
 const BurgerIngredients = () => {
+  const location = useLocation();
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getIngredients());
-  }, [dispatch]);
 
   const { ingredients, currentTab, ingredientsRequest } = useSelector(
     (store) => store.ingredients
   );
 
-  const showIngredient = (item) => {
-    dispatch({
-      type: SHOW_INGREDIENT,
-      item: item,
-    });
-  };
-
   const renderIngredient = (item) => {
     return (
-      <Ingredient
+      <Link
+        className={styles.link}
         key={item._id}
-        item={item}
-        board="default"
-        clickHandler={() => {
-          showIngredient(item);
-        }}
-      />
+        to={`/ingredients/${item._id}`}
+        state={{ background: location }}
+      >
+        <Ingredient item={item} board="default" />
+      </Link>
     );
   };
 

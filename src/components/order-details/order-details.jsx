@@ -1,13 +1,23 @@
 import styles from "./order-details.module.css";
 import orderAcceptedIcon from "../../images/order_accepted.svg";
-import { PropTypes } from "prop-types";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
+import { ORDER_REPORTED } from "../../services/actions/order";
 
-const OrderDetails = ({ number }) => {
+const OrderDetails = () => {
+  const dispatch = useDispatch();
+  const { id } = useParams();
+
+  useEffect(() => {
+    dispatch({
+      type: ORDER_REPORTED,
+    });
+  }, [dispatch]);
+
   return (
     <div className={styles.container + " mt-30 mb-30"}>
-      <p className={styles.orderId + " text text_type_digits-large"}>
-        {number}
-      </p>
+      <p className={styles.orderId + " text text_type_digits-large"}>{id}</p>
       <p className="text text_type_main-medium mt-8">идентификатор заказа</p>
       <img
         className="mt-15 mb-15"
@@ -20,10 +30,6 @@ const OrderDetails = ({ number }) => {
       </p>
     </div>
   );
-};
-
-OrderDetails.propTypes = {
-  number: PropTypes.number,
 };
 
 export default OrderDetails;

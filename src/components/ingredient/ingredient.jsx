@@ -10,7 +10,7 @@ import { ingredientPropType } from "../../utils/prop-types.js";
 import styles from "./ingredient.module.css";
 
 const Ingredient = (props) => {
-  const { item, clickHandler } = props;
+  const { item } = props;
   const { cartItems, bun } = useSelector((store) => store.cart);
 
   const count = useMemo(() => {
@@ -27,7 +27,7 @@ const Ingredient = (props) => {
   });
 
   const listIngredient = (
-    <div ref={ref} className={styles.ingredient} onClick={clickHandler}>
+    <div ref={ref} className={styles.ingredient}>
       <img src={item.image} alt="ingredient" />
       <div className={styles.priceContainer}>
         <p className="text text_type_digits-default pr-2">{item.price}</p>
@@ -43,7 +43,6 @@ const Ingredient = (props) => {
 
 Ingredient.propTypes = {
   item: ingredientPropType,
-  clickHandler: PropTypes.func.isRequired,
 };
 
 export default Ingredient;

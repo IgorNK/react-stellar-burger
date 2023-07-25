@@ -1,5 +1,10 @@
 import uuid from "react-uuid";
-import { ADD_TO_CART, REMOVE_FROM_CART, MOVE_CART_ITEM } from "../actions/cart";
+import {
+  ADD_TO_CART,
+  REMOVE_FROM_CART,
+  MOVE_CART_ITEM,
+  CLEAR_CART,
+} from "../actions/cart";
 
 const initialState = {
   total: 0,
@@ -74,6 +79,11 @@ export const cartReducer = (state = initialState, action) => {
       return {
         ...state,
         cartItems: moveCartItem(action.dragIndex, action.hoverIndex),
+      };
+    }
+    case CLEAR_CART: {
+      return {
+        ...initialState,
       };
     }
     default: {
