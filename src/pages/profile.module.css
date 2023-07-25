@@ -1,12 +1,20 @@
 .profile {
   display: grid;
-  grid-template-rows: 1fr 1fr;
-  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  grid-template-columns: min-content 1fr;
   padding-left: 20px;
   margin-top: 120px;
   column-gap: 60px;
-  max-width: 860px;
+  /* max-width: 860px; */
   width: 100%;
+  max-height: calc(100vh - 326px);
+  min-height: 425px;
+}
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  row-gap: 80px;
 }
 
 .navigation {
@@ -14,7 +22,7 @@
   grid-template-rows: repeat(3, 64px);
   align-items: center;
   flex-direction: column;
-  width: 100%;
+  width: 320px;
 }
 
 .link {

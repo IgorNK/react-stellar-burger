@@ -1,0 +1,41 @@
+.orderInfo {
+  margin: 0;
+  padding: 40px;
+  display: grid;
+  grid-template-columns: 1fr;
+  max-height: calc(100vh - 326px);
+  min-height: 425px;
+  justify-content: flex-start;
+}
+
+.orderNumber {
+  justify-self: center;
+}
+
+.ordersList {
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+  overflow-y: scroll;
+}
+
+.listElement {
+  display: grid;
+  grid-template-columns: min-content 1fr max-content;
+  align-items: center;
+  column-gap: 16px;
+}
+
+.orderBottomLine {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.orderPrice {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}

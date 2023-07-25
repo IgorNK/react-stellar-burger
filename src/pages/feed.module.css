@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: start;
-  column-gap: 40px;  
+  column-gap: 60px;
 }
 
 .feed {
@@ -11,19 +11,12 @@
   display: flex;
   flex-direction: column;
   max-height: calc(100vh - 326px);
-  min-height: 425px;  
-}
-
-.orders {
-  display: flex;
-  flex-direction: column;
-  row-gap: 6px;
-  list-style-type: none;
-  overflow-y: scroll;
+  min-height: 425px;
 }
 
 .ordersInfo {
   margin: 0;
+  margin-top: 100px;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -32,8 +25,9 @@
 }
 
 .ordersTable {
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 36px;
   width: 100%;
 }
 
@@ -53,4 +47,10 @@
 .ordersCompleted {
   display: flex;
   flex-direction: column;
+}
+
+.fancyShadow {
+  color: #f2f2f3;
+  text-shadow: 0px 0px 16px rgba(51, 51, 255, 0.25),
+    0px 0px 8px rgba(51, 51, 255, 0.25), 0px 4px 32px rgba(51, 51, 255, 0.5);
 }

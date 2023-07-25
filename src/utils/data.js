@@ -1,5 +1,65 @@
 export const dataUrl = "https://norma.nomoreparties.space/api";
 
+export const formatNumber = (num) => {
+  return num?.toString().replace(/(.)(?=(\d{3})+$)/g, "$1 ");
+};
+
+export const getOrderStatus = (status) => {
+  switch (status) {
+    case "cooking": {
+      return <p className="text text_type_main-small">Готовится</p>;
+    }
+    case "pending": {
+      return <p className="text text_type_main-small">Готовится</p>;
+    }
+    case "created": {
+      return <p className="text text_type_main-small">Готовится</p>;
+    }
+    case "done": {
+      return (
+        <p className="text text_type_main-small" style={{ color: "#0cc" }}>
+          Готов
+        </p>
+      );
+    }
+    case "cancelled": {
+      return (
+        <p className="text text_type_main-small" style={{ color: "#e52b1a" }}>
+          Отменён
+        </p>
+      );
+    }
+    default: {
+      return (
+        <p className="text text_type_main-small" style={{ color: "#e52b1a" }}>
+          Нет статуса
+        </p>
+      );
+    }
+  }
+};
+
+//in: "2021-06-23T14:43:22.587Z"
+//out: Сегодня, 16:20 i-GMT+3
+export const formatDate = (date) => {
+  const orderDate = new Date(Date.parse(date));
+  const currentDate = new Date(Date.now());
+  const twoDays = 2 * 24 * 60 * 60 * 1000;
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const hoursOffset = currentDate.getTimezoneOffset() / 60;
+  const dateOptions = {
+    dateStyle: "short",
+    timeStyle: "short",
+    timeZone: timezone,
+  };
+  if (currentDate - orderDate < twoDays) {
+    //TODO
+  }
+  return `${orderDate.toLocaleString(navigator.language, dateOptions)}, i-GMT${
+    hoursOffset > 0 ? "+" + hoursOffset : hoursOffset
+  }`;
+};
+
 export const testFeedOrders = {
   success: true,
   orders: [
@@ -516,8 +576,8 @@ export const testFeedOrders = {
       updatedAt: "2023-08-18T11:48:12.403Z",
     },
   ],
-  total: 3,
-  totalToday: 3,
+  total: 38752,
+  totalToday: 3568,
 };
 
 export const testUserOrders = {
@@ -572,6 +632,116 @@ export const testUserOrders = {
       number: 3,
       createdAt: "2021-06-23T20:13:23.654Z",
       updatedAt: "2021-06-23T20:13:23.657Z",
+    },
+    {
+      ingredients: [
+        "643d69a5c3f7b9001cfa093c",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa093e",
+        "643d69a5c3f7b9001cfa0942",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+      ],
+      _id: "",
+      status: "pending",
+      number: 263497,
+      createdAt: "2023-08-18T10:40:22.587Z",
+      updatedAt: "2023-08-18T11:48:12.403Z",
+    },
+    {
+      ingredients: [
+        "643d69a5c3f7b9001cfa093c",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa093e",
+        "643d69a5c3f7b9001cfa0942",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+      ],
+      _id: "",
+      status: "pending",
+      number: 263497,
+      createdAt: "2023-08-18T10:40:22.587Z",
+      updatedAt: "2023-08-18T11:48:12.403Z",
+    },
+    {
+      ingredients: [
+        "643d69a5c3f7b9001cfa093c",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa093e",
+        "643d69a5c3f7b9001cfa0942",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+      ],
+      _id: "",
+      status: "pending",
+      number: 263497,
+      createdAt: "2023-08-18T10:40:22.587Z",
+      updatedAt: "2023-08-18T11:48:12.403Z",
+    },
+    {
+      ingredients: [
+        "643d69a5c3f7b9001cfa093c",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa093e",
+        "643d69a5c3f7b9001cfa0942",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+      ],
+      _id: "",
+      status: "pending",
+      number: 263497,
+      createdAt: "2023-08-18T10:40:22.587Z",
+      updatedAt: "2023-08-18T11:48:12.403Z",
+    },
+    {
+      ingredients: [
+        "643d69a5c3f7b9001cfa093c",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa093e",
+        "643d69a5c3f7b9001cfa0942",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+        "643d69a5c3f7b9001cfa0941",
+      ],
+      _id: "",
+      status: "pending",
+      number: 263497,
+      createdAt: "2023-08-18T10:40:22.587Z",
+      updatedAt: "2023-08-18T11:48:12.403Z",
     },
   ],
   total: 3,

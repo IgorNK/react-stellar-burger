@@ -1,20 +1,28 @@
 .orderIcon {
-  position: relative;
-  width: 50px;
-  height: 50px;
-  background-color: darkgrey;
-  border: 1px solid darkblue;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
-  margin-left: -5px;
+  background: linear-gradient(45deg, #801ab2 0%, #4c4cff 100%);
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.innerContainer {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #131316;
+  position: relative;
 }
 
 .innerImage {
   position: absolute;
   top: 50%;
-  left: 0;
-  transform: translateY(-50%);
-  width: 50px;
+  left: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  width: 112px;
 }
 
 .innerText {

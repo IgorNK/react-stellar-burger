@@ -10,18 +10,21 @@ import {
   ProfilePage,
   ForgotPasswordPage,
   ResetPasswordPage,
-  FeedPage
+  FeedPage,
 } from "../../pages";
-
+import ProfileEditForm from "../profile-edit-form/profile-edit-form";
+import OrdersList from "../orders-list/orders-list";
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import OrderDetails from "../order-details/order-details";
+import OrderInfo from "../order-info/order-info";
 import ErrorPopup from "../error-popup/error-popup";
 import { ProtectedRouteElement } from "../protected-route/protected-route";
 import { DISPLAY_ERROR_MESSAGE } from "../../services/actions";
 import { getIngredients } from "../../services/actions/ingredients";
 import { getUser } from "../../services/actions/auth";
 import { getCookie } from "../../utils/cookies";
+import { testUserOrders } from "../../utils/data";
 
 function App() {
   const dispatch = useDispatch();
@@ -121,27 +124,16 @@ function App() {
                 element={<ProfilePage />}
               />
             }
-          />
-          <Route
-            path="/profile/orders"
-            element={
-              <ProtectedRouteElement
-                authRequired={true}
-                element={<ProfilePage />}
-              />
-            }
-          />
-          <Route
-            path="/profile/orders/:id"
-            element={
-              <ProtectedRouteElement
-                authRequired={true}
-                element={<ProfilePage />}
-              />
-            }
-          />
+          >
+            <Route path="/profile" element={<ProfileEditForm />} />
+            <Route
+              path="orders"
+              element={
+                <OrdersList orders={testUserOrders.orders} showStatus={true} />
+              }
+            />
+          </Route>
           <Route path="/feed" element={<FeedPage />} />
-          <Route path="/feed/:id" element={<FeedPage />} />
           <Route path="/ingredients/:id" element={<IngredientDetails />} />
         </Routes>
         {background && (
@@ -156,6 +148,19 @@ function App() {
                 <ProtectedRouteElement
                   authRequired={true}
                   element={<Modal children={<OrderDetails />} />}
+                />
+              }
+            />
+            <Route
+              path="/feed/:id"
+              element={<Modal children={<OrderInfo />} />}
+            />
+            <Route
+              path="/profile/orders/:id"
+              element={
+                <ProtectedRouteElement
+                  authRequired={true}
+                  element={<Modal children={<OrderInfo />} />}
                 />
               }
             />
