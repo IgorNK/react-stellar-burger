@@ -14,31 +14,31 @@ export const FeedPage = () => {
         <h1 className="text text_type_main-large mt-10 mb-5">
           Лента заказов
         </h1>
-        <div className={styles.orders}>
+        <div className={styles.orders + " custom-scroll pr-6"}>
           { orders.map(order => <OrderEntry key={order._id} order={order} />) }
         </div>
       </div>
       <div className={styles.ordersInfo}>
         <div className={styles.ordersTable}>
           <div className={styles.ordersColumn}>
-            <h2 className="text text_type_main-small">Готовы:</h2>
-            <div className={styles.ordersList}>
-              {readyOrderNumbers.map(number => <p className="text text_type_digits-default">{number}</p>)}
+            <h2 className="text text_type_main-medium">Готовы:</h2>
+            <div className={styles.ordersList + " mt-6"}>
+              {readyOrderNumbers.map(number => <p className="text text_type_digits-default mt-2 mr-4">{number}</p>)}
             </div>
           </div>
           <div className={styles.ordersColumn}>
-            <h2 className="text text_type_main-small">В работе:</h2>          
-            <div className={styles.ordersList}>
-              {cookingOrderNumbers.map(number => <p className="text text_type_digits-default">{number}</p>)}
+            <h2 className="text text_type_main-medium">В работе:</h2>          
+            <div className={styles.ordersList + " mt-6"}>
+              {cookingOrderNumbers.map(number => <p className="text text_type_digits-default mt-2 mr-4">{number}</p>)}
             </div>
           </div>
         </div>
         <div className={styles.ordersCompleted}>
-          <h2 className="text text_type_main-small">Выполнено за все время:</h2>
+          <h2 className="text text_type_main-medium mt-8">Выполнено за все время:</h2>
           <p className="text text_type_digits-large">{total}</p>
         </div>
         <div className={styles.ordersCompleted}>
-          <h2 className="text text_type_main-small">Выполнено сегодня:</h2>
+          <h2 className="text text_type_main-medium mt-6">Выполнено сегодня:</h2>
           <p className="text text_type_digits-large">{totalToday}</p>
         </div>
       </div>

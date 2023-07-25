@@ -1,16 +1,17 @@
 .orderEntry {
   margin: 0;
   padding: 0 24px;
-  border-radius: 50%;
+  border-radius: 5%;
   display: flex;
   flex-direction: column;
+  background-color: #333;
 }
 
 .orderNumber {
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: space-betwen;
+  justify-content: space-between;
 }
 
 .orderInfo {
@@ -22,10 +23,13 @@
 .orderContents {
   display: flex;
   flex-direction: row;
-  column-gap: -5px;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .orderPrice {
   display: flex;
   flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
 }

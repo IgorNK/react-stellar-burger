@@ -1,15 +1,10 @@
 import styles from "./order-icon.module.css";
 
-const OrderIcon = ({ image, content }) => {
-  const backgroundStyle = {
-    backgroundImage: `url(${image})`,
-    opacity: content ? "100%" : "60%",
-    backgroundSize: "contain",
-  };
-
+const OrderIcon = ({ image, rest, extraStyle }) => {
   return (
-    <div style={backgroundStyle} className={styles.orderIcon}>
-      <p className="text text_type_main-small">{content}</p>
+    <div className={styles.orderIcon} style={extraStyle}>
+      <img src={image} className={styles.innerImage} style={{opacity: `${rest ? "60%" : "100%"}`}} />
+      <p className={styles.innerText + " text text_type_main-small"}>{rest}</p>
     </div>
   );
 };
