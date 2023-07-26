@@ -72,10 +72,8 @@ const OrderInfo = () => {
     <div className={styles.orderInfo}>
       <p
         className={styles.orderNumber + " text text_type_digits-default mb-10"}
-      >{`#${order?.number}`}</p>
-      <h2 className="text text_type_main-medium mb-3">
-        Black Hole Singularity острый бургер
-      </h2>
+      >{`#${order ? order.number : "Подождите..."}`}</p>
+      <h2 className="text text_type_main-medium mb-3">{order?.name}</h2>
       <div className="mb-15">{getOrderStatus(order?.status)}</div>
       <h3 className="text text_type_main-medium mb-6">Состав:</h3>
       <div className={styles.ordersList + " custom-scroll mb-10 pr-6"}>

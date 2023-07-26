@@ -69,9 +69,7 @@ const OrderEntry = ({ index, order, showStatus }) => {
         </p>
       </div>
       <div className="mt-6">
-        <p className="text text_type_main-medium">
-          Death Star Starship Main бургер
-        </p>
+        <p className="text text_type_main-medium">{order.name}</p>
       </div>
       {showStatus && <div className="mt-2">{getOrderStatus(order.status)}</div>}
       <div className={styles.orderInfo + " mt-6 mb-6"}>
