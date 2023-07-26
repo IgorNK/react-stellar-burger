@@ -42,6 +42,13 @@
   grid-auto-flow: column;
   overflow: hidden;
   list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.listElement {
+  margin: 0;
+  padding: 0;
 }
 
 .ordersCompleted {

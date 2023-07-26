@@ -1,4 +1,6 @@
 export const dataUrl = "https://norma.nomoreparties.space/api";
+export const wsFeedUrl = "wss://norma.nomoreparties.space/orders/all";
+export const wsMyOrdersUrl = "wss://norma.nomoreparties.space/orders";
 
 export const formatNumber = (num) => {
   return num?.toString().replace(/(.)(?=(\d{3})+$)/g, "$1 ");
@@ -48,18 +50,13 @@ export const formatDate = (date) => {
     timeStyle: "short",
     timeZone: timezone,
   };
-  const orderDate = new Date(Date.parse(date)); 
-  console.log(`orderDate: ${typeof orderDate} ${orderDate}`)
+  const orderDate = new Date(Date.parse(date));
   const currentDate = new Date(Date.now());
-  console.log(`currentDate: ${typeof currentDate} ${currentDate}`)
   const orderDateLocal = dateToLocalTimezone(orderDate, dateOptions);
-  console.log(`orderDateLocal: ${typeof orderDateLocal} ${orderDateLocal}`)
   const currentDateLocal = dateToLocalTimezone(currentDate, dateOptions);
-  console.log(`currentDateLocal: ${typeof currentDateLocal} ${currentDateLocal}`)
   const todayLocal = new Date(currentDateLocal.getTime());
-  console.log(`todayLocal: ${typeof todayLocal} ${todayLocal}`)
   todayLocal.setHours(0, 0, 0, 0);
-  
+
   const yesterdayLocal = new Date(todayLocal.getTime());
   const beforeYesterdayLocal = new Date(todayLocal.getTime());
   const tomorrowLocal = new Date(todayLocal.getTime());
@@ -70,29 +67,36 @@ export const formatDate = (date) => {
   tomorrowLocal.setDate(todayLocal.getDate() + 1);
   afterTomorrowLocal.setDate(todayLocal.getDate() + 2);
   afterAfterTomorrowLocal.setDate(todayLocal.getDate() + 3);
-  
+
   const hoursOffset = currentDate.getTimezoneOffset() / 60;
-  let dateString = `${orderDate.toLocaleString(navigator.language, dateOptions)}`;
-  console.log(`orderdate: ${typeof orderDateLocal} ${orderDateLocal} ${orderDateLocal.getTime()}; today: ${typeof todayLocal} ${todayLocal} ${todayLocal.getTime()}`);
+  let dateString = `${orderDate.toLocaleString(
+    navigator.language,
+    dateOptions
+  )}`;
 
   switch (true) {
-    case (orderDateLocal.getTime() >= afterTomorrowLocal.getTime() && orderDateLocal.getTime() <= afterAfterTomorrowLocal.getTime()): {
+    case orderDateLocal.getTime() >= afterTomorrowLocal.getTime() &&
+      orderDateLocal.getTime() <= afterAfterTomorrowLocal.getTime(): {
       dateString = `Послезавтра, ${formatTime(orderDateLocal)}`;
       break;
     }
-    case (orderDateLocal.getTime() >= tomorrowLocal.getTime() && orderDateLocal.getTime() <= afterTomorrowLocal.getTime()): {
+    case orderDateLocal.getTime() >= tomorrowLocal.getTime() &&
+      orderDateLocal.getTime() <= afterTomorrowLocal.getTime(): {
       dateString = `Завтра, ${formatTime(orderDateLocal)}`;
       break;
     }
-    case (orderDateLocal.getTime() >= todayLocal.getTime() && orderDateLocal.getTime() <= tomorrowLocal.getTime()): {
+    case orderDateLocal.getTime() >= todayLocal.getTime() &&
+      orderDateLocal.getTime() <= tomorrowLocal.getTime(): {
       dateString = `Сегодня, ${formatTime(orderDateLocal)}`;
       break;
     }
-    case (orderDateLocal.getTime() >= yesterdayLocal.getTime() && orderDateLocal.getTime() <= todayLocal.getTime()): {
+    case orderDateLocal.getTime() >= yesterdayLocal.getTime() &&
+      orderDateLocal.getTime() <= todayLocal.getTime(): {
       dateString = `Вчера, ${formatTime(orderDateLocal)}`;
       break;
     }
-    case (orderDateLocal.getTime() >= beforeYesterdayLocal.getTime() && orderDateLocal.getTime() <= yesterdayLocal.getTime()): {
+    case orderDateLocal.getTime() >= beforeYesterdayLocal.getTime() &&
+      orderDateLocal.getTime() <= yesterdayLocal.getTime(): {
       dateString = `Позавчера, ${formatTime(orderDateLocal)}`;
       break;
     }
@@ -103,17 +107,20 @@ export const formatDate = (date) => {
   return `${dateString} i-GMT${formatGMT(hoursOffset)}`;
 };
 
-const dateToLocalTimezone = (date, options) => {  
-  return new Date(date.toLocaleString('en-US', options));
-}
+const dateToLocalTimezone = (date, options) => {
+  return new Date(date.toLocaleString("en-US", options));
+};
 
 const formatGMT = (hoursOffset) => {
   return hoursOffset > 0 ? "+" + hoursOffset : hoursOffset;
-}
+};
 
 const formatTime = (date) => {
-  return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
-}
+  return `${date.getHours().toString().padStart(2, "0")}:${date
+    .getMinutes()
+    .toString()
+    .padStart(2, "0")}`;
+};
 
 export const testFeedOrders = {
   success: true,

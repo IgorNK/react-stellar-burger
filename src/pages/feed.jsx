@@ -1,43 +1,48 @@
 import styles from "./feed.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { testFeedOrders } from "../utils/data";
-import { formatNumber } from "../utils/data";
+import { formatNumber, wsFeedUrl } from "../utils/data";
 import OrdersList from "../components/orders-list/orders-list";
-import { WS_CONNECTION_START } from "../services/actions/socket";
+import {
+  WS_CONNECTION_START,
+  WS_CONNECTION_CLOSE,
+} from "../services/actions/socket";
 
 export const FeedPage = () => {
-  //const { orders, total, totalToday } = testFeedOrders;
   const dispatch = useDispatch();
-  const { wsConnected, orders, total, totalToday } = useSelector(store => store.feed);
+  const { wsConnected, orders, total, totalToday } = useSelector(
+    (store) => store.feed
+  );
   const [readyOrderNumbers, setReadyOrderNumbers] = useState([]);
   const [cookingOrderNumbers, setCookingOrderNumbers] = useState([]);
 
-  useEffect(
-    () => {
-      if (!wsConnected) { 
-        console.log('not connected, dispatching connect action');
-        dispatch({ type: WS_CONNECTION_START });
-      } else {
-        console.log('is now connected!');
-      }
-    },
-    [wsConnected, dispatch]
-  );
+  useEffect(() => {
+    if (!wsConnected) {
+      dispatch({ type: WS_CONNECTION_START, payload: wsFeedUrl });
+    } else {
+    }
+  }, [wsConnected, dispatch]);
 
   useEffect(() => {
-    console.log(`orders updated: ${orders?.length}`);
+    return () => {
+      dispatch({ type: WS_CONNECTION_CLOSE });
+    };
+  }, []);
+
+  useEffect(() => {
     setReadyOrderNumbers(
       orders
         ?.filter((order) => order.status === "done")
         .map((order) => order.number)
+        .slice(0, 20)
     );
     setCookingOrderNumbers(
       orders
         ?.filter((order) => order.status !== "done")
         .map((order) => order.number)
+        .slice(0, 20)
     );
-  }, [orders])
+  }, [orders]);
 
   return (
     <section className={styles.twoColumns}>
@@ -49,26 +54,36 @@ export const FeedPage = () => {
         <div className={styles.ordersTable}>
           <div className={styles.ordersColumn}>
             <h2 className="text text_type_main-medium">Готовы:</h2>
-            <div className={styles.ordersList + " mt-6"}>
-              {readyOrderNumbers?.map((number) => (
-                <p
-                  className="text text_type_digits-default mt-2 mr-4"
+            <ul className={styles.ordersList + " mt-6"}>
+              {readyOrderNumbers?.map((number, index) => (
+                <li
+                  key={index}
+                  className={
+                    styles.listElement +
+                    "text text_type_digits-default mt-2 mr-4"
+                  }
                   style={{ color: "#0cc" }}
                 >
                   {number}
-                </p>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
           <div className={styles.ordersColumn}>
             <h2 className="text text_type_main-medium">В работе:</h2>
-            <div className={styles.ordersList + " mt-6"}>
-              {cookingOrderNumbers?.map((number) => (
-                <p className="text text_type_digits-default mt-2 mr-4">
+            <ul className={styles.ordersList + " mt-6"}>
+              {cookingOrderNumbers?.map((number, index) => (
+                <li
+                  key={index}
+                  className={
+                    styles.listElement +
+                    "text text_type_digits-default mt-2 mr-4"
+                  }
+                >
                   {number}
-                </p>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
         </div>
         <div className={styles.ordersCompleted}>

@@ -3,11 +3,12 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import {
-  testFeedOrders,
   getOrderStatus,
   formatDate,
   formatNumber,
+  dataUrl,
 } from "../../utils/data";
+import Api from "../../services/api";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import OrderIcon from "../order-icon/order-icon";
 
@@ -17,11 +18,15 @@ const OrderInfo = () => {
   const [orderList, setOrderList] = useState(null);
   const ingredients = useSelector((store) => store.ingredients.ingredients);
 
-  useEffect(() => {
-    setOrder(
-      testFeedOrders.orders.find((order) => order.number === Number(id))
-    );
+  const getOrder = useCallback(async () => {
+    const api = new Api({ baseUrl: dataUrl });
+    const order = await api.getOrder(id);
+    setOrder(order?.orders[0]);
   }, [id]);
+
+  useEffect(() => {
+    getOrder();
+  }, [getOrder]);
 
   const getIngredient = useCallback(
     (id) => {
@@ -43,14 +48,14 @@ const OrderInfo = () => {
   useEffect(() => {
     const ingredientsSet = new Set(order?.ingredients);
     setOrderList(
-      [...ingredientsSet].map((id) => {
+      [...ingredientsSet].map((id, index) => {
         const ingredient = getIngredient(id);
         const amount = order?.ingredients.reduce(
           (acc, ingredientId) => (id === ingredientId ? acc + 1 : acc),
           0
         );
         return (
-          <div className={styles.listElement}>
+          <div key={index} className={styles.listElement}>
             <OrderIcon image={ingredient?.image} />
             <p className="text text_type_main-default">{ingredient?.name}</p>
             <div className={styles.orderPrice}>
@@ -61,27 +66,6 @@ const OrderInfo = () => {
         );
       })
     );
-    // const truncatedIngredients = order.ingredients.slice(0, maxIcons);
-    // const restAmount = order.ingredients.length - maxIcons + 1;
-    // setIcons(
-    //   truncatedIngredients.map((id, index) => {
-    //     if (restAmount > 1 && index >= maxIcons - 1) {
-    //       return (
-    //         <OrderIcon
-    //           image={getImage(id)}
-    //           rest={`+${restAmount}`}
-    //           extraStyle={{ zIndex: "1" }}
-    //         />
-    //       );
-    //     }
-    //     return (
-    //       <OrderIcon
-    //         image={getImage(id)}
-    //         extraStyle={{ zIndex: `${maxIcons - index}` }}
-    //       />
-    //     );
-    //   })
-    // );
   }, [ingredients, getIngredient, order]);
 
   return (
@@ -92,9 +76,7 @@ const OrderInfo = () => {
       <h2 className="text text_type_main-medium mb-3">
         Black Hole Singularity острый бургер
       </h2>
-      <p className="text text_type_main-small mb-15">
-        {getOrderStatus(order?.status)}
-      </p>
+      <div className="mb-15">{getOrderStatus(order?.status)}</div>
       <h3 className="text text_type_main-medium mb-6">Состав:</h3>
       <div className={styles.ordersList + " custom-scroll mb-10 pr-6"}>
         {orderList}

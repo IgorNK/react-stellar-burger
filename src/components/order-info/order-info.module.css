@@ -17,6 +17,7 @@
   flex-direction: column;
   row-gap: 16px;
   overflow-y: scroll;
+  max-height: 360px;
 }
 
 .listElement {

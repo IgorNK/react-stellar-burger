@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Routes, Route, useLocation } from "react-router-dom";
 import styles from "./app.module.css";
@@ -20,11 +20,9 @@ import OrderDetails from "../order-details/order-details";
 import OrderInfo from "../order-info/order-info";
 import ErrorPopup from "../error-popup/error-popup";
 import { ProtectedRouteElement } from "../protected-route/protected-route";
-import { DISPLAY_ERROR_MESSAGE } from "../../services/actions";
 import { getIngredients } from "../../services/actions/ingredients";
 import { getUser } from "../../services/actions/auth";
 import { getCookie } from "../../utils/cookies";
-import { testUserOrders } from "../../utils/data";
 
 function App() {
   const dispatch = useDispatch();
@@ -35,11 +33,7 @@ function App() {
   const error = useSelector((store) => store.error);
   const user = useSelector((store) => store.auth.user);
   const ingredients = useSelector((store) => store.ingredients.ingredients);
-
-  const [modalState, setModalState] = useState({
-    visible: false,
-    content: null,
-  });
+  const { orders } = useSelector((store) => store.feed);
 
   useEffect(() => {
     !ingredients.length && dispatch(getIngredients());
@@ -47,28 +41,6 @@ function App() {
     const accessToken = getCookie("token");
     if ((refreshToken || accessToken) && !user) dispatch(getUser());
   }, [dispatch, user]);
-
-  useEffect(() => {
-    error && handleOpenError(error);
-  }, [error]);
-
-  useEffect(() => {
-    shownIngredient && handleOpenIngredientDetails(shownIngredient);
-  }, [shownIngredient]);
-
-  const handleOpenIngredientDetails = (ingredient) => {
-    setModalState({
-      visible: true,
-      content: <IngredientDetails data={ingredient}></IngredientDetails>,
-    });
-  };
-
-  const handleOpenError = (errorMsg) => {
-    setModalState({
-      visible: true,
-      content: <ErrorPopup>{errorMsg}</ErrorPopup>,
-    });
-  };
 
   const location = useLocation();
 
@@ -128,9 +100,7 @@ function App() {
             <Route path="/profile" element={<ProfileEditForm />} />
             <Route
               path="orders"
-              element={
-                <OrdersList orders={testUserOrders.orders} showStatus={true} />
-              }
+              element={<OrdersList orders={orders} showStatus={true} />}
             />
           </Route>
           <Route path="/feed" element={<FeedPage />} />

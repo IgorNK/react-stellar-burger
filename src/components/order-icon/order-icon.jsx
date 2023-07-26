@@ -5,6 +5,7 @@ const OrderIcon = ({ image, rest, extraStyle }) => {
     <div className={styles.orderIcon} style={extraStyle}>
       <div className={styles.innerContainer}>
         <img
+          alt="ingredient"
           src={image}
           className={styles.innerImage}
           style={{ opacity: `${rest ? "60%" : "100%"}` }}

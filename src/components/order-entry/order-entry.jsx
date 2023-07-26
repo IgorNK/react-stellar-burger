@@ -6,7 +6,7 @@ import { useCallback, useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { formatNumber, getOrderStatus, formatDate } from "../../utils/data";
 
-const OrderEntry = ({ order, showStatus }) => {
+const OrderEntry = ({ index, order, showStatus }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const ingredients = useSelector((store) => store.ingredients.ingredients);
@@ -38,6 +38,7 @@ const OrderEntry = ({ order, showStatus }) => {
         if (restAmount > 1 && index >= maxIcons - 1) {
           return (
             <OrderIcon
+              key={`${index}+${id}`}
               image={getImage(id)}
               rest={`+${restAmount}`}
               extraStyle={{ zIndex: "1", marginLeft: "-16px" }}
@@ -46,6 +47,7 @@ const OrderEntry = ({ order, showStatus }) => {
         }
         return (
           <OrderIcon
+            key={`${index}+${id}`}
             image={getImage(id)}
             extraStyle={{ zIndex: `${maxIcons - index}`, marginLeft: "-16px" }}
           />

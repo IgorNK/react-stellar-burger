@@ -5,6 +5,17 @@ class Api {
     this._config = options;
   }
 
+  async getOrder(id) {
+    return fetch(`${this._config.baseUrl}/orders/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((res) => {
+      return checkResponse(res);
+    });
+  }
+
   getIngredientsRequest() {
     return fetch(`${this._config.baseUrl}/ingredients`, {
       method: "GET",
@@ -28,20 +39,6 @@ class Api {
       }),
     });
   }
-
-  // submitOrderRequest(ingredientIDs) {
-  //   return fetch(`${this._config.baseUrl}/orders`, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       ingredients: ingredientIDs,
-  //     }),
-  //   }).then((res) => {
-  //     return checkResponse(res);
-  //   });
-  // }
 
   loginRequest(form) {
     return fetch(`${this._config.baseUrl}/auth/login`, {
