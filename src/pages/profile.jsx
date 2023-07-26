@@ -20,24 +20,19 @@ export const ProfilePage = () => {
   );
 
   useEffect(() => {
-    console.log("useeffect fired");
     if (user) {
       if (!wsConnected) {
-        console.log("not connected, dispatching connect action");
         dispatch({
           type: WS_CONNECTION_START,
           payload: `${wsMyOrdersUrl}?token=${getCookie("token").slice(7)}`,
         });
       } else {
-        console.log("is now connected!");
       }
     }
   }, [wsConnected, user]);
 
   useEffect(() => {
-    console.log("useeffect fired");
     return () => {
-      console.log("leaving profile page, closing connection");
       dispatch({ type: WS_CONNECTION_CLOSE });
     };
   }, []);
