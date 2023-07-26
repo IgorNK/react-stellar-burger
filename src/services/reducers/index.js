@@ -3,6 +3,7 @@ import { cartReducer } from "./cart";
 import { ingredientsReducer } from "./ingredients";
 import { orderReducer } from "./order";
 import { authReducer } from "./auth";
+import { wsReducer } from "./socket";
 import { DISPLAY_ERROR_MESSAGE } from "../actions/index";
 
 const errorReducer = (state = null, action) => {
@@ -22,4 +23,5 @@ export const rootReducer = combineReducers({
   ingredients: ingredientsReducer,
   order: orderReducer,
   error: errorReducer,
+  feed: wsReducer,
 });

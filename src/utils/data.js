@@ -42,23 +42,78 @@ export const getOrderStatus = (status) => {
 //in: "2021-06-23T14:43:22.587Z"
 //out: Сегодня, 16:20 i-GMT+3
 export const formatDate = (date) => {
-  const orderDate = new Date(Date.parse(date));
-  const currentDate = new Date(Date.now());
-  const twoDays = 2 * 24 * 60 * 60 * 1000;
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const hoursOffset = currentDate.getTimezoneOffset() / 60;
   const dateOptions = {
     dateStyle: "short",
     timeStyle: "short",
     timeZone: timezone,
   };
-  if (currentDate - orderDate < twoDays) {
-    //TODO
+  const orderDate = new Date(Date.parse(date)); 
+  console.log(`orderDate: ${typeof orderDate} ${orderDate}`)
+  const currentDate = new Date(Date.now());
+  console.log(`currentDate: ${typeof currentDate} ${currentDate}`)
+  const orderDateLocal = dateToLocalTimezone(orderDate, dateOptions);
+  console.log(`orderDateLocal: ${typeof orderDateLocal} ${orderDateLocal}`)
+  const currentDateLocal = dateToLocalTimezone(currentDate, dateOptions);
+  console.log(`currentDateLocal: ${typeof currentDateLocal} ${currentDateLocal}`)
+  const todayLocal = new Date(currentDateLocal.getTime());
+  console.log(`todayLocal: ${typeof todayLocal} ${todayLocal}`)
+  todayLocal.setHours(0, 0, 0, 0);
+  
+  const yesterdayLocal = new Date(todayLocal.getTime());
+  const beforeYesterdayLocal = new Date(todayLocal.getTime());
+  const tomorrowLocal = new Date(todayLocal.getTime());
+  const afterTomorrowLocal = new Date(todayLocal.getTime());
+  const afterAfterTomorrowLocal = new Date(todayLocal.getTime());
+  yesterdayLocal.setDate(todayLocal.getDate() - 1);
+  beforeYesterdayLocal.setDate(todayLocal.getDate() - 2);
+  tomorrowLocal.setDate(todayLocal.getDate() + 1);
+  afterTomorrowLocal.setDate(todayLocal.getDate() + 2);
+  afterAfterTomorrowLocal.setDate(todayLocal.getDate() + 3);
+  
+  const hoursOffset = currentDate.getTimezoneOffset() / 60;
+  let dateString = `${orderDate.toLocaleString(navigator.language, dateOptions)}`;
+  console.log(`orderdate: ${typeof orderDateLocal} ${orderDateLocal} ${orderDateLocal.getTime()}; today: ${typeof todayLocal} ${todayLocal} ${todayLocal.getTime()}`);
+
+  switch (true) {
+    case (orderDateLocal.getTime() >= afterTomorrowLocal.getTime() && orderDateLocal.getTime() <= afterAfterTomorrowLocal.getTime()): {
+      dateString = `Послезавтра, ${formatTime(orderDateLocal)}`;
+      break;
+    }
+    case (orderDateLocal.getTime() >= tomorrowLocal.getTime() && orderDateLocal.getTime() <= afterTomorrowLocal.getTime()): {
+      dateString = `Завтра, ${formatTime(orderDateLocal)}`;
+      break;
+    }
+    case (orderDateLocal.getTime() >= todayLocal.getTime() && orderDateLocal.getTime() <= tomorrowLocal.getTime()): {
+      dateString = `Сегодня, ${formatTime(orderDateLocal)}`;
+      break;
+    }
+    case (orderDateLocal.getTime() >= yesterdayLocal.getTime() && orderDateLocal.getTime() <= todayLocal.getTime()): {
+      dateString = `Вчера, ${formatTime(orderDateLocal)}`;
+      break;
+    }
+    case (orderDateLocal.getTime() >= beforeYesterdayLocal.getTime() && orderDateLocal.getTime() <= yesterdayLocal.getTime()): {
+      dateString = `Позавчера, ${formatTime(orderDateLocal)}`;
+      break;
+    }
+    default: {
+      break;
+    }
   }
-  return `${orderDate.toLocaleString(navigator.language, dateOptions)}, i-GMT${
-    hoursOffset > 0 ? "+" + hoursOffset : hoursOffset
-  }`;
+  return `${dateString} i-GMT${formatGMT(hoursOffset)}`;
 };
+
+const dateToLocalTimezone = (date, options) => {  
+  return new Date(date.toLocaleString('en-US', options));
+}
+
+const formatGMT = (hoursOffset) => {
+  return hoursOffset > 0 ? "+" + hoursOffset : hoursOffset;
+}
+
+const formatTime = (date) => {
+  return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+}
 
 export const testFeedOrders = {
   success: true,
