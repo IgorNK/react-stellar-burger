@@ -10,8 +10,8 @@ const AppHeader = (props) => {
 
   useEffect(() => {
     switch (true) {
-      case location.pathname.includes("feed"): {
-        setActiveButton("feed");
+      case location.pathname.includes("orders"): {
+        setActiveButton("orders");
         break;
       }
       case location.pathname.includes("profile"): {
@@ -32,8 +32,8 @@ const AppHeader = (props) => {
             Конструктор
           </NavButton>
         </Link>
-        <Link className={styles.link} to="/feed">
-          <NavButton active={activeButton === "feed"} value="feed">
+        <Link className={styles.link} to="/profile/orders">
+          <NavButton active={activeButton === "orders"} value="orders">
             Лента заказов
           </NavButton>
         </Link>
