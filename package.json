@@ -1,6 +1,7 @@
 {
   "name": "react-burger-starter",
   "version": "0.1.0",
+  "homepage": "https://igornk.github.io/react-stellar-burger",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.5",
@@ -28,9 +29,12 @@
     "@testing-library/user-event": "^12.1.10",
     "@types/react": "17.0.0",
     "@types/react-dom": "17.0.0",
+    "gh-pages": "^5.0.0",
     "typescript": "^4.9.5"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
