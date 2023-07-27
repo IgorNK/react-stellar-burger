@@ -3,10 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { logOut } from "../services/actions/auth";
 import styles from "./profile.module.css";
-import {
-  WS_CONNECTION_START,
-  WS_CONNECTION_CLOSE,
-} from "../services/actions/socket";
+import { WS_CONNECTION_START } from "../services/actions/socket";
 import { wsMyOrdersUrl } from "../utils/data";
 import { getCookie } from "../utils/cookies";
 
@@ -15,27 +12,22 @@ export const ProfilePage = () => {
   const location = useLocation();
   const [activeLink, setActiveLink] = useState("profile");
   const user = useSelector((store) => store.auth.user);
-  const { wsConnected, orders, total, totalToday } = useSelector(
-    (store) => store.feed
-  );
+  const { wsConnected } = useSelector((store) => store.feed);
 
   useEffect(() => {
-    if (user) {
+    if (user && location.pathname.includes("orders")) {
       if (!wsConnected) {
         dispatch({
           type: WS_CONNECTION_START,
-          payload: `${wsMyOrdersUrl}?token=${getCookie("token").slice(7)}`,
+          payload: {
+            wsUrl: `${wsMyOrdersUrl}?token=${getCookie("token").slice(7)}`,
+            storage: "user",
+          },
         });
       } else {
       }
     }
-  }, [wsConnected, user]);
-
-  useEffect(() => {
-    return () => {
-      dispatch({ type: WS_CONNECTION_CLOSE });
-    };
-  }, []);
+  }, [wsConnected, user, location]);
 
   useEffect(() => {
     switch (true) {

@@ -7,7 +7,8 @@ import {
 
 const initialState = {
   wsConnected: false,
-  orders: [],
+  feedOrders: [],
+  userOrders: [],
   total: 0,
   totalToday: 0,
 };
@@ -32,12 +33,25 @@ export const wsReducer = (state = initialState, action) => {
       };
 
     case WS_GET_MESSAGE:
-      return {
+      let newState = {
         ...state,
-        orders: action.payload.orders,
         total: action.payload.total,
         totalToday: action.payload.totalToday,
       };
+      switch (action.payload.storage) {
+        case "feed": {
+          newState.feedOrders = action.payload.orders;
+          break;
+        }
+        case "user": {
+          newState.userOrders = action.payload.orders;
+          break;
+        }
+        default: {
+          break;
+        }
+      }
+      return newState;
 
     default:
       return state;

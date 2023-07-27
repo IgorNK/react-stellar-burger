@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Routes, Route, useLocation } from "react-router-dom";
 import styles from "./app.module.css";
@@ -18,7 +18,6 @@ import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import OrderDetails from "../order-details/order-details";
 import OrderInfo from "../order-info/order-info";
-import ErrorPopup from "../error-popup/error-popup";
 import { ProtectedRouteElement } from "../protected-route/protected-route";
 import { getIngredients } from "../../services/actions/ingredients";
 import { getUser } from "../../services/actions/auth";
@@ -27,13 +26,9 @@ import { getCookie } from "../../utils/cookies";
 function App() {
   const dispatch = useDispatch();
 
-  const shownIngredient = useSelector(
-    (store) => store.ingredients.shownIngredient
-  );
-  const error = useSelector((store) => store.error);
   const user = useSelector((store) => store.auth.user);
   const ingredients = useSelector((store) => store.ingredients.ingredients);
-  const { orders } = useSelector((store) => store.feed);
+  const { userOrders } = useSelector((store) => store.feed);
 
   useEffect(() => {
     !ingredients.length && dispatch(getIngredients());
@@ -100,11 +95,21 @@ function App() {
             <Route path="/profile" element={<ProfileEditForm />} />
             <Route
               path="orders"
-              element={<OrdersList orders={orders} showStatus={true} />}
+              element={<OrdersList orders={userOrders} showStatus={true} />}
             />
           </Route>
           <Route path="/feed" element={<FeedPage />} />
           <Route path="/ingredients/:id" element={<IngredientDetails />} />
+          <Route path="/feed/:id" element={<OrderInfo />} />
+          <Route
+            path="/profile/orders/:id"
+            element={
+              <ProtectedRouteElement
+                authRequired={true}
+                element={<OrderInfo />}
+              />
+            }
+          />
         </Routes>
         {background && (
           <Routes>

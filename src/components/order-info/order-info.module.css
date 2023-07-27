@@ -5,6 +5,7 @@
   grid-template-columns: 1fr;
   max-height: calc(100vh - 326px);
   min-height: 425px;
+  max-width: 640px;
   justify-content: flex-start;
 }
 
@@ -13,18 +14,15 @@
 }
 
 .ordersList {
+  margin: 0;
+  padding: 0;
+  padding-right: 24px;
   display: flex;
   flex-direction: column;
   row-gap: 16px;
   overflow-y: scroll;
   max-height: 360px;
-}
-
-.listElement {
-  display: grid;
-  grid-template-columns: min-content 1fr max-content;
-  align-items: center;
-  column-gap: 16px;
+  list-style-type: none;
 }
 
 .orderBottomLine {

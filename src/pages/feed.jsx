@@ -3,14 +3,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { formatNumber, wsFeedUrl } from "../utils/data";
 import OrdersList from "../components/orders-list/orders-list";
-import {
-  WS_CONNECTION_START,
-  WS_CONNECTION_CLOSE,
-} from "../services/actions/socket";
+import { WS_CONNECTION_START } from "../services/actions/socket";
 
 export const FeedPage = () => {
   const dispatch = useDispatch();
-  const { wsConnected, orders, total, totalToday } = useSelector(
+  const { wsConnected, feedOrders, total, totalToday } = useSelector(
     (store) => store.feed
   );
   const [readyOrderNumbers, setReadyOrderNumbers] = useState([]);
@@ -18,37 +15,34 @@ export const FeedPage = () => {
 
   useEffect(() => {
     if (!wsConnected) {
-      dispatch({ type: WS_CONNECTION_START, payload: wsFeedUrl });
+      dispatch({
+        type: WS_CONNECTION_START,
+        payload: { wsUrl: wsFeedUrl, storage: "feed" },
+      });
     } else {
     }
   }, [wsConnected, dispatch]);
 
   useEffect(() => {
-    return () => {
-      dispatch({ type: WS_CONNECTION_CLOSE });
-    };
-  }, []);
-
-  useEffect(() => {
     setReadyOrderNumbers(
-      orders
+      feedOrders
         ?.filter((order) => order.status === "done")
         .map((order) => order.number)
         .slice(0, 20)
     );
     setCookingOrderNumbers(
-      orders
+      feedOrders
         ?.filter((order) => order.status !== "done")
         .map((order) => order.number)
         .slice(0, 20)
     );
-  }, [orders]);
+  }, [feedOrders]);
 
   return (
     <section className={styles.twoColumns}>
       <div className={styles.feed}>
         <h1 className="text text_type_main-large mt-10 mb-5">Лента заказов</h1>
-        <OrdersList orders={orders} />
+        <OrdersList orders={feedOrders} />
       </div>
       <div className={styles.ordersInfo}>
         <div className={styles.ordersTable}>

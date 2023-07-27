@@ -1,0 +1,13 @@
+.listElement {
+  display: grid;
+  grid-template-columns: min-content 1fr max-content;
+  align-items: center;
+  column-gap: 16px;
+}
+
+.orderPrice {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}

@@ -10,7 +10,7 @@ import {
 } from "../../utils/data";
 import Api from "../../services/api";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import OrderIcon from "../order-icon/order-icon";
+import IngredientsListElement from "../ingredients-list-element/ingredients-list-element";
 
 const OrderInfo = () => {
   const { id } = useParams();
@@ -55,14 +55,11 @@ const OrderInfo = () => {
           0
         );
         return (
-          <div key={index} className={styles.listElement}>
-            <OrderIcon image={ingredient?.image} />
-            <p className="text text_type_main-default">{ingredient?.name}</p>
-            <div className={styles.orderPrice}>
-              <p className="text text_type_digits-default mr-2">{`${amount} x ${ingredient?.price}`}</p>
-              <CurrencyIcon />
-            </div>
-          </div>
+          <IngredientsListElement
+            key={index}
+            ingredient={ingredient}
+            amount={amount}
+          />
         );
       })
     );
@@ -76,10 +73,8 @@ const OrderInfo = () => {
       <h2 className="text text_type_main-medium mb-3">{order?.name}</h2>
       <div className="mb-15">{getOrderStatus(order?.status)}</div>
       <h3 className="text text_type_main-medium mb-6">Состав:</h3>
-      <div className={styles.ordersList + " custom-scroll mb-10 pr-6"}>
-        {orderList}
-      </div>
-      <div className={styles.orderBottomLine}>
+      <ul className={styles.ordersList + " custom-scroll"}>{orderList}</ul>
+      <div className={styles.orderBottomLine + " mt-10"}>
         <p className="text text_type_main-default text_color_inactive">
           {formatDate(order?.createdAt)}
         </p>

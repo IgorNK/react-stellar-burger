@@ -1,3 +1,6 @@
+import Api from "../api";
+import { dataUrl } from "../../utils/data";
+
 export const socketMiddleware = (wsActions) => {
   return (store) => {
     let socket = null;
@@ -9,7 +12,8 @@ export const socketMiddleware = (wsActions) => {
         wsActions;
 
       if (type === wsInit) {
-        socket = new WebSocket(payload);
+        socket = new WebSocket(payload.wsUrl);
+        socket.activeStorage = payload.storage;
       }
       if (socket) {
         socket.onopen = (event) => {
@@ -23,9 +27,18 @@ export const socketMiddleware = (wsActions) => {
         socket.onmessage = (event) => {
           const { data } = event;
           const parsedData = JSON.parse(data);
+
+          if (parsedData.message === "Invalid or missing token") {
+            const api = new Api({ baseUrl: dataUrl });
+            api.refreshTokenRequest();
+          }
+
           const { success, ...restParsedData } = parsedData;
 
-          dispatch({ type: onMessage, payload: restParsedData });
+          dispatch({
+            type: onMessage,
+            payload: { ...restParsedData, storage: socket.activeStorage },
+          });
         };
 
         socket.onclose = (event) => {
