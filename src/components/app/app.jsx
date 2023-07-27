@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Routes, Route, useLocation } from "react-router-dom";
 import styles from "./app.module.css";
@@ -10,14 +10,15 @@ import {
   ProfilePage,
   ForgotPasswordPage,
   ResetPasswordPage,
+  FeedPage,
 } from "../../pages";
-
+import ProfileEditForm from "../profile-edit-form/profile-edit-form";
+import OrdersList from "../orders-list/orders-list";
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import OrderDetails from "../order-details/order-details";
-import ErrorPopup from "../error-popup/error-popup";
+import OrderInfo from "../order-info/order-info";
 import { ProtectedRouteElement } from "../protected-route/protected-route";
-import { DISPLAY_ERROR_MESSAGE } from "../../services/actions";
 import { getIngredients } from "../../services/actions/ingredients";
 import { getUser } from "../../services/actions/auth";
 import { getCookie } from "../../utils/cookies";
@@ -25,46 +26,18 @@ import { getCookie } from "../../utils/cookies";
 function App() {
   const dispatch = useDispatch();
 
-  const shownIngredient = useSelector(
-    (store) => store.ingredients.shownIngredient
-  );
-  const error = useSelector((store) => store.error);
   const user = useSelector((store) => store.auth.user);
   const ingredients = useSelector((store) => store.ingredients.ingredients);
-
-  const [modalState, setModalState] = useState({
-    visible: false,
-    content: null,
-  });
+  const { userOrders } = useSelector((store) => store.feed);
 
   useEffect(() => {
     !ingredients.length && dispatch(getIngredients());
     const refreshToken = localStorage.getItem("refreshToken");
     const accessToken = getCookie("token");
-    if ((refreshToken || accessToken) && !user) dispatch(getUser());
-  }, [dispatch, user]);
-
-  useEffect(() => {
-    error && handleOpenError(error);
-  }, [error]);
-
-  useEffect(() => {
-    shownIngredient && handleOpenIngredientDetails(shownIngredient);
-  }, [shownIngredient]);
-
-  const handleOpenIngredientDetails = (ingredient) => {
-    setModalState({
-      visible: true,
-      content: <IngredientDetails data={ingredient}></IngredientDetails>,
-    });
-  };
-
-  const handleOpenError = (errorMsg) => {
-    setModalState({
-      visible: true,
-      content: <ErrorPopup>{errorMsg}</ErrorPopup>,
-    });
-  };
+    if ((refreshToken || accessToken) && !user) {
+      dispatch(getUser());
+    }
+  }, [user]);
 
   const location = useLocation();
 
@@ -120,26 +93,25 @@ function App() {
                 element={<ProfilePage />}
               />
             }
-          />
-          <Route
-            path="/profile/orders"
-            element={
-              <ProtectedRouteElement
-                authRequired={true}
-                element={<ProfilePage />}
-              />
-            }
-          />
+          >
+            <Route path="/profile" element={<ProfileEditForm />} />
+            <Route
+              path="orders"
+              element={<OrdersList orders={userOrders} showStatus={true} />}
+            />
+          </Route>
+          <Route path="/feed" element={<FeedPage />} />
+          <Route path="/ingredients/:id" element={<IngredientDetails />} />
+          <Route path="/feed/:id" element={<OrderInfo />} />
           <Route
             path="/profile/orders/:id"
             element={
               <ProtectedRouteElement
                 authRequired={true}
-                element={<ProfilePage />}
+                element={<OrderInfo />}
               />
             }
           />
-          <Route path="/ingredients/:id" element={<IngredientDetails />} />
         </Routes>
         {background && (
           <Routes>
@@ -148,11 +120,24 @@ function App() {
               element={<Modal children={<IngredientDetails />} />}
             />
             <Route
-              path="/profile/orders/:id"
+              path="/profile/order-accepted/:id"
               element={
                 <ProtectedRouteElement
                   authRequired={true}
                   element={<Modal children={<OrderDetails />} />}
+                />
+              }
+            />
+            <Route
+              path="/feed/:id"
+              element={<Modal children={<OrderInfo />} />}
+            />
+            <Route
+              path="/profile/orders/:id"
+              element={
+                <ProtectedRouteElement
+                  authRequired={true}
+                  element={<Modal children={<OrderInfo />} />}
                 />
               }
             />
