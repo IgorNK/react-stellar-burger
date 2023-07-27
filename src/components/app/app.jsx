@@ -120,7 +120,7 @@ function App() {
               element={<Modal children={<IngredientDetails />} />}
             />
             <Route
-              path="/profile/orders/:id"
+              path="/profile/order-accepted/:id"
               element={
                 <ProtectedRouteElement
                   authRequired={true}
