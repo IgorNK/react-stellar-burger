@@ -20,7 +20,7 @@ export const ProfilePage = () => {
         dispatch({
           type: WS_CONNECTION_START,
           payload: {
-            wsUrl: `${wsMyOrdersUrl}?token=${getCookie("token").slice(7)}`,
+            wsUrl: `${wsMyOrdersUrl}?token=${getCookie("token")?.slice(7)}`,
             storage: "user",
           },
         });

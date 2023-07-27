@@ -24,13 +24,13 @@ export const socketMiddleware = (wsActions) => {
           dispatch({ type: onError, payload: event });
         };
 
-        socket.onmessage = (event) => {
+        socket.onmessage = async (event) => {
           const { data } = event;
           const parsedData = JSON.parse(data);
 
           if (parsedData.message === "Invalid or missing token") {
             const api = new Api({ baseUrl: dataUrl });
-            api.refreshTokenRequest();
+            await api.getUserRequest();
           }
 
           const { success, ...restParsedData } = parsedData;

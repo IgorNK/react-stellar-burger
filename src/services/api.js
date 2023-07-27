@@ -139,7 +139,7 @@ class Api {
       return await checkResponse(res);
     } catch (err) {
       if (err.message === "jwt expired") {
-        const refreshData = await this.refreshToken();
+        const refreshData = await this.refreshTokenRequest();
         localStorage.setItem("refreshToken", refreshData.refreshToken);
         setCookie("token", refreshData.accessToken);
         options.headers.authorization = refreshData.accessToken;

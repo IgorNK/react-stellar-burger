@@ -34,8 +34,10 @@ function App() {
     !ingredients.length && dispatch(getIngredients());
     const refreshToken = localStorage.getItem("refreshToken");
     const accessToken = getCookie("token");
-    if ((refreshToken || accessToken) && !user) dispatch(getUser());
-  }, [dispatch, user]);
+    if ((refreshToken || accessToken) && !user) {
+      dispatch(getUser());
+    }
+  }, [user]);
 
   const location = useLocation();
 

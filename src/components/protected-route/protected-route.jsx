@@ -14,7 +14,9 @@ export const ProtectedRouteElement = ({ authRequired, element }) => {
   const init = useCallback(() => {
     const refreshToken = localStorage.getItem("refreshToken");
     const accessToken = getCookie("token");
-    if ((refreshToken || accessToken) && !user) dispatch(getUser());
+    if ((refreshToken || accessToken) && !user) {
+      dispatch(getUser());
+    }
   }, [dispatch, user]);
 
   useEffect(() => {
