@@ -4,29 +4,32 @@ import {
   ListIcon,
   ProfileIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes from "prop-types";
 
-const NavButton = (props) => {
-  const getIconClass = (active) => {
+const NavButton: React.FC<{
+  active: boolean,
+  value: string,
+  children: string | React.ReactElement | React.ReactElement[],
+}> = ({active, value, children}) => {
+  const getIconClass = (active: boolean) => {
     return active ? "primary" : "secondary";
   };
 
-  const getTextClass = (active) => {
+  const getTextClass: (active: boolean) => string = (active) => {
     return active
       ? "text text_type_main-default"
       : "text text_type_main-default text_color_inactive";
   };
 
-  const renderIcon = (value) => {
+  const renderIcon: (value: string) => React.ReactElement | null = (value) => {
     switch (value) {
       case "burger":
-        return <BurgerIcon type={getIconClass(props.active)} />;
+        return <BurgerIcon type={getIconClass(active)} />;
       case "orders":
-        return <ListIcon type={getIconClass(props.active)} />;
+        return <ListIcon type={getIconClass(active)} />;
       case "profile":
-        return <ProfileIcon type={getIconClass(props.active)} />;
+        return <ProfileIcon type={getIconClass(active)} />;
       default:
-        return;
+        return null;
     }
   };
 
@@ -38,12 +41,4 @@ const NavButton = (props) => {
   );
 };
 
-NavButton.propTypes = {
-  active: PropTypes.bool,
-  value: PropTypes.string,
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]),
-};
 export default NavButton;

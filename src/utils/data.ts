@@ -2,11 +2,13 @@ export const dataUrl = "https://norma.nomoreparties.space/api";
 export const wsFeedUrl = "wss://norma.nomoreparties.space/orders/all";
 export const wsMyOrdersUrl = "wss://norma.nomoreparties.space/orders";
 
-export const formatNumber = (num) => {
+export const formatNumber: (num: number) => string = (num) => {
   return num?.toString().replace(/(.)(?=(\d{3})+$)/g, "$1 ");
 };
 
-export const getOrderStatus = (status) => {
+export enum 
+
+export const getOrderStatus = (status: string) => {
   switch (status) {
     case "cooking": {
       return <p className="text text_type_main-small">Готовится</p>;

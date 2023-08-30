@@ -7,7 +7,7 @@ import { WS_CONNECTION_START } from "../services/actions/socket";
 import { wsMyOrdersUrl } from "../utils/data";
 import { getCookie } from "../utils/cookies";
 
-export const ProfilePage = () => {
+export const ProfilePage: React.FC = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const [activeLink, setActiveLink] = useState("profile");
@@ -79,7 +79,7 @@ export const ProfilePage = () => {
               История заказов
             </p>
           </Link>
-          <Link onClick={onLogoutClick} className={styles.link}>
+          <Link to="" onClick={onLogoutClick} className={styles.link}>
             <p className={"text text_type_main-medium text_color_inactive"}>
               Выход
             </p>

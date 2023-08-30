@@ -4,12 +4,13 @@ import { Link, useLocation } from "react-router-dom";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import Ingredient from "../ingredient/ingredient";
 import styles from "./burger-ingredients.module.css";
+import { TIngredient } from "../ingredient/ingredient";
 import {
   SWITCH_TAB,
   SHOW_INGREDIENT,
 } from "../../services/actions/ingredients";
 
-const BurgerIngredients = () => {
+const BurgerIngredients: React.FC = () => {
   const location = useLocation();
   const dispatch = useDispatch();
 
@@ -17,7 +18,7 @@ const BurgerIngredients = () => {
     (store) => store.ingredients
   );
 
-  const renderIngredient = (item) => {
+  const renderIngredient: (item: TIngredient) => React.ReactElement = (item) => {
     return (
       <Link
         className={styles.link}
@@ -25,23 +26,23 @@ const BurgerIngredients = () => {
         to={`/ingredients/${item._id}`}
         state={{ background: location }}
       >
-        <Ingredient item={item} board="default" />
+        <Ingredient item={item} />
       </Link>
     );
   };
 
   const buns = useMemo(
-    () => ingredients.filter((item) => item.type === "bun"),
+    () => ingredients.filter((item: TIngredient) => item.type === "bun"),
     [ingredients]
   );
 
   const sauces = useMemo(
-    () => ingredients.filter((item) => item.type === "sauce"),
+    () => ingredients.filter((item: TIngredient) => item.type === "sauce"),
     [ingredients]
   );
 
   const fillings = useMemo(
-    () => ingredients.filter((item) => item.type === "main"),
+    () => ingredients.filter((item: TIngredient) => item.type === "main"),
     [ingredients]
   );
 
@@ -51,25 +52,25 @@ const BurgerIngredients = () => {
   const scrollContainerRef = useRef(null);
 
   const handleScroll = () => {
-    const scrollTop = scrollContainerRef.current.scrollTop;
+    const scrollTop = scrollContainerRef?.current?.scrollTop;
     const margin = -300;
     const offsets = [
       {
         name: "buns",
         offset: Math.abs(
-          Math.abs(bunsRef.current.offsetTop - scrollTop) + margin
+          Math.abs(bunsRef?.current?.offsetTop - scrollTop) + margin
         ),
       },
       {
         name: "sauces",
         offset: Math.abs(
-          Math.abs(saucesRef.current.offsetTop - scrollTop) + margin
+          Math.abs(saucesRef?.current?.offsetTop - scrollTop) + margin
         ),
       },
       {
         name: "fillings",
         offset: Math.abs(
-          Math.abs(fillingsRef.current.offsetTop - scrollTop) + margin
+          Math.abs(fillingsRef?.current?.offsetTop - scrollTop) + margin
         ),
       },
     ];
@@ -83,7 +84,7 @@ const BurgerIngredients = () => {
     }
   };
 
-  const scrollTo = (ref) => {
+  const scrollTo = (ref: React.MutableRefObject<HTMLElement>) => {
     ref.current.scrollIntoView({ behavior: "smooth" });
   };
 
@@ -122,7 +123,7 @@ const BurgerIngredients = () => {
             Булки
           </h2>
           <div className={styles.container + " pt-6 pl-4"}>
-            {buns.map((item) => {
+            {buns.map((item: TIngredient) => {
               return renderIngredient(item);
             })}
           </div>
@@ -130,7 +131,7 @@ const BurgerIngredients = () => {
             Соусы
           </h2>
           <div className={styles.container + " pt-6 pl-4"}>
-            {sauces.map((item) => {
+            {sauces.map((item: TIngredient) => {
               return renderIngredient(item);
             })}
           </div>
@@ -138,7 +139,7 @@ const BurgerIngredients = () => {
             Начинки
           </h2>
           <div className={styles.container + " pt-6 pl-4"}>
-            {fillings.map((item) => {
+            {fillings.map((item: TIngredient) => {
               return renderIngredient(item);
             })}
           </div>

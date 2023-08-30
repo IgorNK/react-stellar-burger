@@ -6,7 +6,12 @@ import { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../../services/actions/auth";
 
-const ProfileEditForm = () => {
+type TUserData = {
+  name: string,
+  email: string,
+}
+
+const ProfileEditForm: React.FC = () => {
   const dispatch = useDispatch();
   const [form, setFormValue] = useState({ name: "", email: "", password: "" });
   const [nameEditActive, setNameEditActive] = useState(false);
@@ -18,20 +23,20 @@ const ProfileEditForm = () => {
     resetForm(user);
   }, [user]);
 
-  const resetForm = (userdata) => {
+  const resetForm = (userdata: TUserData) => {
     setFormValue({
       name: userdata.name,
       email: userdata.email,
     });
   };
 
-  const onFormChange = (e) => {
+  const onFormChange = (e: React.FormEvent<HTMLInputElement>) => {
     e.preventDefault();
-    setFormValue({ ...form, [e.target.name]: e.target.value });
+    setFormValue({ ...form, [e.currentTarget.name]: e.currentTarget.value });
   };
 
   const onFormSubmit = useCallback(
-    (e) => {
+    (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       dispatch(updateUser(form));
       setNameEditActive(false);
@@ -42,7 +47,7 @@ const ProfileEditForm = () => {
   );
 
   const onFormReset = useCallback(
-    (e) => {
+    (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       resetForm(user);
       setNameEditActive(false);

@@ -11,8 +11,9 @@ import {
 import Api from "../../services/api";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import IngredientsListElement from "../ingredients-list-element/ingredients-list-element";
+import { TIngredient } from "../ingredient/ingredient";
 
-const OrderInfo = () => {
+const OrderInfo: React.FC = () => {
   const { id } = useParams();
   const [order, setOrder] = useState(null);
   const [orderList, setOrderList] = useState(null);
@@ -30,15 +31,15 @@ const OrderInfo = () => {
 
   const getIngredient = useCallback(
     (id) => {
-      return ingredients.find((ingredient) => ingredient._id === id);
+      return ingredients.find((ingredient: TIngredient) => ingredient._id === id);
     },
     [ingredients]
   );
 
   const calculatePrice = useCallback(
     (ids) => {
-      return ids?.reduce((acc, id) => {
-        const price = ingredients?.find((item) => item._id === id)?.price;
+      return ids?.reduce((acc: number, id: string) => {
+        const price = ingredients?.find((item: TIngredient) => item._id === id)?.price;
         return acc + price;
       }, 0);
     },
@@ -48,10 +49,10 @@ const OrderInfo = () => {
   useEffect(() => {
     const ingredientsSet = new Set(order?.ingredients);
     setOrderList(
-      [...ingredientsSet].map((id, index) => {
+      [...ingredientsSet].map((id: string, index: number) => {
         const ingredient = getIngredient(id);
         const amount = order?.ingredients.reduce(
-          (acc, ingredientId) => (id === ingredientId ? acc + 1 : acc),
+          (acc: number, ingredientId: string) => (id === ingredientId ? acc + 1 : acc),
           0
         );
         return (
@@ -82,7 +83,7 @@ const OrderInfo = () => {
           <p className="text text_type_digits-default mr-2">
             {formatNumber(calculatePrice(order?.ingredients))}
           </p>
-          <CurrencyIcon />
+          <CurrencyIcon type="primary" />
         </div>
       </div>
     </div>

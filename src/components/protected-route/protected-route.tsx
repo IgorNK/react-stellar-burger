@@ -5,7 +5,10 @@ import { getUser } from "../../services/actions/auth";
 import { GoBack } from "../go-back/go-back";
 import { getCookie } from "../../utils/cookies";
 
-export const ProtectedRouteElement = ({ authRequired, element }) => {
+export const ProtectedRouteElement: React.FC<{
+  authRequired: boolean, 
+  element: React.ReactElement | React.ReactElement[] | null
+}> = ({ authRequired, element }) => {
   const dispatch = useDispatch();
   const { getUserRequest, refreshTokenRequest, user } = useSelector(
     (store) => store.auth

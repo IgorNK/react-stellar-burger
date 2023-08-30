@@ -4,7 +4,7 @@ import { Logo } from "@ya.praktikum/react-developer-burger-ui-components";
 import NavButton from "../nav-button/nav-button";
 import styles from "./app-header.module.css";
 
-const AppHeader = (props) => {
+const AppHeader: React.FC = () => {
   const [activeButton, setActiveButton] = useState("burger");
   const location = useLocation();
 

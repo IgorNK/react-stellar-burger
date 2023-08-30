@@ -8,6 +8,7 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import ConstructorIngredient from "../constructor-ingredient/constructor-ingredient";
 import { submitOrder } from "../../services/actions/order";
+import { TIngredient } from "../ingredient/ingredient";
 
 import {
   ADD_TO_CART,
@@ -17,7 +18,7 @@ import {
 
 import styles from "./burger-constructor.module.css";
 
-const BurgerConstructor = () => {
+const BurgerConstructor: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -44,7 +45,7 @@ const BurgerConstructor = () => {
     }
   }, [orderSuccess]);
 
-  const renderBun = ({ item, pos, key }) => {
+  const renderBun = ({ item, pos, key}: { item: TIngredient, pos: string, key: number }) => {
     return (
       <ConstructorIngredient
         item={item}
@@ -55,7 +56,7 @@ const BurgerConstructor = () => {
     );
   };
 
-  const renderIngredient = ({ item, index, key }) => {
+  const renderIngredient = ({ item, index, key }: { item: TIngredient, index: number, key: number }) => {
     return (
       <li key={key}>
         <ConstructorIngredient item={item} index={index} cartID={key} />

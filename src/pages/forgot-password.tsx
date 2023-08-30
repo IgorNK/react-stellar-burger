@@ -8,20 +8,20 @@ import { Link, Navigate } from "react-router-dom";
 import { forgotPassword } from "../services/actions/auth";
 import styles from "./form.module.css";
 
-export const ForgotPasswordPage = () => {
+export const ForgotPasswordPage: React.FC = () => {
   const dispatch = useDispatch();
   const [form, setFormValue] = useState({ email: "" });
   const { forgotPasswordRequest, forgotPasswordSuccess } = useSelector(
     (store) => store.auth
   );
 
-  const onFormChange = (e) => {
+  const onFormChange = (e: React.FormEvent<HTMLInputElement>) => {
     e.preventDefault();
-    setFormValue({ ...form, [e.target.name]: e.target.value });
+    setFormValue({ ...form, [e.currentTarget.name]: e.currentTarget.value });
   };
 
   const onFormSubmit = useCallback(
-    (e) => {
+    (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       dispatch(forgotPassword(form));
     },

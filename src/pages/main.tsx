@@ -2,7 +2,7 @@ import BurgerIngredients from "../components/burger-ingredients/burger-ingredien
 import BurgerConstructor from "../components/burger-constructor/burger-constructor";
 import styles from "./main.module.css";
 
-export const MainPage = () => {
+export const MainPage: React.FC = () => {
   return (
     <section className={styles.twoColumns}>
       <div>

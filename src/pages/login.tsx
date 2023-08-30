@@ -9,17 +9,17 @@ import { logIn } from "../services/actions/auth";
 import { Link } from "react-router-dom";
 import styles from "./form.module.css";
 
-export const LoginPage = () => {
+export const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
   const [form, setFormValue] = useState({ email: "", password: "" });
 
-  const onFormChange = (e) => {
+  const onFormChange = (e: React.FormEvent<HTMLInputElement>) => {
     e.preventDefault();
-    setFormValue({ ...form, [e.target.name]: e.target.value });
+    setFormValue({ ...form, [e.currentTarget.name]: e.currentTarget.value });
   };
 
   const onFormSubmit = useCallback(
-    (e) => {
+    (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       dispatch(logIn(form));
     },

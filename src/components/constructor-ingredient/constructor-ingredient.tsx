@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import { PropTypes } from "prop-types";
 import { useDispatch } from "react-redux";
 import { useDrag, useDrop } from "react-dnd";
 import {
@@ -7,16 +6,20 @@ import {
   ConstructorElement,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { REMOVE_FROM_CART, MOVE_CART_ITEM } from "../../services/actions/cart";
-import { ingredientPropType } from "../../utils/prop-types.js";
+import { TIngredient } from "../ingredient/ingredient";
 
 import styles from "./constructor-ingredient.module.css";
 
-const ConstructorIngredient = (props) => {
-  const { item, pos, index, cartID } = props;
+const ConstructorIngredient: React.FC<{
+  item: TIngredient, 
+  pos: string, 
+  index: number, 
+  cartID: string
+}> = ({ item, pos, index, cartID }) => {
   const dispatch = useDispatch();
   const ref = useRef(null);
 
-  const removeFromCart = ({ key }) => {
+  const removeFromCart = ({ key }: { key: string }) => {
     dispatch({
       type: REMOVE_FROM_CART,
       key: key,
@@ -61,7 +64,7 @@ const ConstructorIngredient = (props) => {
     }),
   });
 
-  const moveCard = (dragIndex, hoverIndex) => {
+  const moveCard = (dragIndex: number, hoverIndex: number) => {
     dispatch({
       type: MOVE_CART_ITEM,
       dragIndex: dragIndex,
@@ -85,7 +88,7 @@ const ConstructorIngredient = (props) => {
     >
       {item.type !== "bun" && (
         <div className={styles.dragHandle}>
-          <DragIcon />
+          <DragIcon type="primary" />
         </div>
       )}
       <ConstructorElement
@@ -99,13 +102,6 @@ const ConstructorIngredient = (props) => {
   );
 
   return constructorIngredient;
-};
-
-ConstructorIngredient.propTypes = {
-  item: ingredientPropType,
-  pos: PropTypes.string,
-  index: PropTypes.number,
-  cartID: PropTypes.string.isRequired,
 };
 
 export default ConstructorIngredient;

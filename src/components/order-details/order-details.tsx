@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { ORDER_REPORTED } from "../../services/actions/order";
 
-const OrderDetails = () => {
+const OrderDetails: React.FC = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
 

@@ -23,7 +23,7 @@ import { getIngredients } from "../../services/actions/ingredients";
 import { getUser } from "../../services/actions/auth";
 import { getCookie } from "../../utils/cookies";
 
-function App() {
+const App: React.FC = () => {
   const dispatch = useDispatch();
 
   const user = useSelector((store) => store.auth.user);

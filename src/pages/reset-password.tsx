@@ -9,7 +9,7 @@ import { Link, Navigate } from "react-router-dom";
 import { resetPassword } from "../services/actions/auth";
 import styles from "./form.module.css";
 
-export const ResetPasswordPage = () => {
+export const ResetPasswordPage: React.FC = () => {
   const dispatch = useDispatch();
   const {
     forgotPasswordSuccess,
@@ -19,13 +19,13 @@ export const ResetPasswordPage = () => {
   } = useSelector((store) => store.auth);
   const [form, setFormValue] = useState({ password: "", token: "" });
 
-  const onFormChange = (e) => {
+  const onFormChange = (e: React.FormEvent<HTMLInputElement>) => {
     e.preventDefault();
-    setFormValue({ ...form, [e.target.name]: e.target.value });
+    setFormValue({ ...form, [e.currentTarget.name]: e.currentTarget.value });
   };
 
   const onFormSubmit = useCallback(
-    (e) => {
+    (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       dispatch(resetPassword(form));
     },

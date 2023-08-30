@@ -1,11 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
-import { PropTypes } from "prop-types";
 import { useNavigate } from "react-router-dom";
 import styles from "./modal.module.css";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import ModalOverlay from "../modal-overlay/modal-overlay";
 
-const Modal = ({ children }) => {
+const Modal: React.FC<{children: React.ReactElement || React.ReactElement[]}> = ({ children }) => {
   const navigate = useNavigate();
 
   const [closeIconState, setCloseIconState] = useState("primary");
@@ -55,13 +54,6 @@ const Modal = ({ children }) => {
       </div>
     </div>
   );
-};
-
-Modal.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]),
 };
 
 export default Modal;

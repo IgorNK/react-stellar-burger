@@ -1,6 +1,10 @@
 import styles from "./order-icon.module.css";
 
-const OrderIcon = ({ image, rest, extraStyle }) => {
+const OrderIcon: React.FC<{
+  image: string, 
+  rest?: string | null, 
+  extraStyle?: React.CSSProperties
+}> = ({ image, rest, extraStyle }) => {
   return (
     <div className={styles.orderIcon} style={extraStyle}>
       <div className={styles.innerContainer}>

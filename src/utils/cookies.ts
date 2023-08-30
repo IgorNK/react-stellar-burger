@@ -1,4 +1,8 @@
-const getCookie = (name) => {
+type TCookie = {
+  [name: string]: any, 
+} & { expires ?: number | Date | string }
+
+const getCookie: (name: string) => string | undefined = (name) => {
   const matches = document.cookie.match(
     new RegExp(
       "(?:^|; )" +
@@ -9,7 +13,7 @@ const getCookie = (name) => {
   return matches ? decodeURIComponent(matches[1]) : undefined;
 };
 
-const setCookie = (name, value, props) => {
+const setCookie = (name: string, value: string, props: TCookie) => {
   // props = props || {};
   props = {
     path: "/",
@@ -21,8 +25,8 @@ const setCookie = (name, value, props) => {
     d.setTime(d.getTime() + exp * 1000);
     exp = props.expires = d;
   }
-  if (exp && exp.toUTCString) {
-    props.expires = exp.toUTCString();
+  if (exp && (exp as Date).toUTCString) {
+    props.expires = (exp as Date).toUTCString();
   }
   value = encodeURIComponent(value);
   let updatedCookie = name + "=" + value;
@@ -36,8 +40,8 @@ const setCookie = (name, value, props) => {
   document.cookie = updatedCookie;
 };
 
-const deleteCookie = (name) => {
-  setCookie(name, null, { expires: -1 });
+const deleteCookie = (name: string) => {
+  setCookie(name, '', { expires: -1 });
 };
 
 export { getCookie, setCookie, deleteCookie };

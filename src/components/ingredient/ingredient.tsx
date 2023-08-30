@@ -1,16 +1,28 @@
 import { useMemo } from "react";
-import { PropTypes } from "prop-types";
 import { useSelector } from "react-redux";
 import { useDrag } from "react-dnd";
 import {
   CurrencyIcon,
   Counter,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { ingredientPropType } from "../../utils/prop-types.js";
 import styles from "./ingredient.module.css";
 
-const Ingredient = (props) => {
-  const { item } = props;
+export type TIngredient = {
+  _id: string,
+  name: string,
+  type: string,
+  proteins?: number,
+  fat?: number,
+  carbohydrates?: number,
+  calories?: number,
+  price: number,
+  image: string,
+  image_mobile: string,
+  image_large?: string,
+  __v?: number,
+};
+
+const Ingredient: React.FC<{item: TIngredient}> = ({ item }) => {
   const { cartItems, bun } = useSelector((store) => store.cart);
 
   const count = useMemo(() => {
@@ -31,7 +43,7 @@ const Ingredient = (props) => {
       <img src={item.image} alt="ingredient" />
       <div className={styles.priceContainer}>
         <p className="text text_type_digits-default pr-2">{item.price}</p>
-        <CurrencyIcon />
+        <CurrencyIcon type="primary" />
       </div>
       <p className="text text_type_main-default">{item.name}</p>
       {count > 0 && <Counter count={count} size="default" extraClass="m-1" />}
@@ -39,10 +51,6 @@ const Ingredient = (props) => {
   );
 
   return listIngredient;
-};
-
-Ingredient.propTypes = {
-  item: ingredientPropType,
 };
 
 export default Ingredient;
