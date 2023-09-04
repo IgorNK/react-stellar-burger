@@ -1,11 +1,11 @@
 import styles from "./order-entry.module.css";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import OrderIcon from "../order-icon/order-icon";
-import { useSelector } from "react-redux";
+import { useSelector } from "../../services/hooks";
 import { useCallback, useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { formatNumber, getOrderStatus, formatDate } from "../../utils/data";
-import { TIngredient } from "../ingredient/ingredient";
+import { TIngredient, TOrder } from "../../services/types";
 
 const OrderEntry: React.FC<{
   index?: number, 

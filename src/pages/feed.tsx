@@ -1,9 +1,11 @@
 import styles from "./feed.module.css";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "../../services/hooks";
 import { useEffect, useState } from "react";
 import { formatNumber, wsFeedUrl } from "../utils/data";
 import OrdersList from "../components/orders-list/orders-list";
 import { WS_CONNECTION_START } from "../services/actions/socket";
+import { wsInit } from "../services/actions/socket";
+import { TOrder } from "../services/types/data";
 
 export const FeedPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -15,10 +17,7 @@ export const FeedPage: React.FC = () => {
 
   useEffect(() => {
     if (!wsConnected) {
-      dispatch({
-        type: WS_CONNECTION_START,
-        payload: { wsUrl: wsFeedUrl, storage: "feed" },
-      });
+      dispatch(wsInit(wsFeedUrl, "feed"));
     } else {
     }
   }, [wsConnected, dispatch]);

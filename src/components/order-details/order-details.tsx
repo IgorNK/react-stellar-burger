@@ -1,7 +1,7 @@
 import styles from "./order-details.module.css";
 import orderAcceptedIcon from "../../images/order_accepted.svg";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch } from "../../services/hooks";
 import { useParams } from "react-router-dom";
 import { ORDER_REPORTED } from "../../services/actions/order";
 

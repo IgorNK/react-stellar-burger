@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "../../services/hooks";
 import { useDrop } from "react-dnd";
 import { useNavigate, useLocation } from "react-router-dom";
 import {

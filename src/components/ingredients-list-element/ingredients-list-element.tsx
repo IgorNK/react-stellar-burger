@@ -1,7 +1,7 @@
 import styles from "./ingredients-list-element.module.css";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import OrderIcon from "../order-icon/order-icon";
-import { TIngredient } from "../ingredient/ingredient";
+import { TIngredient } from "../../services/types";
 
 const IngredientsListElement: React.FC<{
   ingredient: TIngredient, 

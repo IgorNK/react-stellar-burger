@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "../../services/hooks";
 import {
   Input,
   PasswordInput,

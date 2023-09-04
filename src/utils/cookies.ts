@@ -13,7 +13,7 @@ const getCookie: (name: string) => string | undefined = (name) => {
   return matches ? decodeURIComponent(matches[1]) : undefined;
 };
 
-const setCookie = (name: string, value: string, props: TCookie) => {
+const setCookie = (name: string, value: string, props?: TCookie) => {
   // props = props || {};
   props = {
     path: "/",

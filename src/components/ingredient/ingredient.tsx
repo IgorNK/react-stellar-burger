@@ -6,21 +6,7 @@ import {
   Counter,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./ingredient.module.css";
-
-export type TIngredient = {
-  _id: string,
-  name: string,
-  type: string,
-  proteins?: number,
-  fat?: number,
-  carbohydrates?: number,
-  calories?: number,
-  price: number,
-  image: string,
-  image_mobile: string,
-  image_large?: string,
-  __v?: number,
-};
+import { TIngredient } from "../../services/types";
 
 const Ingredient: React.FC<{item: TIngredient}> = ({ item }) => {
   const { cartItems, bun } = useSelector((store) => store.cart);

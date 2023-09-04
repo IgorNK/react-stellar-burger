@@ -1,8 +1,9 @@
 import styles from "./orders-list.module.css";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch } from "../../services/hooks";
 import OrderEntry from "../order-entry/order-entry";
 import { WS_CONNECTION_CLOSE } from "../../services/actions/socket";
+import { TOrder } from "../../services/types";
 
 const OrdersList: React.FC<{
   orders: TOrder[], 

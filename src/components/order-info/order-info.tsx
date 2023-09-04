@@ -1,7 +1,7 @@
 import styles from "./order-info.module.css";
 import { useParams } from "react-router-dom";
 import { useState, useEffect, useCallback } from "react";
-import { useSelector } from "react-redux";
+import { useSelector } from "../../services/hooks";
 import {
   getOrderStatus,
   formatDate,
@@ -11,7 +11,7 @@ import {
 import Api from "../../services/api";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import IngredientsListElement from "../ingredients-list-element/ingredients-list-element";
-import { TIngredient } from "../ingredient/ingredient";
+import { TIngredient, TOrder } from "../../services/types";
 
 const OrderInfo: React.FC = () => {
   const { id } = useParams();

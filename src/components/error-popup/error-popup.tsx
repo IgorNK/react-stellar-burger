@@ -1,4 +1,4 @@
-export default const ErrorPopup: React.FC<{
+const ErrorPopup: React.FC<{
   children: string | React.ReactElement | React.ReactElement[]
 }> = ({ children }) => {
   return (
@@ -7,3 +7,5 @@ export default const ErrorPopup: React.FC<{
     </p>
   );
 };
+
+export default ErrorPopup;

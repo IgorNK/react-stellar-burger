@@ -1,10 +1,10 @@
 import { useMemo, useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "../../services/hooks";
 import { Link, useLocation } from "react-router-dom";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import Ingredient from "../ingredient/ingredient";
 import styles from "./burger-ingredients.module.css";
-import { TIngredient } from "../ingredient/ingredient";
+import { TIngredient } from "../../services/types";
 import {
   SWITCH_TAB,
   SHOW_INGREDIENT,

@@ -1,12 +1,12 @@
 import { useRef } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch } from "../../services/hooks";
 import { useDrag, useDrop } from "react-dnd";
 import {
   DragIcon,
   ConstructorElement,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { REMOVE_FROM_CART, MOVE_CART_ITEM } from "../../services/actions/cart";
-import { TIngredient } from "../ingredient/ingredient";
+import { TIngredient } from "../../services/types";
 
 import styles from "./constructor-ingredient.module.css";
 

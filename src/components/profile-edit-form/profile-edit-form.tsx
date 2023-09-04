@@ -3,13 +3,9 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useState, useEffect, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "../../services/hooks";
 import { updateUser } from "../../services/actions/auth";
-
-type TUserData = {
-  name: string,
-  email: string,
-}
+import { TUser } from "../../services/types";
 
 const ProfileEditForm: React.FC = () => {
   const dispatch = useDispatch();
@@ -23,7 +19,7 @@ const ProfileEditForm: React.FC = () => {
     resetForm(user);
   }, [user]);
 
-  const resetForm = (userdata: TUserData) => {
+  const resetForm = (userdata: TUser) => {
     setFormValue({
       name: userdata.name,
       email: userdata.email,

@@ -6,8 +6,6 @@ export const formatNumber: (num: number) => string = (num) => {
   return num?.toString().replace(/(.)(?=(\d{3})+$)/g, "$1 ");
 };
 
-export enum 
-
 export const getOrderStatus = (status: string) => {
   switch (status) {
     case "cooking": {

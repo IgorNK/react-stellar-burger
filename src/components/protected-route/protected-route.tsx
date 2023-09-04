@@ -1,5 +1,5 @@
 import { useEffect, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "../../services/hooks";
 import { Navigate } from "react-router-dom";
 import { getUser } from "../../services/actions/auth";
 import { GoBack } from "../go-back/go-back";

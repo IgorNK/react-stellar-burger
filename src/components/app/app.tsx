@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "../../services/hooks";
 import { Routes, Route, useLocation } from "react-router-dom";
 import styles from "./app.module.css";
 import AppHeader from "../app-header/app-header";

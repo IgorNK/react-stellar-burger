@@ -1,9 +1,10 @@
 import { useState, useCallback, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "../../services/hooks";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { logOut } from "../services/actions/auth";
 import styles from "./profile.module.css";
 import { WS_CONNECTION_START } from "../services/actions/socket";
+import { wsInit } from "../services/actions/socket";
 import { wsMyOrdersUrl } from "../utils/data";
 import { getCookie } from "../utils/cookies";
 
@@ -17,13 +18,7 @@ export const ProfilePage: React.FC = () => {
   useEffect(() => {
     if (user && location.pathname.includes("orders")) {
       if (!wsConnected) {
-        dispatch({
-          type: WS_CONNECTION_START,
-          payload: {
-            wsUrl: `${wsMyOrdersUrl}?token=${getCookie("token")?.slice(7)}`,
-            storage: "user",
-          },
-        });
+        dispatch(wsInit(`${wsMyOrdersUrl}?token=${getCookie("token")?.slice(7)}`, "user"));
       } else {
       }
     }

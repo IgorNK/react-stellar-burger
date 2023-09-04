@@ -1,11 +1,19 @@
 import {
-  WS_CONNECTION_SUCCESS,
+  WS_CONNECTION_OPEN,
   WS_CONNECTION_ERROR,
   WS_CONNECTION_CLOSED,
   WS_GET_MESSAGE,
 } from "../actions/socket";
 
-const initialState = {
+export type TSocketState = {
+  wsConnected: boolean;
+  feedOrders: ReadonlyArray<string>;
+  userOrders: ReadonlyArray<string>;
+  total: number;
+  totalToday: number;
+};
+
+const initialState: TSocketState = {
   wsConnected: false,
   feedOrders: [],
   userOrders: [],
@@ -15,7 +23,7 @@ const initialState = {
 
 export const wsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case WS_CONNECTION_SUCCESS:
+    case WS_CONNECTION_OPEN:
       return {
         ...state,
         wsConnected: true,
