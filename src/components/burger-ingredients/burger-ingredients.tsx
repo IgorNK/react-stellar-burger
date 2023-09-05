@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import Ingredient from "../ingredient/ingredient";
 import styles from "./burger-ingredients.module.css";
-import { TIngredient } from "../../services/types";
+import { TIngredient } from "../../services/types/data";
 import {
   SWITCH_TAB,
   SHOW_INGREDIENT,
@@ -46,31 +46,37 @@ const BurgerIngredients: React.FC = () => {
     [ingredients]
   );
 
-  const bunsRef = useRef(null);
-  const saucesRef = useRef(null);
-  const fillingsRef = useRef(null);
-  const scrollContainerRef = useRef(null);
+  const bunsRef = useRef<HTMLHeadingElement>(null);
+  const saucesRef = useRef<HTMLHeadingElement>(null);
+  const fillingsRef = useRef<HTMLHeadingElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const handleScroll = () => {
     const scrollTop = scrollContainerRef?.current?.scrollTop;
     const margin = -300;
+    const bunsOffset = bunsRef?.current?.offsetTop;
+    const saucesOffset = saucesRef?.current?.offsetTop;
+    const fillingsOffset = fillingsRef?.current?.offsetTop;
+    if (!scrollTop || !bunsOffset || !saucesOffset || !fillingsOffset) {
+      return;
+    }
     const offsets = [
       {
         name: "buns",
         offset: Math.abs(
-          Math.abs(bunsRef?.current?.offsetTop - scrollTop) + margin
+          Math.abs(bunsOffset - scrollTop) + margin
         ),
       },
       {
         name: "sauces",
         offset: Math.abs(
-          Math.abs(saucesRef?.current?.offsetTop - scrollTop) + margin
+          Math.abs(saucesOffset - scrollTop) + margin
         ),
       },
       {
         name: "fillings",
         offset: Math.abs(
-          Math.abs(fillingsRef?.current?.offsetTop - scrollTop) + margin
+          Math.abs(fillingsOffset - scrollTop) + margin
         ),
       },
     ];
@@ -84,8 +90,8 @@ const BurgerIngredients: React.FC = () => {
     }
   };
 
-  const scrollTo = (ref: React.MutableRefObject<HTMLElement>) => {
-    ref.current.scrollIntoView({ behavior: "smooth" });
+  const scrollTo = (ref: React.RefObject<HTMLDivElement>) => {
+    ref?.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (

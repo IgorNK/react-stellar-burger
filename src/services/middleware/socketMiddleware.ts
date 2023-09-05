@@ -1,24 +1,27 @@
 import Api from "../api";
 import { dataUrl } from "../../utils/data";
 import { wsInit, wsClose, onOpen, onClose, onError, onMessage } from "../actions/socket";
-import { IWsConnectionStartAction, 
-  IWsConnectionCloseAction,
-  IWsConnectionOpenAction,
-  IWsConnectionErrorAction,
-  IWsConnectionClosedAction,
-  IWsGetMessageAction } from "../actions/socket";
+import {
+  WS_CONNECTION_START, 
+  WS_CONNECTION_CLOSE, 
+  WS_CONNECTION_OPEN, 
+  WS_CONNECTION_ERROR, 
+  WS_CONNECTION_CLOSED,
+  WS_GET_MESSAGE
+} from "../actions/socket";
+import { TSocketAction } from "../actions/socket";
 
 export const socketMiddleware = () => {
   return (store) => {
-    let socket = null;
+    let socket: WebSocket & { activeStorage: string } = new WebSocket();
 
-    return (next) => (action) => {
+    return (next) => (action: TSocketAction) => {
       const { dispatch } = store;
       // const { type, payload } = action;
       // const { wsInit, wsClose, onOpen, onClose, onError, onMessage } =
       //   wsActions;
 
-      if (typeof action == IWsConnectionStartAction) {
+      if (action.type === WS_CONNECTION_START) {
         socket = new WebSocket(action.wsUrl);
         socket.activeStorage = action.storage;
       }
@@ -50,7 +53,7 @@ export const socketMiddleware = () => {
           dispatch(onClose());
         };
 
-        if (typeof action == IWsConnectionClosedAction) {
+        if (action.type === WS_CONNECTION_CLOSED) {
           socket.close();
           socket = null;
         }

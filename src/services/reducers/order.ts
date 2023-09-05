@@ -1,3 +1,4 @@
+import { TOrderAction } from "../actions/order";
 import {
   SEND_ORDER_REQUEST,
   SEND_ORDER_SUCCESS,
@@ -5,7 +6,16 @@ import {
   ORDER_REPORTED,
 } from "../actions/order";
 
-const initialState = {
+export type TOrderState = {
+  ingredientIDs: ReadonlyArray<string>;
+  number: null | string;
+  orderRequest: boolean;
+  orderSuccess: boolean;
+  orderFailed: boolean;
+  message?: string;
+}
+
+const initialState: TOrderState = {
   ingredientIDs: [],
   number: null,
   orderRequest: false,
@@ -14,7 +24,7 @@ const initialState = {
   message: "",
 };
 
-export const orderReducer = (state = initialState, action) => {
+export const orderReducer = (state = initialState, action: TOrderAction) => {
   switch (action.type) {
     case SEND_ORDER_REQUEST: {
       return {

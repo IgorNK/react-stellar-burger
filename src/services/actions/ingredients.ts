@@ -24,7 +24,7 @@ export interface IGetIngredientsFailedAction {
 
 export interface IShowIngredientAction {
   readonly type: typeof SHOW_INGREDIENT;
-  readonly ingredient: TIngredient;
+  readonly item: TIngredient;
 }
 
 export interface ISwitchTabAction {
@@ -32,7 +32,7 @@ export interface ISwitchTabAction {
   tab: string; // change this to enum later
 }
 
-export type TIngredientsActions = IGetIngredientsRequestAction |
+export type TIngredientsAction = IGetIngredientsRequestAction |
   IGetIngredientsSuccessAction |
   IGetIngredientsFailedAction |
   IShowIngredientAction |
@@ -51,9 +51,9 @@ export const getIngredientsFailedAction = (): IGetIngredientsFailedAction => ({
   type: GET_INGREDIENTS_FAILED
 });
 
-export const showIngredientAction = (ingredient: TIngredient): IShowIngredientAction => ({
+export const showIngredientAction = (item: TIngredient): IShowIngredientAction => ({
   type: SHOW_INGREDIENT,
-  ingredient
+  item
 });
 
 export const switchTabAction = (tab: string): ISwitchTabAction => ({

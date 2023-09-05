@@ -16,19 +16,20 @@ export interface ISendOrderRequestAction {
 
 export interface ISendOrderSuccessAction {
   readonly type: typeof SEND_ORDER_SUCCESS;
-  readonly number: number;
+  readonly number: string;
   readonly ingredientIDs: ReadonlyArray<string>;
 }
 
 export interface ISendOrderFailedAction {
   readonly type: typeof SEND_ORDER_FAILED;
+  readonly message: string;
 }
 
 export interface IOrderReportedAction {
   readonly type: typeof ORDER_REPORTED;
 }
 
-export type TOrderActions = ISendOrderRequestAction |
+export type TOrderAction = ISendOrderRequestAction |
   ISendOrderSuccessAction |
   ISendOrderFailedAction |
   IOrderReportedAction;
@@ -37,14 +38,15 @@ export const sendOrderRequestAction = (): ISendOrderRequestAction => ({
   type: SEND_ORDER_REQUEST
 });
 
-export const sendOrderSuccessAction = (number: number, ingredientIDs: ReadonlyArray<string>): ISendOrderSuccessAction => ({
+export const sendOrderSuccessAction = (number: string, ingredientIDs: ReadonlyArray<string>): ISendOrderSuccessAction => ({
   type: SEND_ORDER_SUCCESS,
   number,
   ingredientIDs
 });
 
-export const sendOrderFailedAction = (): ISendOrderFailedAction => ({
-  type: SEND_ORDER_FAILED
+export const sendOrderFailedAction = (message: string): ISendOrderFailedAction => ({
+  type: SEND_ORDER_FAILED,
+  message
 });
 
 export const orderReportedAction = (): IOrderReportedAction => ({

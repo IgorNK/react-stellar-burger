@@ -1,3 +1,5 @@
+import { TUser } from "../types/data";
+import { TAuthAction } from "../actions/auth";
 import {
   LOGIN_REQUEST,
   LOGIN_FAILED,
@@ -25,7 +27,29 @@ import {
   RESET_PASSWORD_SUCCESS,
 } from "../actions/auth";
 
-const initialState = {
+export type TAuthState = {
+  loginRequest: boolean,
+  loginFailed: boolean,
+  registerRequest: boolean,
+  registerFailed: boolean,
+  logoutRequest: boolean,
+  logoutFailed: boolean,
+  getUserRequest: boolean,
+  getUserFailed: boolean,
+  updateTokenRequest: boolean,
+  updateTokenFailed: boolean,
+  refreshUserRequest: boolean,
+  refreshUserFailed: boolean,
+  forgotPasswordRequest: boolean,
+  forgotPasswordFailed: boolean,
+  forgotPasswordSuccess: boolean,
+  resetPasswordRequest: boolean,
+  resetPasswordFailed: boolean,
+  resetPasswordSuccess: boolean,
+  user: TUser,
+}
+
+const initialState: TAuthState = {
   loginRequest: false,
   loginFailed: false,
   registerRequest: false,
@@ -47,7 +71,7 @@ const initialState = {
   user: null,
 };
 
-export const authReducer = (state = initialState, action) => {
+export const authReducer = (state = initialState, action: TAuthAction) => {
   switch (action.type) {
     case LOGIN_REQUEST: {
       return {

@@ -1,8 +1,8 @@
-import { TAuthActions } from "./actions/auth";
-import { TCartActions } from "./actions/cart";
-import { TIngredientsActions } from "./actions/ingredients";
-import { TOrderActions } from "./actions/order";
-import { TSocketActions } from "./actions/socket";
+import { TAuthAction } from "./auth";
+import { TCartAction } from "./cart";
+import { TIngredientsAction } from "./ingredients";
+import { TOrderAction } from "./order";
+import { TSocketAction } from "./socket";
 
 export const DISPLAY_ERROR_MESSAGE: "DISPLAY_ERROR_MESSAGE" = "DISPLAY_ERROR_MESSAGE";
 
@@ -16,9 +16,9 @@ export const displayErrorMessageAction = (message: string): IDisplayErrorMessage
   message
 });
 
-export type TApplicationActions = TAuthActions | 
-  TCartActions | 
-  TIngredientActions | 
-  TOrderActions | 
-  TWsActions |
+export type TApplicationAction = TAuthAction | 
+  TCartAction | 
+  TIngredientsAction | 
+  TOrderAction | 
+  TSocketAction |
   IDisplayErrorMessageAction;

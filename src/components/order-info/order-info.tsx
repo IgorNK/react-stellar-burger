@@ -11,12 +11,12 @@ import {
 import Api from "../../services/api";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import IngredientsListElement from "../ingredients-list-element/ingredients-list-element";
-import { TIngredient, TOrder } from "../../services/types";
+import { TIngredient, TOrder } from "../../services/types/data";
 
 const OrderInfo: React.FC = () => {
   const { id } = useParams();
-  const [order, setOrder] = useState(null);
-  const [orderList, setOrderList] = useState(null);
+  const [order, setOrder] = useState<TOrder | null>(null);
+  const [orderList, setOrderList] = useState<React.ReactElement[] | null>(null);
   const ingredients = useSelector((store) => store.ingredients.ingredients);
 
   const getOrder = useCallback(async () => {
@@ -40,7 +40,7 @@ const OrderInfo: React.FC = () => {
     (ids) => {
       return ids?.reduce((acc: number, id: string) => {
         const price = ingredients?.find((item: TIngredient) => item._id === id)?.price;
-        return acc + price;
+        if (price) return acc + price; else return acc;
       }, 0);
     },
     [ingredients]

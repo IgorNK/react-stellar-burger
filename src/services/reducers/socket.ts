@@ -1,3 +1,6 @@
+import { TOrder, TWsMessage } from "../types/data";
+import { TSocketAction } from "../actions/socket";
+
 import {
   WS_CONNECTION_OPEN,
   WS_CONNECTION_ERROR,
@@ -7,8 +10,8 @@ import {
 
 export type TSocketState = {
   wsConnected: boolean;
-  feedOrders: ReadonlyArray<string>;
-  userOrders: ReadonlyArray<string>;
+  feedOrders: ReadonlyArray<TOrder>;
+  userOrders: ReadonlyArray<TOrder>;
   total: number;
   totalToday: number;
 };
@@ -21,7 +24,7 @@ const initialState: TSocketState = {
   totalToday: 0,
 };
 
-export const wsReducer = (state = initialState, action) => {
+export const wsReducer = (state = initialState, action: TSocketAction) => {
   switch (action.type) {
     case WS_CONNECTION_OPEN:
       return {

@@ -1,4 +1,6 @@
 import uuid from "react-uuid";
+import { TIngredient, TCartItem } from "../types/data";
+import { TCartAction } from "../actions/cart"
 import {
   ADD_TO_CART,
   REMOVE_FROM_CART,
@@ -6,14 +8,20 @@ import {
   CLEAR_CART,
 } from "../actions/cart";
 
-const initialState = {
+export type TCartState = {
+  total: number,
+  bun: null | TCartItem,
+  cartItems: ReadonlyArray<TCartItem>
+}
+
+const initialState: TCartState = {
   total: 0,
   bun: null,
   cartItems: [],
 };
 
-export const cartReducer = (state = initialState, action) => {
-  const moveCartItem = (dragIndex, hoverIndex) => {
+export const cartReducer = (state = initialState, action: TCartAction) => {
+  const moveCartItem = (dragIndex: number, hoverIndex: number): TCartItem[] => {
     const newItems = [...state.cartItems];
     newItems.splice(dragIndex, 1);
     newItems.splice(hoverIndex, 0, state.cartItems[dragIndex]);
@@ -51,11 +59,13 @@ export const cartReducer = (state = initialState, action) => {
     }
     case REMOVE_FROM_CART: {
       const allItems = [...state.cartItems, state.bun];
-      const cartItem = allItems.find((item) => item.key === action.key);
+      const cartItem = allItems.find((item) => item?.key === action.key);
+      if (!cartItem) return;
       if (cartItem.item.type !== "bun") {
         const cartItem = state.cartItems.find(
           (cartItem) => cartItem.key === action.key
         );
+        if (!cartItem) return;
         const newItems = [...state.cartItems].filter(
           (item) => item.key !== action.key
         );
@@ -67,7 +77,8 @@ export const cartReducer = (state = initialState, action) => {
           cartItems: newItems,
         };
       } else {
-        const newTotal = state.total - state.bun.item.price * 2;
+        const bunPrice = state?.bun?.item?.price;
+        const newTotal = bunPrice ? state.total - bunPrice * 2 : state.total;
         return {
           ...state,
           total: newTotal,

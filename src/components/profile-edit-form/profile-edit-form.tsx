@@ -5,11 +5,11 @@ import {
 import { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "../../services/hooks";
 import { updateUser } from "../../services/actions/auth";
-import { TUser } from "../../services/types";
+import { TUser, TUpdateUserForm } from "../../services/types/data";
 
 const ProfileEditForm: React.FC = () => {
   const dispatch = useDispatch();
-  const [form, setFormValue] = useState({ name: "", email: "", password: "" });
+  const [form, setFormValue] = useState<TUpdateUserForm>({ name: "", email: "", password: "" });
   const [nameEditActive, setNameEditActive] = useState(false);
   const [emailEditActive, setEmailEditActive] = useState(false);
   const [passwordEditActive, setPasswordEditActive] = useState(false);
@@ -59,7 +59,7 @@ const ProfileEditForm: React.FC = () => {
       <Input
         type="text"
         placeholder="Имя"
-        value={form.name}
+        value={form.name ? form.name : ""}
         size="default"
         extraClass="mb-6"
         onChange={onFormChange}
@@ -73,7 +73,7 @@ const ProfileEditForm: React.FC = () => {
       <Input
         type="email"
         placeholder="Логин"
-        value={form.email}
+        value={form.email ? form.email : ""}
         size="default"
         extraClass="mb-6"
         onChange={onFormChange}

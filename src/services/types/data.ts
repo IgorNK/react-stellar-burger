@@ -51,6 +51,11 @@ export type TIngredient = {
   __v?: number,
 };
 
+export type TCartItem = {
+  item: TIngredient,
+  key: string,
+}
+
 export type TOrder = {
   ingredients: string[],
   _id: string,
@@ -65,5 +70,5 @@ export type TWsMessage = {
   success: boolean,
   total: number,
   totalToday: number,
-  store?: string,
+  storage?: string,
 };

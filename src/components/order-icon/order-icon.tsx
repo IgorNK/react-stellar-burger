@@ -1,7 +1,7 @@
 import styles from "./order-icon.module.css";
 
 const OrderIcon: React.FC<{
-  image: string, 
+  image?: string, 
   rest?: string | null, 
   extraStyle?: React.CSSProperties
 }> = ({ image, rest, extraStyle }) => {

@@ -5,12 +5,9 @@ import { getUser } from "../../services/actions/auth";
 import { GoBack } from "../go-back/go-back";
 import { getCookie } from "../../utils/cookies";
 
-export const ProtectedRouteElement: React.FC<{
-  authRequired: boolean, 
-  element: React.ReactElement | React.ReactElement[] | null
-}> = ({ authRequired, element }) => {
+export const ProtectedRouteElement: React.FC<{ authRequired: boolean, element: React.ReactElement}> = ({ authRequired, element }) => {
   const dispatch = useDispatch();
-  const { getUserRequest, refreshTokenRequest, user } = useSelector(
+  const { getUserRequest, updateTokenRequest, user } = useSelector(
     (store) => store.auth
   );
 
@@ -27,7 +24,7 @@ export const ProtectedRouteElement: React.FC<{
   }, [init]);
 
   // While request is pending, show nothing
-  if (getUserRequest || refreshTokenRequest) {
+  if (getUserRequest || updateTokenRequest) {
     return <h1>Загрузка...</h1>;
   }
 

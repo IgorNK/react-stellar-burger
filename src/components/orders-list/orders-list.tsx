@@ -2,18 +2,18 @@ import styles from "./orders-list.module.css";
 import { useEffect } from "react";
 import { useDispatch } from "../../services/hooks";
 import OrderEntry from "../order-entry/order-entry";
-import { WS_CONNECTION_CLOSE } from "../../services/actions/socket";
-import { TOrder } from "../../services/types";
+import { WS_CONNECTION_CLOSE, wsClose } from "../../services/actions/socket";
+import { TOrder } from "../../services/types/data";
 
 const OrdersList: React.FC<{
-  orders: TOrder[], 
+  orders: ReadonlyArray<TOrder>, 
   showStatus: boolean
 }> = ({ orders, showStatus }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     return () => {
-      dispatch({ type: WS_CONNECTION_CLOSE });
+      dispatch(wsClose());
     };
   }, []);
 

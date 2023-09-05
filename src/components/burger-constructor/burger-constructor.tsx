@@ -8,13 +8,14 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import ConstructorIngredient from "../constructor-ingredient/constructor-ingredient";
 import { submitOrder } from "../../services/actions/order";
-import { TIngredient } from "../ingredient/ingredient";
+import { TIngredient, TCartItem } from "../../services/types/data";
 
 import {
   ADD_TO_CART,
   REMOVE_FROM_CART,
   CLEAR_CART,
 } from "../../services/actions/cart";
+import { addToCartAction, removeFromCartAction, clearCartAction } from "../../services/actions/cart";
 
 import styles from "./burger-constructor.module.css";
 
@@ -23,9 +24,9 @@ const BurgerConstructor: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { total, cartItems, bun } = useSelector((store) => ({
-    total: store.cart.total,
-    cartItems: store.cart.cartItems,
-    bun: store.cart.bun,
+    total: store?.cart?.total,
+    cartItems: store?.cart?.cartItems,
+    bun: store?.cart?.bun,
   }));
   const { orderRequest, orderSuccess, number } = useSelector((store) => ({
     orderRequest: store.order.orderRequest,
@@ -45,7 +46,7 @@ const BurgerConstructor: React.FC = () => {
     }
   }, [orderSuccess]);
 
-  const renderBun = ({ item, pos, key}: { item: TIngredient, pos: string, key: number }) => {
+  const renderBun = ({ item, pos, key}: { item: TIngredient, pos: string, key: string }) => {
     return (
       <ConstructorIngredient
         item={item}
@@ -56,7 +57,7 @@ const BurgerConstructor: React.FC = () => {
     );
   };
 
-  const renderIngredient = ({ item, index, key }: { item: TIngredient, index: number, key: number }) => {
+  const renderIngredient = ({ item, index, key }: { item: TIngredient, index: number, key: string }) => {
     return (
       <li key={key}>
         <ConstructorIngredient item={item} index={index} cartID={key} />
@@ -65,16 +66,18 @@ const BurgerConstructor: React.FC = () => {
   };
 
   const handleSubmitOrder = useCallback(() => {
-    user
-      ? dispatch(
-          submitOrder(
-            cartItems
-              .concat(bun)
-              .concat(bun)
-              .map((cartItem) => cartItem.item._id)
-          )
-        )
-      : navigate("/login");
+    if (user) {
+      if (cartItems) {
+        let orderItems = [...cartItems];
+        if (bun) {
+          orderItems.push(bun);
+          orderItems.push(bun);
+        }
+        dispatch(orderItems.map((cartItem) => cartItem.item._id));
+      }            
+    } else {
+      navigate("/login");
+    }    
   }, [dispatch, cartItems, user, navigate, bun]);
 
   const [{ isHover }, dropTarget] = useDrop({
@@ -82,26 +85,17 @@ const BurgerConstructor: React.FC = () => {
     collect: (monitor) => ({
       isHover: monitor.isOver(),
     }),
-    drop(item) {
+    drop(item: TCartItem) {
       addToCart(item);
     },
   });
 
-  const addToCart = (cartItem) => {
+  const addToCart = (cartItem: TCartItem) => {
     if (bun && cartItem.item.type === "bun") {
-      dispatch({
-        type: REMOVE_FROM_CART,
-        key: bun.key,
-      });
-      dispatch({
-        type: ADD_TO_CART,
-        ...cartItem,
-      });
+      dispatch(removeFromCartAction(bun.key));
+      dispatch(addToCartAction(cartItem.item));
     } else {
-      dispatch({
-        type: ADD_TO_CART,
-        ...cartItem,
-      });
+      dispatch(addToCartAction(cartItem.item));
     }
   };
 
@@ -133,13 +127,14 @@ const BurgerConstructor: React.FC = () => {
       <div className={styles.checkoutContainer + " pr-8"}>
         <div className={styles.totalContainer}>
           <p className="text text_type_digits-medium">{total}</p>
-          <CurrencyIcon className={styles.priceIcon} />
+          {/* <CurrencyIcon className={styles.priceIcon} /> */}
+          <CurrencyIcon type="primary" />
         </div>
         <Button
           htmlType="button"
           type="primary"
           size="large"
-          disabled={cartItems.length && !orderRequest ? false : true}
+          disabled={cartItems?.length && !orderRequest ? false : true}
           onClick={() => {
             handleSubmitOrder();
           }}

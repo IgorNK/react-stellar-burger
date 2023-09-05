@@ -35,7 +35,7 @@ export interface IWsGetMessageAction {
   readonly payload: TWsMessage;
 }
 
-export type TSocketActions = IWsConnectionStartAction |
+export type TSocketAction = IWsConnectionStartAction |
   IWsConnectionCloseAction |
   IWsConnectionOpenAction |
   IWsConnectionErrorAction |
@@ -44,7 +44,7 @@ export type TSocketActions = IWsConnectionStartAction |
 
 export const wsInit = (wsUrl: string, storage: string): IWsConnectionStartAction => ({
   type: WS_CONNECTION_START,
-  wsurl,
+  wsUrl,
   storage
 });
 

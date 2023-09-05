@@ -4,9 +4,10 @@ import { ingredientsReducer } from "./ingredients";
 import { orderReducer } from "./order";
 import { authReducer } from "./auth";
 import { wsReducer } from "./socket";
+import { TApplicationAction } from "../actions";
 import { DISPLAY_ERROR_MESSAGE } from "../actions/index";
 
-const errorReducer = (state = null, action) => {
+const errorReducer = (state = null, action: TApplicationAction) => {
   switch (action.type) {
     case DISPLAY_ERROR_MESSAGE: {
       return action.message;

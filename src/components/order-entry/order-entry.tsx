@@ -5,7 +5,7 @@ import { useSelector } from "../../services/hooks";
 import { useCallback, useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { formatNumber, getOrderStatus, formatDate } from "../../utils/data";
-import { TIngredient, TOrder } from "../../services/types";
+import { TIngredient, TOrder } from "../../services/types/data";
 
 const OrderEntry: React.FC<{
   index?: number, 
@@ -15,7 +15,7 @@ const OrderEntry: React.FC<{
   const navigate = useNavigate();
   const location = useLocation();
   const ingredients = useSelector((store) => store.ingredients.ingredients);
-  const [orderIcons, setIcons] = useState(null);
+  const [orderIcons, setIcons] = useState<React.ReactElement[] | null>(null);
   const maxIcons = 6;
 
   const getImage = useCallback(
@@ -29,7 +29,7 @@ const OrderEntry: React.FC<{
     (ids) => {
       return ids.reduce((acc: number, id: string) => {
         const price = ingredients.find((item: TIngredient) => item._id === id)?.price;
-        return acc + price;
+        if (price) return acc + price; else return acc;
       }, 0);
     },
     [ingredients]

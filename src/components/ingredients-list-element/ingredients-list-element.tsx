@@ -1,11 +1,11 @@
 import styles from "./ingredients-list-element.module.css";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import OrderIcon from "../order-icon/order-icon";
-import { TIngredient } from "../../services/types";
+import { TIngredient } from "../../services/types/data";
 
 const IngredientsListElement: React.FC<{
-  ingredient: TIngredient, 
-  amount: number
+  ingredient?: TIngredient, 
+  amount?: number
 }> = ({ ingredient, amount }) => {
   return (
     <li className={styles.listElement}>

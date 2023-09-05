@@ -2,15 +2,18 @@ import styles from "./ingredient-details.module.css";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "../../services/hooks";
-import { TIngredient } from "../../services/types";
+import { TIngredient } from "../../services/types/data";
 
 const IngredientDetails: React.FC = () => {
   const { id } = useParams();
   const ingredients = useSelector((store) => store.ingredients.ingredients);
-  const [ingredient, setIngredient] = useState(null);
+  const [ingredient, setIngredient] = useState<TIngredient | null>(null);
 
   useEffect(() => {
-    setIngredient(ingredients.find((item: TIngredient) => item._id === id));
+    const ingredient = ingredients.find((item: TIngredient) => item._id === id);
+    if (ingredient) {
+      setIngredient(ingredient);
+    }
   }, [ingredients, id]);
 
   if (!ingredient) {

@@ -6,24 +6,26 @@ import {
   ConstructorElement,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { REMOVE_FROM_CART, MOVE_CART_ITEM } from "../../services/actions/cart";
-import { TIngredient } from "../../services/types";
+import { removeFromCartAction, moveCartItemAction } from "../../services/actions/cart";
+import { TIngredient } from "../../services/types/data";
 
 import styles from "./constructor-ingredient.module.css";
 
+interface IDragItem {
+  index: number,
+}
+
 const ConstructorIngredient: React.FC<{
   item: TIngredient, 
-  pos: string, 
-  index: number, 
+  pos?: string, 
+  index?: number, 
   cartID: string
 }> = ({ item, pos, index, cartID }) => {
   const dispatch = useDispatch();
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   const removeFromCart = ({ key }: { key: string }) => {
-    dispatch({
-      type: REMOVE_FROM_CART,
-      key: key,
-    });
+    dispatch(removeFromCartAction(key));
   };
 
   const [{ handlerId }, drop] = useDrop({
@@ -31,19 +33,26 @@ const ConstructorIngredient: React.FC<{
     collect: (monitor) => ({
       handlerId: monitor.getHandlerId(),
     }),
-    hover: (item, monitor) => {
+    hover: (item: IDragItem, monitor) => {
       if (!ref.current) {
         return;
       }
-      const dragIndex = item.index;
+      const clientOffset = monitor.getClientOffset();
+      if (!clientOffset) {
+        return;
+      }
       const hoverIndex = index;
+      if (!hoverIndex) {
+        return;
+      }
+      const dragIndex = item.index;      
       if (dragIndex === hoverIndex) {
         return;
       }
-      const hoverBoundingRect = ref.current?.getBoundingClientRect();
+      const hoverBoundingRect = ref.current.getBoundingClientRect();
       const hoverMiddleY =
         (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-      const clientOffset = monitor.getClientOffset();
+      
       const hoverClientY = clientOffset.y - hoverBoundingRect.top;
       if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
         return;
@@ -65,11 +74,7 @@ const ConstructorIngredient: React.FC<{
   });
 
   const moveCard = (dragIndex: number, hoverIndex: number) => {
-    dispatch({
-      type: MOVE_CART_ITEM,
-      dragIndex: dragIndex,
-      hoverIndex: hoverIndex,
-    });
+    dispatch(moveCartItemAction(dragIndex, hoverIndex));
   };
 
   const opacity = isDrag ? 0 : 1;

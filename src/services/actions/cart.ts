@@ -1,4 +1,4 @@
-import { TIngredient } from "../types/data";
+import { TIngredient, TCartItem } from "../types/data";
 
 export const ADD_TO_CART: "ADD_TO_CART" = "ADD_TO_CART";
 export const REMOVE_FROM_CART: "REMOVE_FROM_CART" = "REMOVE_FROM_CART";
@@ -12,7 +12,7 @@ export interface IAddToCartAction {
 
 export interface IRemoveFromCartAction {
   readonly type: typeof REMOVE_FROM_CART;
-  readonly item: TIngredient;
+  readonly key: string;
 }
 
 export interface IMoveCartItemAction {
@@ -25,7 +25,7 @@ export interface IClearCartAction {
   readonly type: typeof CLEAR_CART;
 }
 
-export type TCartActions = IAddToCartAction |
+export type TCartAction = IAddToCartAction |
   IRemoveFromCartAction |
   IMoveCartItemAction |
   IClearCartAction;
@@ -35,9 +35,9 @@ export const addToCartAction = (item: TIngredient): IAddToCartAction => ({
   item
 });
 
-export const removeFromCartAction = (item: TIngredient): IRemoveFromCartAction => ({
+export const removeFromCartAction = (key: string): IRemoveFromCartAction => ({
   type: REMOVE_FROM_CART,
-  item
+  key
 });
 
 export const moveCartItemAction = (dragIndex: number, hoverIndex: number): IMoveCartItemAction => ({

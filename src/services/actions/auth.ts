@@ -138,7 +138,7 @@ export interface IResetPasswordFailedAction {
   readonly type: typeof RESET_PASSWORD_FAILED;
 }
 
-export type TAuthActions = ILoginRequestAction |
+export type TAuthAction = ILoginRequestAction |
   ILoginSuccessAction |
   ILoginFailedAction |
   IRegisterUserRequestAction |
