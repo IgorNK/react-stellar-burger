@@ -1,5 +1,6 @@
 import Api from "../api";
 import { dataUrl } from "../../utils/data";
+import { AppThunk, AppDispatch } from "../types";
 import { TIngredient } from "../types/data";
 
 export const GET_INGREDIENTS_REQUEST: "GET_INGREDIENTS_REQUEST" = "GET_INGREDIENTS_REQUEST";
@@ -64,7 +65,7 @@ export const switchTabAction = (tab: string): ISwitchTabAction => ({
 export function getIngredients() {
   const api = new Api({ baseUrl: dataUrl });
 
-  return function (dispatch) {
+  return function (dispatch: AppDispatch) {
     dispatch(getIngredientsRequestAction());
     api.getIngredientsRequest().then((res) => {
       if (res && res.success) {

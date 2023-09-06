@@ -1,5 +1,5 @@
 import styles from "./feed.module.css";
-import { useSelector, useDispatch } from "../../services/hooks";
+import { useSelector, useDispatch } from "../services/hooks";
 import { useEffect, useState } from "react";
 import { formatNumber, wsFeedUrl } from "../utils/data";
 import OrdersList from "../components/orders-list/orders-list";
@@ -12,8 +12,8 @@ export const FeedPage: React.FC = () => {
   const { wsConnected, feedOrders, total, totalToday } = useSelector(
     (store) => store.feed
   );
-  const [readyOrderNumbers, setReadyOrderNumbers] = useState([]);
-  const [cookingOrderNumbers, setCookingOrderNumbers] = useState([]);
+  const [readyOrderNumbers, setReadyOrderNumbers] = useState<ReadonlyArray<string>>([]);
+  const [cookingOrderNumbers, setCookingOrderNumbers] = useState<ReadonlyArray<string>>([]);
 
   useEffect(() => {
     if (!wsConnected) {

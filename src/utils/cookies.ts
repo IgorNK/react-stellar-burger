@@ -2,7 +2,7 @@ type TCookie = {
   [name: string]: any, 
 } & { expires ?: number | Date | string }
 
-const getCookie: (name: string) => string | undefined = (name) => {
+const getCookie: (name: string) => string = (name) => {
   const matches = document.cookie.match(
     new RegExp(
       "(?:^|; )" +
@@ -10,7 +10,7 @@ const getCookie: (name: string) => string | undefined = (name) => {
         "=([^;]*)"
     )
   );
-  return matches ? decodeURIComponent(matches[1]) : undefined;
+  return matches ? decodeURIComponent(matches[1]) : "";
 };
 
 const setCookie = (name: string, value: string, props?: TCookie) => {

@@ -75,7 +75,7 @@ const OrderEntry: React.FC<{
         </p>
       </div>
       <div className="mt-6">
-        <p className="text text_type_main-medium">{order.name}</p>
+        <p className="text text_type_main-medium">{order.name? order.name : ""}</p>
       </div>
       {showStatus && <div className="mt-2">{getOrderStatus(order.status)}</div>}
       <div className={styles.orderInfo + " mt-6 mb-6"}>

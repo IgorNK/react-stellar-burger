@@ -1,6 +1,8 @@
 import Api from "../api";
+import { Middleware, MiddlewareAPI } from "redux";
 import { dataUrl } from "../../utils/data";
 import { wsInit, wsClose, onOpen, onClose, onError, onMessage } from "../actions/socket";
+import { RootState } from "../types";
 import {
   WS_CONNECTION_START, 
   WS_CONNECTION_CLOSE, 
@@ -11,9 +13,10 @@ import {
 } from "../actions/socket";
 import { TSocketAction } from "../actions/socket";
 
-export const socketMiddleware = () => {
-  return (store) => {
-    let socket: WebSocket & { activeStorage: string } = new WebSocket();
+export const socketMiddleware: Middleware = 
+  (store: MiddlewareAPI) => {
+    let socket: WebSocket | null;
+    let activeStorage: string;
 
     return (next) => (action: TSocketAction) => {
       const { dispatch } = store;
@@ -23,7 +26,7 @@ export const socketMiddleware = () => {
 
       if (action.type === WS_CONNECTION_START) {
         socket = new WebSocket(action.wsUrl);
-        socket.activeStorage = action.storage;
+        activeStorage = action.storage;
       }
       
       if (socket) {
@@ -32,7 +35,7 @@ export const socketMiddleware = () => {
         };
 
         socket.onerror = (event) => {
-          dispatch(onError(event.message));
+          dispatch(onError("uknnown error: websocket error"));
         };
 
         socket.onmessage = async (event) => {
@@ -46,7 +49,7 @@ export const socketMiddleware = () => {
 
           // const { success, ...restParsedData } = parsedData;
 
-          dispatch(onMessage({ ...parsedData, storage: socket.activeStorage }));
+          dispatch(onMessage({ ...parsedData, storage: activeStorage }));
         };
 
         socket.onclose = (event) => {
@@ -62,4 +65,3 @@ export const socketMiddleware = () => {
       next(action);
     };
   };
-};

@@ -73,7 +73,7 @@ const BurgerConstructor: React.FC = () => {
           orderItems.push(bun);
           orderItems.push(bun);
         }
-        dispatch(orderItems.map((cartItem) => cartItem.item._id));
+        dispatch(submitOrder(orderItems.map((cartItem) => cartItem.item._id)));
       }            
     } else {
       navigate("/login");

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useSelector } from "react-redux";
+import { useSelector } from "../../services/hooks";
 import { useDrag } from "react-dnd";
 import {
   CurrencyIcon,
@@ -9,9 +9,13 @@ import styles from "./ingredient.module.css";
 import { TIngredient } from "../../services/types/data";
 
 const Ingredient: React.FC<{item: TIngredient}> = ({ item }) => {
-  const { cartItems, bun } = useSelector((store) => store.cart);
+  const { cartItems, bun } = useSelector((store) => ({
+    cartItems: store?.cart?.cartItems,
+    bun: store?.cart?.bun,
+  }));
 
   const count = useMemo(() => {
+    if (!cartItems || !bun) return 0;
     const newCount = [...cartItems, bun].reduce(
       (acc, cartItem) => (cartItem?.item?._id === item._id ? acc + 1 : acc),
       0

@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
-import { useDispatch, useSelector } from "../../services/hooks";
+import { useDispatch, useSelector } from "../services/hooks";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { logOut } from "../services/actions/auth";
 import styles from "./profile.module.css";

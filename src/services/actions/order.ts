@@ -1,5 +1,6 @@
 import Api from "../api";
 import { dataUrl } from "../../utils/data";
+import { AppThunk, AppDispatch } from "../types";
 import { TOrder } from "../types/data";
 
 import { DISPLAY_ERROR_MESSAGE } from "./index";
@@ -53,10 +54,10 @@ export const orderReportedAction = (): IOrderReportedAction => ({
   type: ORDER_REPORTED
 });
 
-export function submitOrder(ingredientIDs) {
+export function submitOrder(ingredientIDs: ReadonlyArray<string>) {
   const api = new Api({ baseUrl: dataUrl });
 
-  return function (dispatch) {
+  return function (dispatch: AppDispatch) {
     dispatch(sendOrderRequestAction());
     api
       .submitOrderRequest(ingredientIDs)
@@ -64,7 +65,7 @@ export function submitOrder(ingredientIDs) {
         if (res && res.success) {
           dispatch(sendOrderSuccessAction(res.order.number, ingredientIDs));
         } else {
-          dispatch(sendOrderFailedAction());
+          dispatch(sendOrderFailedAction("unknown error: order send failed"));
         }
       })
       .catch((err) => {

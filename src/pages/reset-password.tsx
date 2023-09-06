@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { useDispatch, useSelector } from "../../services/hooks";
+import { useDispatch, useSelector } from "../services/hooks";
 import {
   Input,
   PasswordInput,

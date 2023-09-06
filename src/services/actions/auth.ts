@@ -1,5 +1,5 @@
 import Api from "../api";
-import { dataUrl } from "../../utils/data.js";
+import { dataUrl } from "../../utils/data";
 
 import { setCookie, deleteCookie, getCookie } from "../../utils/cookies";
 
@@ -336,7 +336,7 @@ export const getUser: AppThunk = () => {
       })
       .catch((err) => {
         dispatch(getUserFailedAction());
-        dispatch(refreshAccessToken());
+        dispatch(refreshTokenRequestAction());
       });
   };
 };

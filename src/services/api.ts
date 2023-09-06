@@ -1,11 +1,18 @@
 import { getCookie, setCookie } from "../utils/cookies";
+import { TLoginForm, TUpdateUserForm, TRegisterForm, TForgotPasswordForm, TResetPasswordForm } from "./types/data";
+
+type TAPIConfig = {
+  baseUrl: string,  
+}
 
 class Api {
-  constructor(options) {
+  _config: TAPIConfig;
+  
+  constructor(options: TAPIConfig) {
     this._config = options;
   }
 
-  async getOrder(id) {
+  async getOrder(id: string) {
     return fetch(`${this._config.baseUrl}/orders/${id}`, {
       method: "GET",
       headers: {
@@ -27,12 +34,12 @@ class Api {
     });
   }
 
-  submitOrderRequest(ingredientIDs) {
+  submitOrderRequest(ingredientIDs: ReadonlyArray<string>) {
     return this.fetchWithRefresh(`${this._config.baseUrl}/orders`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        authorization: getCookie("token"),
+        Authorization: getCookie("token"),
       },
       body: JSON.stringify({
         ingredients: ingredientIDs,
@@ -40,7 +47,7 @@ class Api {
     });
   }
 
-  loginRequest(form) {
+  loginRequest(form: TLoginForm) {
     return fetch(`${this._config.baseUrl}/auth/login`, {
       method: "POST",
       headers: {
@@ -52,7 +59,7 @@ class Api {
     });
   }
 
-  registerRequest(form) {
+  registerRequest(form: TRegisterForm) {
     return fetch(`${this._config.baseUrl}/auth/register`, {
       method: "POST",
       headers: {
@@ -98,7 +105,7 @@ class Api {
     });
   }
 
-  async updateUserRequest(form) {
+  async updateUserRequest(form: TUpdateUserForm) {
     return this.fetchWithRefresh(`${this._config.baseUrl}/auth/user`, {
       method: "PATCH",
       headers: {
@@ -109,7 +116,7 @@ class Api {
     });
   }
 
-  forgotPasswordRequest(form) {
+  forgotPasswordRequest(form: TForgotPasswordForm) {
     return fetch(`${this._config.baseUrl}/password-reset`, {
       method: "POST",
       headers: {
@@ -121,7 +128,7 @@ class Api {
     });
   }
 
-  resetPasswordRequest(form) {
+  resetPasswordRequest(form: TResetPasswordForm) {
     return fetch(`${this._config.baseUrl}/password-reset/reset`, {
       method: "POST",
       headers: {
@@ -133,16 +140,19 @@ class Api {
     });
   }
 
-  async fetchWithRefresh(url, options) {
+  async fetchWithRefresh(url: string, options: RequestInit) {
     try {
       const res = await fetch(url, options);
       return await checkResponse(res);
-    } catch (err) {
+    } catch (err: any) {
       if (err.message === "jwt expired") {
         const refreshData = await this.refreshTokenRequest();
         localStorage.setItem("refreshToken", refreshData.refreshToken);
         setCookie("token", refreshData.accessToken);
-        options.headers.authorization = refreshData.accessToken;
+        options.headers = {
+          ...options.headers,
+          Authorization: refreshData.accessToken
+      };
         const res = await fetch(url, options);
         return await checkResponse(res);
       } else {
@@ -152,7 +162,7 @@ class Api {
   }
 }
 
-const checkResponse = (res) => {
+const checkResponse = async (res: Response) => {
   if (res.ok) {
     return res.json();
   }

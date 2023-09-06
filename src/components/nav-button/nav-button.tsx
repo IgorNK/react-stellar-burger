@@ -35,8 +35,8 @@ const NavButton: React.FC<{
 
   return (
     <button type="button" className={styles.navButton + " pl-5 pr-5 pb-4 pt-4"}>
-      {renderIcon(props.value)}
-      <p className={getTextClass(props.active)}>{props.children}</p>
+      {renderIcon(value)}
+      <p className={getTextClass(active)}>{children}</p>
     </button>
   );
 };

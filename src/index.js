@@ -10,7 +10,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import "./index.css";
 import App from "./components/app/app";
 import reportWebVitals from "./reportWebVitals";
-import { store } from "./servies/store";
+import { store } from "./services/store";
 
 ReactDOM.render(
   <React.StrictMode>

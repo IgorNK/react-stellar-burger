@@ -16,6 +16,7 @@ const ProfileEditForm: React.FC = () => {
   const { user } = useSelector((store) => store.auth);
 
   useEffect(() => {
+    if (!user) return;
     resetForm(user);
   }, [user]);
 
@@ -45,7 +46,9 @@ const ProfileEditForm: React.FC = () => {
   const onFormReset = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      resetForm(user);
+      if (user) {
+        resetForm(user);
+      }
       setNameEditActive(false);
       setEmailEditActive(false);
       setPasswordEditActive(false);

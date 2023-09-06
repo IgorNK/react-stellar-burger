@@ -3,6 +3,7 @@ import { TCartAction } from "./cart";
 import { TIngredientsAction } from "./ingredients";
 import { TOrderAction } from "./order";
 import { TSocketAction } from "./socket";
+import { AppThunk } from "../types";
 
 export const DISPLAY_ERROR_MESSAGE: "DISPLAY_ERROR_MESSAGE" = "DISPLAY_ERROR_MESSAGE";
 

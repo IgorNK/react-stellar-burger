@@ -6,7 +6,7 @@ export const formatNumber: (num: number) => string = (num) => {
   return num?.toString().replace(/(.)(?=(\d{3})+$)/g, "$1 ");
 };
 
-export const getOrderStatus = (status: string) => {
+export const getOrderStatus = (status: string): JSX.Element => {
   switch (status) {
     case "cooking": {
       return <p className="text text_type_main-small">Готовится</p>;
@@ -43,9 +43,9 @@ export const getOrderStatus = (status: string) => {
 
 //in: "2021-06-23T14:43:22.587Z"
 //out: Сегодня, 16:20 i-GMT+3
-export const formatDate = (date) => {
+export const formatDate = (date: string) => {
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const dateOptions = {
+  const dateOptions: Intl.DateTimeFormatOptions = {
     dateStyle: "short",
     timeStyle: "short",
     timeZone: timezone,
@@ -107,15 +107,15 @@ export const formatDate = (date) => {
   return `${dateString} i-GMT${formatGMT(hoursOffset)}`;
 };
 
-const dateToLocalTimezone = (date, options) => {
+const dateToLocalTimezone = (date: Date, options: Intl.DateTimeFormatOptions) => {
   return new Date(date.toLocaleString("en-US", options));
 };
 
-const formatGMT = (hoursOffset) => {
-  return hoursOffset > 0 ? "+" + hoursOffset : hoursOffset;
+const formatGMT = (hoursOffset: number): string => {
+  return hoursOffset > 0 ? "+" + hoursOffset : hoursOffset.toString();
 };
 
-const formatTime = (date) => {
+const formatTime = (date: Date): string => {
   return `${date.getHours().toString().padStart(2, "0")}:${date
     .getMinutes()
     .toString()

@@ -46,7 +46,7 @@ export type TAuthState = {
   resetPasswordRequest: boolean,
   resetPasswordFailed: boolean,
   resetPasswordSuccess: boolean,
-  user: TUser,
+  user: TUser | null,
 }
 
 const initialState: TAuthState = {
