@@ -56,7 +56,7 @@ export const socketMiddleware: Middleware =
           dispatch(onClose());
         };
 
-        if (action.type === WS_CONNECTION_CLOSED) {
+        if (action.type === WS_CONNECTION_CLOSE) {
           socket.close();
           socket = null;
         }
