@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
-import { useDispatch, useSelector } from "../services/hooks";
+import { useDispatch, useSelector, useForm } from "../services/hooks";
+import { IForgotPasswordForm } from "../services/types/data";
 import {
   Input,
   Button,
@@ -10,22 +11,25 @@ import styles from "./form.module.css";
 
 export const ForgotPasswordPage: React.FC = () => {
   const dispatch = useDispatch();
-  const [form, setFormValue] = useState({ email: "" });
+  // const [form, setFormValue] = useState({ email: "" });
+  const {values, handleChange, setValues} = useForm({
+    email: "",
+  });
   const { forgotPasswordRequest, forgotPasswordSuccess } = useSelector(
     (store) => store.auth
   );
 
-  const onFormChange = (e: React.FormEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setFormValue({ ...form, [e.currentTarget.name]: e.currentTarget.value });
-  };
+  // const onFormChange = (e: React.FormEvent<HTMLInputElement>) => {
+  //   e.preventDefault();
+  //   setFormValue({ ...form, [e.currentTarget.name]: e.currentTarget.value });
+  // };
 
   const onFormSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      dispatch(forgotPassword(form));
+      dispatch(forgotPassword(values));
     },
-    [dispatch, form]
+    [dispatch, values]
   );
 
   if (forgotPasswordSuccess) {
@@ -44,10 +48,10 @@ export const ForgotPasswordPage: React.FC = () => {
       <Input
         type="email"
         placeholder="Укажите e-mail"
-        value={form.email}
+        value={(values as IForgotPasswordForm).email}
         size="default"
         extraClass="mb-6"
-        onChange={onFormChange}
+        onChange={handleChange}
         name="email"
         id="email"
       />

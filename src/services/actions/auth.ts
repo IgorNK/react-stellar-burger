@@ -4,7 +4,7 @@ import { dataUrl } from "../../utils/data";
 import { setCookie, deleteCookie, getCookie } from "../../utils/cookies";
 
 import { AppThunk, AppDispatch } from "../types";
-import { TUser, TLoginForm, TForgotPasswordForm, TRegisterForm, TResetPasswordForm, TUpdateUserForm } from "../types/data";
+import { TUser, ILoginForm, IForgotPasswordForm, IRegisterForm, IResetPasswordForm, IUpdateUserForm, TLoginResponse, TRegisterResponse, TUserResponse } from "../types/data";
 
 export const LOGIN_REQUEST: "LOGIN_REQUEST" = "LOGIN_REQUEST";
 export const LOGIN_FAILED: "LOGIN_FAILED" = "LOGIN_FAILED";
@@ -265,18 +265,16 @@ const resetPasswordFailedAction = (): IResetPasswordFailedAction => ({
 
 const api = new Api({ baseUrl: dataUrl });
 
-export const logIn: AppThunk = (form: TLoginForm)  => {
+export const logIn: AppThunk = (form: ILoginForm)  => {
   return function (dispatch: AppDispatch) {
     dispatch(loginRequestAction());
     api
       .loginRequest(form)
       .then((res) => {
-        if (res && res.success) {
-          dispatch(loginSuccessAction(res.user));
-          deleteCookie("token");
-          setCookie("token", res.accessToken);
-          localStorage.setItem("refreshToken", res.refreshToken);
-        }
+        dispatch(loginSuccessAction((res as TLoginResponse).user));
+        deleteCookie("token");
+        setCookie("token", (res as TLoginResponse).accessToken);
+        localStorage.setItem("refreshToken", (res as TLoginResponse).refreshToken);
       })
       .catch((err) => {
         dispatch(loginFailedAction());
@@ -291,11 +289,9 @@ export const logOut: AppThunk = () => {
     api
       .logoutRequest()
       .then((res) => {
-        if (res && res.success) {
-          dispatch(logoutSuccessAction());
-          localStorage.removeItem("refreshToken");
-          deleteCookie("token");
-        }
+        dispatch(logoutSuccessAction());
+        localStorage.removeItem("refreshToken");
+        deleteCookie("token");
       })
       .catch((err) => {
         dispatch(logoutFailedAction());
@@ -304,18 +300,16 @@ export const logOut: AppThunk = () => {
   };
 };
 
-export const register: AppThunk = (form: TRegisterForm) => {
+export const register: AppThunk = (form: IRegisterForm) => {
   return function (dispatch: AppDispatch) {
     dispatch(registerUserRequestAction());
     api
       .registerRequest(form)
       .then((res) => {
-        if (res && res.success) {
-          dispatch(registerUserSuccessAction(res.user));
-          deleteCookie("token");
-          setCookie("token", res.accessToken);
-          localStorage.setItem("refreshToken", res.refreshToken);
-        }
+        dispatch(registerUserSuccessAction((res as TRegisterResponse).user));
+        deleteCookie("token");
+        setCookie("token", (res as TRegisterResponse).accessToken);
+        localStorage.setItem("refreshToken", (res as TRegisterResponse).refreshToken);
       })
       .catch((err) => {
         dispatch(registerUserFailedAction());
@@ -330,9 +324,7 @@ export const getUser: AppThunk = () => {
     api
       .getUserRequest()
       .then((res) => {
-        if (res && res.success) {
-          dispatch(getUserSuccessAction(res.user));
-        }
+        dispatch(getUserSuccessAction((res as TUserResponse).user));
       })
       .catch((err) => {
         dispatch(getUserFailedAction());
@@ -347,9 +339,7 @@ export const refreshAccessToken: AppThunk = () => {
     api
       .refreshTokenRequest()
       .then((res) => {
-        if (res && res.success) {
-          dispatch(refreshTokenSuccessAction());
-        }
+        dispatch(refreshTokenSuccessAction());
       })
       .catch((err) => {
         dispatch(refreshTokenFailedAction());
@@ -358,15 +348,13 @@ export const refreshAccessToken: AppThunk = () => {
   };
 };
 
-export const updateUser: AppThunk = (form: TUpdateUserForm) => {
+export const updateUser: AppThunk = (form: IUpdateUserForm) => {
   return function (dispatch: AppDispatch) {
     dispatch(updateUserRequestAction());
     api
       .updateUserRequest(form)
       .then((res) => {
-        if (res && res.success) {
-          dispatch(updateUserSuccessAction(res.user));
-        }
+        dispatch(updateUserSuccessAction((res as TUserResponse).user));
       })
       .catch((err) => {
         dispatch(updateUserFailedAction());
@@ -375,15 +363,13 @@ export const updateUser: AppThunk = (form: TUpdateUserForm) => {
   };
 };
 
-export const forgotPassword: AppThunk = (form: TForgotPasswordForm) => {
+export const forgotPassword: AppThunk = (form: IForgotPasswordForm) => {
   return function (dispatch: AppDispatch) {
     dispatch(forgotPasswordRequestAction());
     api
       .forgotPasswordRequest(form)
       .then((res) => {
-        if (res && res.success) {
-          dispatch(forgotPasswordSuccessAction());
-        }
+        dispatch(forgotPasswordSuccessAction());
       })
       .catch((err) => {
         dispatch(forgotPasswordFailedAction());
@@ -392,15 +378,13 @@ export const forgotPassword: AppThunk = (form: TForgotPasswordForm) => {
   };
 };
 
-export const resetPassword: AppThunk = (form: TResetPasswordForm) => {
+export const resetPassword: AppThunk = (form: IResetPasswordForm) => {
   return function (dispatch: AppDispatch) {
     dispatch(resetPasswordRequestAction());
     api
       .resetPasswordRequest(form)
       .then((res) => {
-        if (res && res.success) {
-          dispatch(resetPasswordSuccessAction());
-        }
+        dispatch(resetPasswordSuccessAction());
       })
       .catch((err) => {
         dispatch(resetPasswordFailedAction());

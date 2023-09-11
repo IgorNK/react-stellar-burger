@@ -1,5 +1,5 @@
 import { getCookie, setCookie } from "../utils/cookies";
-import { TLoginForm, TUpdateUserForm, TRegisterForm, TForgotPasswordForm, TResetPasswordForm } from "./types/data";
+import { ILoginForm, IUpdateUserForm, IRegisterForm, IForgotPasswordForm, IResetPasswordForm, TRefreshTokenResponse } from "./types/data";
 
 type TAPIConfig = {
   baseUrl: string,  
@@ -13,29 +13,25 @@ class Api {
   }
 
   async getOrder(id: string) {
-    return fetch(`${this._config.baseUrl}/orders/${id}`, {
+    return this.request(`orders/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
-    }).then((res) => {
-      return checkResponse(res);
     });
   }
 
   getIngredientsRequest() {
-    return fetch(`${this._config.baseUrl}/ingredients`, {
+    return this.request('ingredients', {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
-    }).then((res) => {
-      return checkResponse(res);
     });
   }
 
   submitOrderRequest(ingredientIDs: ReadonlyArray<string>) {
-    return this.fetchWithRefresh(`${this._config.baseUrl}/orders`, {
+    return this.fetchWithRefresh('orders', {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -47,44 +43,38 @@ class Api {
     });
   }
 
-  loginRequest(form: TLoginForm) {
-    return fetch(`${this._config.baseUrl}/auth/login`, {
+  loginRequest(form: ILoginForm) {
+    return this.request('auth/login', {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(form),
-    }).then((res) => {
-      return checkResponse(res);
     });
   }
 
-  registerRequest(form: TRegisterForm) {
-    return fetch(`${this._config.baseUrl}/auth/register`, {
+  registerRequest(form: IRegisterForm) {
+    return this.request('auth/register', {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(form),
-    }).then((res) => {
-      return checkResponse(res);
     });
   }
 
   logoutRequest() {
-    return fetch(`${this._config.baseUrl}/auth/logout`, {
+    return this.request('auth/logout', {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ token: localStorage.getItem("refreshToken") }),
-    }).then((res) => {
-      return checkResponse(res);
     });
   }
 
   async getUserRequest() {
-    return this.fetchWithRefresh(`${this._config.baseUrl}/auth/user`, {
+    return this.fetchWithRefresh('auth/user', {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -94,19 +84,17 @@ class Api {
   }
 
   refreshTokenRequest() {
-    return fetch(`${this._config.baseUrl}/auth/token`, {
+    return this.request('auth/token', {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ token: localStorage.getItem("refreshToken") }),
-    }).then((res) => {
-      return checkResponse(res);
     });
   }
 
-  async updateUserRequest(form: TUpdateUserForm) {
-    return this.fetchWithRefresh(`${this._config.baseUrl}/auth/user`, {
+  async updateUserRequest(form: IUpdateUserForm) {
+    return this.fetchWithRefresh('auth/user', {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -116,49 +104,49 @@ class Api {
     });
   }
 
-  forgotPasswordRequest(form: TForgotPasswordForm) {
-    return fetch(`${this._config.baseUrl}/password-reset`, {
+  forgotPasswordRequest(form: IForgotPasswordForm) {
+    return this.request('password-reset', {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(form),
-    }).then((res) => {
-      return checkResponse(res);
     });
   }
 
-  resetPasswordRequest(form: TResetPasswordForm) {
-    return fetch(`${this._config.baseUrl}/password-reset/reset`, {
+  resetPasswordRequest(form: IResetPasswordForm) {
+    return this.request('password-reset/reset', {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(form),
-    }).then((res) => {
-      return checkResponse(res);
     });
   }
 
-  async fetchWithRefresh(url: string, options: RequestInit) {
+  async fetchWithRefresh(endpoint: string, options: RequestInit) {
     try {
-      const res = await fetch(url, options);
-      return await checkResponse(res);
+      return await this.request(endpoint, options);
     } catch (err: any) {
       if (err.message === "jwt expired") {
-        const refreshData = await this.refreshTokenRequest();
+        const refreshData = await this.refreshTokenRequest() as TRefreshTokenResponse;
         localStorage.setItem("refreshToken", refreshData.refreshToken);
         setCookie("token", refreshData.accessToken);
         options.headers = {
           ...options.headers,
           Authorization: refreshData.accessToken
       };
-        const res = await fetch(url, options);
-        return await checkResponse(res);
+        return await this.request(endpoint, options);
       } else {
         return Promise.reject(err);
       }
     }
+  }
+
+  async request(endpoint: string, options: RequestInit) {
+    return fetch(`${this._config.baseUrl}/${endpoint}`, options)
+      .then(checkResponse)
+      .then(checkSuccess)
   }
 }
 
@@ -168,5 +156,12 @@ const checkResponse = async (res: Response) => {
   }
   return res.json().then((err) => Promise.reject(err));
 };
+
+const checkSuccess = async (res: Response) => {
+  if (res && res.ok) {
+    return res as unknown;
+  }
+  return Promise.reject(`Request rejected: ${res}`);
+}
 
 export default Api;

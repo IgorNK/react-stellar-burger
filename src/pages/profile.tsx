@@ -3,8 +3,7 @@ import { useDispatch, useSelector } from "../services/hooks";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { logOut } from "../services/actions/auth";
 import styles from "./profile.module.css";
-import { WS_CONNECTION_START } from "../services/actions/socket";
-import { wsInit } from "../services/actions/socket";
+import { wsInit, wsClose } from "../services/actions/socket";
 import { wsMyOrdersUrl } from "../utils/data";
 import { getCookie } from "../utils/cookies";
 
@@ -19,8 +18,10 @@ export const ProfilePage: React.FC = () => {
     if (user && location.pathname.includes("orders")) {
       if (!wsConnected) {
         dispatch(wsInit(`${wsMyOrdersUrl}?token=${getCookie("token")?.slice(7)}`, "user"));
-      } else {
       }
+    }
+    return () => {
+      dispatch(wsClose());
     }
   }, [wsConnected, user, location]);
 

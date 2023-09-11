@@ -1,21 +1,21 @@
 import styles from "./orders-list.module.css";
-import { useEffect } from "react";
-import { useDispatch } from "../../services/hooks";
+// import { useEffect } from "react";
+// import { useDispatch } from "../../services/hooks";
 import OrderEntry from "../order-entry/order-entry";
-import { WS_CONNECTION_CLOSE, wsClose } from "../../services/actions/socket";
+// import { WS_CONNECTION_CLOSE, wsClose } from "../../services/actions/socket";
 import { TOrder } from "../../services/types/data";
 
 const OrdersList: React.FC<{
   orders: ReadonlyArray<TOrder>, 
   showStatus: boolean
 }> = ({ orders, showStatus }) => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  useEffect(() => {
-    return () => {
-      dispatch(wsClose());
-    };
-  }, []);
+  // useEffect(() => {
+  //   return () => {
+  //     dispatch(wsClose());
+  //   };
+  // }, []);
 
   return (
     <div className={styles.orders + " custom-scroll pr-2"}>

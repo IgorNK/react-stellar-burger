@@ -11,7 +11,7 @@ import {
 import Api from "../../services/api";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import IngredientsListElement from "../ingredients-list-element/ingredients-list-element";
-import { TIngredient, TOrder } from "../../services/types/data";
+import { TIngredient, TOrder, TOrdersResponse } from "../../services/types/data";
 
 const OrderInfo: React.FC = () => {
   const { id } = useParams();
@@ -22,7 +22,7 @@ const OrderInfo: React.FC = () => {
   const getOrder = useCallback(async () => {
     if (!id) return;
     const api = new Api({ baseUrl: dataUrl });
-    const order = await api.getOrder(id);
+    const order = await api.getOrder(id) as TOrdersResponse;
     setOrder(order?.orders[0]);
   }, [id]);
 

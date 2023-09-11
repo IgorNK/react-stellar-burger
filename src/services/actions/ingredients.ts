@@ -1,7 +1,7 @@
 import Api from "../api";
 import { dataUrl } from "../../utils/data";
 import { AppThunk, AppDispatch } from "../types";
-import { TIngredient } from "../types/data";
+import { TIngredient, TIngredientsResponse } from "../types/data";
 
 export const GET_INGREDIENTS_REQUEST: "GET_INGREDIENTS_REQUEST" = "GET_INGREDIENTS_REQUEST";
 export const GET_INGREDIENTS_SUCCESS: "GET_INGREDIENTS_SUCCESS" = "GET_INGREDIENTS_SUCCESS";
@@ -21,6 +21,7 @@ export interface IGetIngredientsSuccessAction {
 
 export interface IGetIngredientsFailedAction {
   readonly type: typeof GET_INGREDIENTS_FAILED;
+  readonly payload: any;
 }
 
 export interface IShowIngredientAction {
@@ -48,8 +49,9 @@ export const getIngredientsSuccessAction = (ingredients: ReadonlyArray<TIngredie
   ingredients
 });
 
-export const getIngredientsFailedAction = (): IGetIngredientsFailedAction => ({
-  type: GET_INGREDIENTS_FAILED
+export const getIngredientsFailedAction = (err: any): IGetIngredientsFailedAction => ({
+  type: GET_INGREDIENTS_FAILED,
+  payload: err
 });
 
 export const showIngredientAction = (item: TIngredient): IShowIngredientAction => ({
@@ -62,17 +64,17 @@ export const switchTabAction = (tab: string): ISwitchTabAction => ({
   tab
 });
 
-export function getIngredients() {
+export const getIngredients: AppThunk = () => {
   const api = new Api({ baseUrl: dataUrl });
 
   return function (dispatch: AppDispatch) {
     dispatch(getIngredientsRequestAction());
-    api.getIngredientsRequest().then((res) => {
-      if (res && res.success) {
-        dispatch(getIngredientsSuccessAction(res.data));
-      } else {
-        dispatch(getIngredientsFailedAction());
-      }
-    });
+    api.getIngredientsRequest()
+      .then((res) => {
+        dispatch(getIngredientsSuccessAction((res as TIngredientsResponse).data));
+      })
+      .catch((err) => {
+        dispatch(getIngredientsFailedAction(err));
+      });
   };
 }

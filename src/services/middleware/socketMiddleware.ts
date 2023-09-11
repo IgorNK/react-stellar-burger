@@ -1,19 +1,11 @@
 import Api from "../api";
 import { Middleware, MiddlewareAPI } from "redux";
 import { dataUrl } from "../../utils/data";
-import { wsInit, wsClose, onOpen, onClose, onError, onMessage } from "../actions/socket";
 import { RootState } from "../types";
-import {
-  WS_CONNECTION_START, 
-  WS_CONNECTION_CLOSE, 
-  WS_CONNECTION_OPEN, 
-  WS_CONNECTION_ERROR, 
-  WS_CONNECTION_CLOSED,
-  WS_GET_MESSAGE
-} from "../actions/socket";
-import { TSocketAction } from "../actions/socket";
+import { TSocketAction, IWsActions } from "../actions/socket";
 
-export const socketMiddleware: Middleware = 
+export const socketMiddleware =
+  (wsActions: IWsActions): Middleware => 
   (store: MiddlewareAPI) => {
     let socket: WebSocket | null;
     let activeStorage: string;
@@ -21,21 +13,25 @@ export const socketMiddleware: Middleware =
     return (next) => (action: TSocketAction) => {
       const { dispatch } = store;
       // const { type, payload } = action;
-      // const { wsInit, wsClose, onOpen, onClose, onError, onMessage } =
-      //   wsActions;
+      const { wsInit, wsClose, onOpen, onClose, onError, onMessage } =
+        wsActions;
 
-      if (action.type === WS_CONNECTION_START) {
+      if (action.type === wsInit) {
         socket = new WebSocket(action.wsUrl);
         activeStorage = action.storage;
       }
       
       if (socket) {
         socket.onopen = (event) => {
-          dispatch(onOpen());
+          dispatch({
+            type: onOpen
+          });
         };
 
         socket.onerror = (event) => {
-          dispatch(onError("uknnown error: websocket error"));
+          dispatch({
+            type: onError,
+            message: "uknnown error: websocket error"});
         };
 
         socket.onmessage = async (event) => {
@@ -49,14 +45,19 @@ export const socketMiddleware: Middleware =
 
           // const { success, ...restParsedData } = parsedData;
 
-          dispatch(onMessage({ ...parsedData, storage: activeStorage }));
+          dispatch({
+            type: onMessage,
+            payload: { ...parsedData, storage: activeStorage }
+          });
         };
 
         socket.onclose = (event) => {
-          dispatch(onClose());
+          dispatch({
+            type: onClose
+          });
         };
 
-        if (action.type === WS_CONNECTION_CLOSE) {
+        if (action.type === wsClose) {
           socket.close();
           socket = null;
         }

@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
-import { useDispatch, useSelector } from "../services/hooks";
+import { useDispatch, useSelector, useForm } from "../services/hooks";
+import { IResetPasswordForm } from "../services/types/data";
 import {
   Input,
   PasswordInput,
@@ -17,19 +18,23 @@ export const ResetPasswordPage: React.FC = () => {
     resetPasswordSuccess,
     resetPasswordFailed,
   } = useSelector((store) => store.auth);
-  const [form, setFormValue] = useState({ password: "", token: "" });
+  // const [form, setFormValue] = useState({ password: "", token: "" });
+  const {values, handleChange, setValues} = useForm({
+    password: "",
+    token: "",
+  });
 
-  const onFormChange = (e: React.FormEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setFormValue({ ...form, [e.currentTarget.name]: e.currentTarget.value });
-  };
+  // const onFormChange = (e: React.FormEvent<HTMLInputElement>) => {
+  //   e.preventDefault();
+  //   setFormValue({ ...form, [e.currentTarget.name]: e.currentTarget.value });
+  // };
 
   const onFormSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      dispatch(resetPassword(form));
+      dispatch(resetPassword(values));
     },
-    [dispatch, form]
+    [dispatch, values]
   );
 
   if (!forgotPasswordSuccess) {
@@ -51,10 +56,10 @@ export const ResetPasswordPage: React.FC = () => {
       <label htmlFor="password"></label>
       <PasswordInput
         placeholder="Введите новый пароль"
-        value={form.password}
+        value={(values as IResetPasswordForm).password}
         size="default"
         extraClass="mb-6"
-        onChange={onFormChange}
+        onChange={handleChange}
         name="password"
         id="password"
       />
@@ -63,10 +68,10 @@ export const ResetPasswordPage: React.FC = () => {
       <Input
         type="text"
         placeholder="Введите код из письма"
-        value={form.token}
+        value={(values as IResetPasswordForm).token}
         size="default"
         extraClass="mb-6"
-        onChange={onFormChange}
+        onChange={handleChange}
         name="token"
         id="token"
       />

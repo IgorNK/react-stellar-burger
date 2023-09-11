@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
-import { useDispatch } from "../services/hooks";
+import { useDispatch, useForm } from "../services/hooks";
+import { ILoginForm } from "../services/types/data";
 import {
   Input,
   PasswordInput,
@@ -11,19 +12,23 @@ import styles from "./form.module.css";
 
 export const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
-  const [form, setFormValue] = useState({ email: "", password: "" });
+  const {values, handleChange, setValues} = useForm({
+    email: "", 
+    password: ""
+  });
+  // const [form, setFormValue] = useState({ email: "", password: "" });
 
-  const onFormChange = (e: React.FormEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setFormValue({ ...form, [e.currentTarget.name]: e.currentTarget.value });
-  };
+  // const onFormChange = (e: React.FormEvent<HTMLInputElement>) => {
+  //   e.preventDefault();
+  //   setFormValue({ ...form, [e.currentTarget.name]: e.currentTarget.value });
+  // };
 
   const onFormSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      dispatch(logIn(form));
+      dispatch(logIn(values));
     },
-    [dispatch, form]
+    [dispatch, values]
   );
 
   return (
@@ -34,10 +39,10 @@ export const LoginPage: React.FC = () => {
       <Input
         type="email"
         placeholder="E-mail"
-        value={form.email}
+        value={(values as ILoginForm).email}
         size="default"
         extraClass="mb-6"
-        onChange={onFormChange}
+        onChange={handleChange}
         name="email"
         id="email"
       />
@@ -45,10 +50,10 @@ export const LoginPage: React.FC = () => {
       <label htmlFor="password"></label>
       <PasswordInput
         placeholder="Пароль"
-        value={form.password}
+        value={(values as ILoginForm).password}
         size="default"
         extraClass="mb-6"
-        onChange={onFormChange}
+        onChange={handleChange}
         name="password"
         id="password"
       />

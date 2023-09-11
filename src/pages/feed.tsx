@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { formatNumber, wsFeedUrl } from "../utils/data";
 import OrdersList from "../components/orders-list/orders-list";
 import { WS_CONNECTION_START } from "../services/actions/socket";
-import { wsInit } from "../services/actions/socket";
+import { wsInit, wsClose } from "../services/actions/socket";
 import { TOrder } from "../services/types/data";
 
 export const FeedPage: React.FC = () => {
@@ -18,21 +18,23 @@ export const FeedPage: React.FC = () => {
   useEffect(() => {
     if (!wsConnected) {
       dispatch(wsInit(wsFeedUrl, "feed"));
-    } else {
+    }
+    return () => {
+      dispatch(wsClose());
     }
   }, [wsConnected, dispatch]);
 
   useEffect(() => {
     setReadyOrderNumbers(
       feedOrders
-        ?.filter((order: TOrder) => order.status === "done")
-        .map((order: TOrder) => order.number)
+        ?.filter((order) => order.status === "done")
+        .map((order) => order.number)
         .slice(0, 20)
     );
     setCookingOrderNumbers(
       feedOrders
-        ?.filter((order: TOrder) => order.status !== "done")
-        .map((order: TOrder) => order.number)
+        ?.filter((order) => order.status !== "done")
+        .map((order) => order.number)
         .slice(0, 20)
     );
   }, [feedOrders]);
@@ -48,7 +50,7 @@ export const FeedPage: React.FC = () => {
           <div className={styles.ordersColumn}>
             <h2 className="text text_type_main-medium">Готовы:</h2>
             <ul className={styles.ordersList + " mt-6"}>
-              {readyOrderNumbers?.map((number: string, index: number) => (
+              {readyOrderNumbers?.map((number, index) => (
                 <li
                   key={index}
                   className={
@@ -65,7 +67,7 @@ export const FeedPage: React.FC = () => {
           <div className={styles.ordersColumn}>
             <h2 className="text text_type_main-medium">В работе:</h2>
             <ul className={styles.ordersList + " mt-6"}>
-              {cookingOrderNumbers?.map((number: string, index: number) => (
+              {cookingOrderNumbers?.map((number, index) => (
                 <li
                   key={index}
                   className={

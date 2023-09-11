@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
-import { useDispatch } from "../services/hooks";
+import { useDispatch, useForm } from "../services/hooks";
+import { IRegisterForm } from "../services/types/data";
 import {
   Input,
   PasswordInput,
@@ -11,19 +12,24 @@ import styles from "./form.module.css";
 
 export const RegisterPage: React.FC = () => {
   const dispatch = useDispatch();
-  const [form, setFormValue] = useState({ email: "", password: "", name: "" });
+  const {values, handleChange, setValues} = useForm({
+    email: "", 
+    password: "",
+    name: "",
+  });
+  // const [form, setFormValue] = useState({ email: "", password: "", name: "" });
 
-  const onFormChange = (e: React.FormEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setFormValue({ ...form, [e.currentTarget.name]: e.currentTarget.value });
-  };
+  // const onFormChange = (e: React.FormEvent<HTMLInputElement>) => {
+  //   e.preventDefault();
+  //   setFormValue({ ...form, [e.currentTarget.name]: e.currentTarget.value });
+  // };
 
   const onFormSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      dispatch(register(form));
+      dispatch(register(values));
     },
-    [dispatch, form]
+    [dispatch, values]
   );
 
   return (
@@ -34,10 +40,10 @@ export const RegisterPage: React.FC = () => {
       <Input
         type="text"
         placeholder="Имя"
-        value={form.name}
+        value={(values as IRegisterForm).name}
         size="default"
         extraClass="mb-6"
-        onChange={onFormChange}
+        onChange={handleChange}
         name="name"
         id="name"
       />
@@ -46,10 +52,10 @@ export const RegisterPage: React.FC = () => {
       <Input
         type="email"
         placeholder="E-mail"
-        value={form.email}
+        value={(values as IRegisterForm).email}
         size="default"
         extraClass="mb-6"
-        onChange={onFormChange}
+        onChange={handleChange}
         name="email"
         id="email"
       />
@@ -57,10 +63,10 @@ export const RegisterPage: React.FC = () => {
       <label htmlFor="password"></label>
       <PasswordInput
         placeholder="Пароль"
-        value={form.password}
+        value={(values as IRegisterForm).password}
         size="default"
         extraClass="mb-6"
-        onChange={onFormChange}
+        onChange={handleChange}
         name="password"
         id="password"
       />

@@ -3,13 +3,18 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useState, useEffect, useCallback } from "react";
-import { useDispatch, useSelector } from "../../services/hooks";
+import { useDispatch, useSelector, useForm } from "../../services/hooks";
 import { updateUser } from "../../services/actions/auth";
-import { TUser, TUpdateUserForm } from "../../services/types/data";
+import { TUser, IUpdateUserForm } from "../../services/types/data";
 
 const ProfileEditForm: React.FC = () => {
   const dispatch = useDispatch();
-  const [form, setFormValue] = useState<TUpdateUserForm>({ name: "", email: "", password: "" });
+  // const [form, setFormValue] = useState<TUpdateUserForm>({ name: "", email: "", password: "" });
+  const {values, handleChange, setValues} = useForm({
+    name: "",
+    email: "", 
+    password: "",
+  });
   const [nameEditActive, setNameEditActive] = useState(false);
   const [emailEditActive, setEmailEditActive] = useState(false);
   const [passwordEditActive, setPasswordEditActive] = useState(false);
@@ -21,26 +26,27 @@ const ProfileEditForm: React.FC = () => {
   }, [user]);
 
   const resetForm = (userdata: TUser) => {
-    setFormValue({
+    setValues({
+      ...values,
       name: userdata.name,
       email: userdata.email,
     });
   };
 
-  const onFormChange = (e: React.FormEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setFormValue({ ...form, [e.currentTarget.name]: e.currentTarget.value });
-  };
+  // const onFormChange = (e: React.FormEvent<HTMLInputElement>) => {
+  //   e.preventDefault();
+  //   setFormValue({ ...form, [e.currentTarget.name]: e.currentTarget.value });
+  // };
 
   const onFormSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      dispatch(updateUser(form));
+      dispatch(updateUser(values));
       setNameEditActive(false);
       setEmailEditActive(false);
       setPasswordEditActive(false);
     },
-    [dispatch, form]
+    [dispatch, values]
   );
 
   const onFormReset = useCallback(
@@ -62,10 +68,10 @@ const ProfileEditForm: React.FC = () => {
       <Input
         type="text"
         placeholder="Имя"
-        value={form.name ? form.name : ""}
+        value={(values as IUpdateUserForm).name}
         size="default"
         extraClass="mb-6"
-        onChange={onFormChange}
+        onChange={handleChange}
         disabled={!nameEditActive}
         icon="EditIcon"
         onIconClick={() => setNameEditActive(true)}
@@ -76,10 +82,10 @@ const ProfileEditForm: React.FC = () => {
       <Input
         type="email"
         placeholder="Логин"
-        value={form.email ? form.email : ""}
+        value={(values as IUpdateUserForm).email}
         size="default"
         extraClass="mb-6"
-        onChange={onFormChange}
+        onChange={handleChange}
         disabled={!emailEditActive}
         icon="EditIcon"
         onIconClick={() => setEmailEditActive(true)}
@@ -89,15 +95,15 @@ const ProfileEditForm: React.FC = () => {
       <label htmlFor="password"></label>
       <Input
         placeholder="Пароль"
-        value={passwordEditActive ? form.password || "" : "******"}
+        value={passwordEditActive ? (values as IUpdateUserForm).password || "" : "******"}
         size="default"
         extraClass="mb-6"
-        onChange={onFormChange}
+        onChange={handleChange}
         disabled={!passwordEditActive}
         icon="EditIcon"
         onIconClick={() => {
           setPasswordEditActive(true);
-          setFormValue({ ...form, password: "" });
+          setValues({ ...values, password: "" });
         }}
         name="password"
         id="password"

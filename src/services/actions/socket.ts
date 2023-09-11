@@ -1,4 +1,5 @@
 import { TWsMessage } from "../types/data";
+import { AppThunk, AppDispatch } from "../types";
 
 export const WS_CONNECTION_START: "WS_CONNECTION_START" = "WS_CONNECTION_START";
 export const WS_CONNECTION_CLOSE: "WS_CONNECTION_CLOSE" = "WS_CONNECTION_CLOSE";
@@ -69,6 +70,15 @@ export const onMessage = (payload: TWsMessage): IWsGetMessageAction => ({
   type: WS_GET_MESSAGE,
   payload
 });
+
+export interface IWsActions {
+  wsInit: typeof WS_CONNECTION_START; 
+  wsClose: typeof WS_CONNECTION_CLOSE;
+  onOpen: typeof WS_CONNECTION_OPEN;
+  onError: typeof WS_CONNECTION_ERROR;
+  onClose: typeof WS_CONNECTION_CLOSED;
+  onMessage: typeof WS_GET_MESSAGE;
+}
 
 // export interface IWsActions {
 //   readonly wsInit: typeof WS_CONNECTION_START;

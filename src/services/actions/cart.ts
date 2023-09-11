@@ -7,6 +7,7 @@ export const CLEAR_CART: "CLEAR_CART" = "CLEAR_CART";
 
 export interface IAddToCartAction {
   readonly type: typeof ADD_TO_CART;
+  readonly key: string;
   readonly item: TIngredient;
 }
 
@@ -30,8 +31,9 @@ export type TCartAction = IAddToCartAction |
   IMoveCartItemAction |
   IClearCartAction;
 
-export const addToCartAction = (item: TIngredient): IAddToCartAction => ({
+export const addToCartAction = (item: TIngredient, key: string): IAddToCartAction => ({
   type: ADD_TO_CART,
+  key,
   item
 });
 

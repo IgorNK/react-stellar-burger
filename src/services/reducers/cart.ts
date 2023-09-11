@@ -1,4 +1,3 @@
-import uuid from "react-uuid";
 import { TIngredient, TCartItem } from "../types/data";
 import { TCartAction } from "../actions/cart"
 import {
@@ -34,7 +33,7 @@ export const cartReducer = (state = initialState, action: TCartAction) => {
         const newItems = [
           ...state.cartItems,
           {
-            key: uuid(),
+            key: action.key,
             item: action.item,
           },
         ];
@@ -46,7 +45,7 @@ export const cartReducer = (state = initialState, action: TCartAction) => {
         };
       } else {
         const newBun = {
-          key: uuid(),
+          key: action.key,
           item: action.item,
         };
         const newTotal = state.total + action.item.price * 2;

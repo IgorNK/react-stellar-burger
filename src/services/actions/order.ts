@@ -1,7 +1,7 @@
 import Api from "../api";
 import { dataUrl } from "../../utils/data";
 import { AppThunk, AppDispatch } from "../types";
-import { TOrder } from "../types/data";
+import { TOrder, TOrderResponse } from "../types/data";
 
 import { DISPLAY_ERROR_MESSAGE } from "./index";
 import { displayErrorMessageAction } from "./index";
@@ -62,13 +62,9 @@ export function submitOrder(ingredientIDs: ReadonlyArray<string>) {
     api
       .submitOrderRequest(ingredientIDs)
       .then((res) => {
-        if (res && res.success) {
-          dispatch(sendOrderSuccessAction(res.order.number, ingredientIDs));
-        } else {
-          dispatch(sendOrderFailedAction("unknown error: order send failed"));
-        }
-      })
-      .catch((err) => {
+        dispatch(sendOrderSuccessAction((res as TOrderResponse).order.number, ingredientIDs));
+      }).catch((err) => {
+        dispatch(sendOrderFailedAction("unknown error: order send failed"));
         dispatch(displayErrorMessageAction(err.message));
       });
   };

@@ -17,7 +17,7 @@ interface IDragItem {
 
 const ConstructorIngredient: React.FC<{
   item: TIngredient, 
-  pos?: string, 
+  pos?: "top" | "bottom", 
   index?: number, 
   cartID: string
 }> = ({ item, pos, index, cartID }) => {
@@ -97,8 +97,9 @@ const ConstructorIngredient: React.FC<{
         </div>
       )}
       <ConstructorElement
-        text={item.name}
+        text={formatName(item.name, pos)}
         isLocked={item.type === "bun" ? true : false}
+        type={pos}
         price={item.price}
         thumbnail={item.image_mobile}
         handleClose={() => removeFromCart({ key: cartID })}
@@ -108,5 +109,17 @@ const ConstructorIngredient: React.FC<{
 
   return constructorIngredient;
 };
+
+const formatName = (name: string, pos: string | undefined): string => {
+  let outName = name;
+  if (!pos) return outName;
+  if (pos === "top") {
+    outName.concat(" (верх)");
+  }
+  if (pos === "низ") {
+    outName.concat(" (низ)");
+  }
+  return outName;
+}
 
 export default ConstructorIngredient;

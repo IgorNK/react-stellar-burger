@@ -1,4 +1,5 @@
 import { useCallback, useEffect } from "react";
+import uuid from "react-uuid";
 import { useSelector, useDispatch } from "../../services/hooks";
 import { useDrop } from "react-dnd";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -46,7 +47,7 @@ const BurgerConstructor: React.FC = () => {
     }
   }, [orderSuccess]);
 
-  const renderBun = ({ item, pos, key}: { item: TIngredient, pos: string, key: string }) => {
+  const renderBun = ({ item, pos, key}: { item: TIngredient, pos: "top" | "bottom", key: string }) => {
     return (
       <ConstructorIngredient
         item={item}
@@ -93,9 +94,9 @@ const BurgerConstructor: React.FC = () => {
   const addToCart = (cartItem: TCartItem) => {
     if (bun && cartItem.item.type === "bun") {
       dispatch(removeFromCartAction(bun.key));
-      dispatch(addToCartAction(cartItem.item));
+      dispatch(addToCartAction(cartItem.item, uuid()));
     } else {
-      dispatch(addToCartAction(cartItem.item));
+      dispatch(addToCartAction(cartItem.item, uuid()));
     }
   };
 
