@@ -32,7 +32,6 @@ export const ProtectedRouteElement: React.FC<{
   }, [init]);
 
   if (getUserRequest || updateTokenRequest) {
-    console.log("we're in the middle of a request");
     return null;
   }
 
@@ -40,22 +39,18 @@ export const ProtectedRouteElement: React.FC<{
     authRequired &&
     (getUserFailed || updateTokenFailed || refreshUserFailed)
   ) {
-    console.log("failed to login, returning to login page");
     return <Navigate to="/login" />;
   }
 
   if (authRequired && user) {
-    console.log("youre authed, showing content");
     return element;
   }
 
   if (!authRequired && !user) {
-    console.log("you're not authed, but it's ok");
     return element;
   }
 
   if (!authRequired && user) {
-    console.log("you're authed so you can't see login page! Go back!");
     return <GoBack />;
   }
 
@@ -63,7 +58,6 @@ export const ProtectedRouteElement: React.FC<{
     dispatch(getUser());
   }
 
-  console.log("This shouldn't happen");
   return null;
 
   // if (authRequired) {
