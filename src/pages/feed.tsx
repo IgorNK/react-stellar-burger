@@ -3,26 +3,26 @@ import { useSelector, useDispatch } from "../services/hooks";
 import { useEffect, useState } from "react";
 import { formatNumber, wsFeedUrl } from "../utils/data";
 import OrdersList from "../components/orders-list/orders-list";
-import { WS_CONNECTION_START } from "../services/actions/socket";
 import { wsInit, wsClose } from "../services/actions/socket";
-import { TOrder } from "../services/types/data";
 
 export const FeedPage: React.FC = () => {
   const dispatch = useDispatch();
   const { wsConnected, feedOrders, total, totalToday } = useSelector(
     (store) => store.feed
   );
-  const [readyOrderNumbers, setReadyOrderNumbers] = useState<ReadonlyArray<string>>([]);
-  const [cookingOrderNumbers, setCookingOrderNumbers] = useState<ReadonlyArray<string>>([]);
+  const [readyOrderNumbers, setReadyOrderNumbers] = useState<
+    ReadonlyArray<string>
+  >([]);
+  const [cookingOrderNumbers, setCookingOrderNumbers] = useState<
+    ReadonlyArray<string>
+  >([]);
 
   useEffect(() => {
-    if (!wsConnected) {
-      dispatch(wsInit(wsFeedUrl, "feed"));
-    }
+    dispatch(wsInit(wsFeedUrl, "feed"));
     return () => {
       dispatch(wsClose());
-    }
-  }, [wsConnected, dispatch]);
+    };
+  }, []);
 
   useEffect(() => {
     setReadyOrderNumbers(

@@ -28,26 +28,26 @@ import {
 } from "../actions/auth";
 
 export type TAuthState = {
-  loginRequest: boolean,
-  loginFailed: boolean,
-  registerRequest: boolean,
-  registerFailed: boolean,
-  logoutRequest: boolean,
-  logoutFailed: boolean,
-  getUserRequest: boolean,
-  getUserFailed: boolean,
-  updateTokenRequest: boolean,
-  updateTokenFailed: boolean,
-  refreshUserRequest: boolean,
-  refreshUserFailed: boolean,
-  forgotPasswordRequest: boolean,
-  forgotPasswordFailed: boolean,
-  forgotPasswordSuccess: boolean,
-  resetPasswordRequest: boolean,
-  resetPasswordFailed: boolean,
-  resetPasswordSuccess: boolean,
-  user: TUser | null,
-}
+  loginRequest: boolean;
+  loginFailed: boolean;
+  registerRequest: boolean;
+  registerFailed: boolean;
+  logoutRequest: boolean;
+  logoutFailed: boolean;
+  getUserRequest: boolean;
+  getUserFailed: boolean;
+  updateTokenRequest: boolean;
+  updateTokenFailed: boolean;
+  refreshUserRequest: boolean;
+  refreshUserFailed: boolean;
+  forgotPasswordRequest: boolean;
+  forgotPasswordFailed: boolean;
+  forgotPasswordSuccess: boolean;
+  resetPasswordRequest: boolean;
+  resetPasswordFailed: boolean;
+  resetPasswordSuccess: boolean;
+  user: TUser | null;
+};
 
 const initialState: TAuthState = {
   loginRequest: false,

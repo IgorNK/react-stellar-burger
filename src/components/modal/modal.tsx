@@ -4,15 +4,20 @@ import styles from "./modal.module.css";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import ModalOverlay from "../modal-overlay/modal-overlay";
 
-const Modal: React.FC<{children: React.ReactElement | React.ReactElement[]}> = ({ children }) => {
+const Modal: React.FC<{
+  children: React.ReactElement | React.ReactElement[];
+  onClose: () => void;
+}> = ({ children, onClose }) => {
   const navigate = useNavigate();
 
   enum TIconTypes {
     primary,
-    secondary
+    secondary,
   }
 
-  const [closeIconState, setCloseIconState] = useState<TIconTypes>(TIconTypes.primary);
+  const [closeIconState, setCloseIconState] = useState<TIconTypes>(
+    TIconTypes.primary
+  );
 
   const handleCloseButtonHover = () => {
     setCloseIconState(TIconTypes.secondary);
@@ -21,10 +26,6 @@ const Modal: React.FC<{children: React.ReactElement | React.ReactElement[]}> = (
   const handleCloseButtonLeave = () => {
     setCloseIconState(TIconTypes.primary);
   };
-
-  const onClose = useCallback(() => {
-    navigate(-1);
-  }, [navigate]);
 
   const handleEscapeButton = useCallback(
     (e) => {
@@ -53,7 +54,11 @@ const Modal: React.FC<{children: React.ReactElement | React.ReactElement[]}> = (
           onMouseOver={handleCloseButtonHover}
           onMouseLeave={handleCloseButtonLeave}
         >
-          {closeIconState === TIconTypes.primary ? <CloseIcon type="primary" /> : <CloseIcon type="secondary"/>}
+          {closeIconState === TIconTypes.primary ? (
+            <CloseIcon type="primary" />
+          ) : (
+            <CloseIcon type="secondary" />
+          )}
         </button>
         {children}
       </div>

@@ -6,20 +6,23 @@ import {
   ConstructorElement,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { REMOVE_FROM_CART, MOVE_CART_ITEM } from "../../services/actions/cart";
-import { removeFromCartAction, moveCartItemAction } from "../../services/actions/cart";
+import {
+  removeFromCartAction,
+  moveCartItemAction,
+} from "../../services/actions/cart";
 import { TIngredient } from "../../services/types/data";
 
 import styles from "./constructor-ingredient.module.css";
 
 interface IDragItem {
-  index: number,
+  index: number;
 }
 
 const ConstructorIngredient: React.FC<{
-  item: TIngredient, 
-  pos?: "top" | "bottom", 
-  index?: number, 
-  cartID: string
+  item: TIngredient;
+  pos?: "top" | "bottom";
+  index?: number;
+  cartID: string;
 }> = ({ item, pos, index, cartID }) => {
   const dispatch = useDispatch();
   const ref = useRef<HTMLDivElement>(null);
@@ -45,14 +48,14 @@ const ConstructorIngredient: React.FC<{
       if (!hoverIndex) {
         return;
       }
-      const dragIndex = item.index;      
+      const dragIndex = item.index;
       if (dragIndex === hoverIndex) {
         return;
       }
       const hoverBoundingRect = ref.current.getBoundingClientRect();
       const hoverMiddleY =
         (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-      
+
       const hoverClientY = clientOffset.y - hoverBoundingRect.top;
       if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
         return;
@@ -110,16 +113,19 @@ const ConstructorIngredient: React.FC<{
   return constructorIngredient;
 };
 
-const formatName = (name: string, pos: string | undefined): string => {
+const formatName = (
+  name: string,
+  pos: "top" | "bottom" | undefined
+): string => {
   let outName = name;
   if (!pos) return outName;
   if (pos === "top") {
-    outName.concat(" (верх)");
+    outName = outName.concat(" (верх)");
   }
-  if (pos === "низ") {
-    outName.concat(" (низ)");
+  if (pos === "bottom") {
+    outName = outName.concat(" (низ)");
   }
   return outName;
-}
+};
 
 export default ConstructorIngredient;

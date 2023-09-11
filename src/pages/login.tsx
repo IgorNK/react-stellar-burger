@@ -12,9 +12,9 @@ import styles from "./form.module.css";
 
 export const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
-  const {values, handleChange, setValues} = useForm({
-    email: "", 
-    password: ""
+  const { values, handleChange, setValues } = useForm({
+    email: "",
+    password: "",
   });
   // const [form, setFormValue] = useState({ email: "", password: "" });
 

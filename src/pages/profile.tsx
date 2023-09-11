@@ -17,13 +17,21 @@ export const ProfilePage: React.FC = () => {
   useEffect(() => {
     if (user && location.pathname.includes("orders")) {
       if (!wsConnected) {
-        dispatch(wsInit(`${wsMyOrdersUrl}?token=${getCookie("token")?.slice(7)}`, "user"));
+        dispatch(
+          wsInit(
+            `${wsMyOrdersUrl}?token=${getCookie("token")?.slice(7)}`,
+            "user"
+          )
+        );
       }
     }
+  }, [user, location]);
+
+  useEffect(() => {
     return () => {
       dispatch(wsClose());
-    }
-  }, [wsConnected, user, location]);
+    };
+  }, []);
 
   useEffect(() => {
     switch (true) {

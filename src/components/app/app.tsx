@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "../../services/hooks";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import styles from "./app.module.css";
 import AppHeader from "../app-header/app-header";
 import {
@@ -25,6 +25,7 @@ import { getCookie } from "../../utils/cookies";
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const user = useSelector((store) => store.auth.user);
   const ingredients = useSelector((store) => store.ingredients.ingredients);
@@ -42,6 +43,10 @@ const App: React.FC = () => {
   const location = useLocation();
 
   const background = location.state?.background;
+
+  const onClose = () => {
+    navigate(-1);
+  };
 
   return (
     <div className={styles.app}>
@@ -117,27 +122,31 @@ const App: React.FC = () => {
           <Routes>
             <Route
               path="/ingredients/:id"
-              element={<Modal children={<IngredientDetails />} />}
+              element={
+                <Modal children={<IngredientDetails />} onClose={onClose} />
+              }
             />
             <Route
               path="/profile/order-accepted/:id"
               element={
                 <ProtectedRouteElement
                   authRequired={true}
-                  element={<Modal children={<OrderDetails />} />}
+                  element={
+                    <Modal children={<OrderDetails />} onClose={onClose} />
+                  }
                 />
               }
             />
             <Route
               path="/feed/:id"
-              element={<Modal children={<OrderInfo />} />}
+              element={<Modal children={<OrderInfo />} onClose={onClose} />}
             />
             <Route
               path="/profile/orders/:id"
               element={
                 <ProtectedRouteElement
                   authRequired={true}
-                  element={<Modal children={<OrderInfo />} />}
+                  element={<Modal children={<OrderInfo />} onClose={onClose} />}
                 />
               }
             />
@@ -146,6 +155,6 @@ const App: React.FC = () => {
       </main>
     </div>
   );
-}
+};
 
 export default App;

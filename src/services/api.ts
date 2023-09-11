@@ -1,13 +1,20 @@
-import { getCookie, setCookie } from "../utils/cookies";
-import { ILoginForm, IUpdateUserForm, IRegisterForm, IForgotPasswordForm, IResetPasswordForm, TRefreshTokenResponse } from "./types/data";
+import { getCookie, setCookie, deleteCookie } from "../utils/cookies";
+import {
+  ILoginForm,
+  IUpdateUserForm,
+  IRegisterForm,
+  IForgotPasswordForm,
+  IResetPasswordForm,
+  TRefreshTokenResponse,
+} from "./types/data";
 
 type TAPIConfig = {
-  baseUrl: string,  
-}
+  baseUrl: string;
+};
 
 class Api {
   _config: TAPIConfig;
-  
+
   constructor(options: TAPIConfig) {
     this._config = options;
   }
@@ -21,8 +28,8 @@ class Api {
     });
   }
 
-  getIngredientsRequest() {
-    return this.request('ingredients', {
+  async getIngredientsRequest() {
+    return await this.request("ingredients", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -31,7 +38,7 @@ class Api {
   }
 
   submitOrderRequest(ingredientIDs: ReadonlyArray<string>) {
-    return this.fetchWithRefresh('orders', {
+    return this.fetchWithRefresh("orders", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -44,7 +51,7 @@ class Api {
   }
 
   loginRequest(form: ILoginForm) {
-    return this.request('auth/login', {
+    return this.request("auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -54,7 +61,7 @@ class Api {
   }
 
   registerRequest(form: IRegisterForm) {
-    return this.request('auth/register', {
+    return this.request("auth/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -64,7 +71,8 @@ class Api {
   }
 
   logoutRequest() {
-    return this.request('auth/logout', {
+    deleteCookie("token");
+    return this.request("auth/logout", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -73,8 +81,8 @@ class Api {
     });
   }
 
-  async getUserRequest() {
-    return this.fetchWithRefresh('auth/user', {
+  getUserRequest() {
+    return this.fetchWithRefresh("auth/user", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -84,7 +92,7 @@ class Api {
   }
 
   refreshTokenRequest() {
-    return this.request('auth/token', {
+    return this.request("auth/token", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -94,7 +102,7 @@ class Api {
   }
 
   async updateUserRequest(form: IUpdateUserForm) {
-    return this.fetchWithRefresh('auth/user', {
+    return this.fetchWithRefresh("auth/user", {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -105,7 +113,7 @@ class Api {
   }
 
   forgotPasswordRequest(form: IForgotPasswordForm) {
-    return this.request('password-reset', {
+    return this.request("password-reset", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -115,7 +123,7 @@ class Api {
   }
 
   resetPasswordRequest(form: IResetPasswordForm) {
-    return this.request('password-reset/reset', {
+    return this.request("password-reset/reset", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -129,13 +137,14 @@ class Api {
       return await this.request(endpoint, options);
     } catch (err: any) {
       if (err.message === "jwt expired") {
-        const refreshData = await this.refreshTokenRequest() as TRefreshTokenResponse;
+        const refreshData =
+          (await this.refreshTokenRequest()) as TRefreshTokenResponse;
         localStorage.setItem("refreshToken", refreshData.refreshToken);
         setCookie("token", refreshData.accessToken);
         options.headers = {
           ...options.headers,
-          Authorization: refreshData.accessToken
-      };
+          Authorization: refreshData.accessToken,
+        };
         return await this.request(endpoint, options);
       } else {
         return Promise.reject(err);
@@ -146,7 +155,7 @@ class Api {
   async request(endpoint: string, options: RequestInit) {
     return fetch(`${this._config.baseUrl}/${endpoint}`, options)
       .then(checkResponse)
-      .then(checkSuccess)
+      .then(checkSuccess);
   }
 }
 
@@ -154,14 +163,14 @@ const checkResponse = async (res: Response) => {
   if (res.ok) {
     return res.json();
   }
-  return res.json().then((err) => Promise.reject(err));
+  return Promise.reject(res.status);
 };
 
 const checkSuccess = async (res: Response) => {
-  if (res && res.ok) {
+  if (res) {
     return res as unknown;
   }
   return Promise.reject(`Request rejected: ${res}`);
-}
+};
 
 export default Api;

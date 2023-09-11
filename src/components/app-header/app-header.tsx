@@ -38,7 +38,9 @@ const AppHeader: React.FC = () => {
           </NavButton>
         </Link>
       </nav>
-      <Logo />
+      <Link to="/">
+        <Logo />
+      </Link>
       <nav className={styles.profileButton}>
         <Link className={styles.link} to="/profile">
           <NavButton active={activeButton === "profile"} value="profile">
