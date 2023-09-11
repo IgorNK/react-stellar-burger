@@ -1,0 +1,71 @@
+import { useState, useCallback, useEffect } from "react";
+import { useDispatch, useSelector, useForm } from "../services/hooks";
+import { IForgotPasswordForm } from "../services/types/data";
+import {
+  Input,
+  Button,
+} from "@ya.praktikum/react-developer-burger-ui-components";
+import { Link, Navigate } from "react-router-dom";
+import { forgotPassword } from "../services/actions/auth";
+import styles from "./form.module.css";
+
+export const ForgotPasswordPage: React.FC = () => {
+  const dispatch = useDispatch();
+  // const [form, setFormValue] = useState({ email: "" });
+  const {values, handleChange, setValues} = useForm({
+    email: "",
+  });
+  const { forgotPasswordRequest, forgotPasswordSuccess } = useSelector(
+    (store) => store.auth
+  );
+
+  // const onFormChange = (e: React.FormEvent<HTMLInputElement>) => {
+  //   e.preventDefault();
+  //   setFormValue({ ...form, [e.currentTarget.name]: e.currentTarget.value });
+  // };
+
+  const onFormSubmit = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      dispatch(forgotPassword(values));
+    },
+    [dispatch, values]
+  );
+
+  if (forgotPasswordSuccess) {
+    return <Navigate to="/reset-password" />;
+  }
+
+  if (forgotPasswordRequest) {
+    return <h1>Подождите...</h1>;
+  }
+
+  return (
+    <form className={styles.form} onSubmit={onFormSubmit}>
+      <h1 className="text text_type_main-medium mb-6">Восстановление пароля</h1>
+
+      <label htmlFor="email"></label>
+      <Input
+        type="email"
+        placeholder="Укажите e-mail"
+        value={(values as IForgotPasswordForm).email}
+        size="default"
+        extraClass="mb-6"
+        onChange={handleChange}
+        name="email"
+        id="email"
+      />
+
+      <Button htmlType="submit" type="primary" size="medium" extraClass="mb-20">
+        Восстановить
+      </Button>
+
+      <p className="text text_type_main-default text_color_inactive mb-4">
+        Вспомнили пароль?{" "}
+        <Link to="/login" className={styles.link}>
+          Войти
+        </Link>
+      </p>
+    </form>
+  );
+};
